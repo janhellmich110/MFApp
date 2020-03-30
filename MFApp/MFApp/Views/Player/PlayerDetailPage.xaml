@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="MFApp.Views.PlayerDetailPage"
+             Title="{Binding Title}">
+
+    <StackLayout Spacing="20" Padding="15">
+        <Label Text="Initialen:" FontSize="Medium" />
+        <Label Text="{Binding Player.Initials}" d:Text="Initialen" FontSize="Small"/>
+        <Label Text="Name:" FontSize="Medium" />
+        <Label Text="{Binding Player.Name}" d:Text="Name" FontSize="Small"/>
+        <Label Text="Handicap:" FontSize="Medium" />
+        <Label Text="{Binding Player.Handicap}" d:Text="Handicap" FontSize="Small"/>
+    </StackLayout>
+    
+</ContentPage>
