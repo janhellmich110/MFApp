@@ -4,8 +4,10 @@ using System.Text;
 
 namespace MFApp.Models
 {
-    class CourseHandicapTable
+    public class CourseHandicapTable
     {
+        public int Id;
+
         List<CourseHandicap> CourseHandicapList;
         public int CourseId;
         public string TeeColour;

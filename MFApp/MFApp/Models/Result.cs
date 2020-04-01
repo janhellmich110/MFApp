@@ -6,6 +6,8 @@ namespace MFApp.Models
 {
     public class Result
     {
+        public int Id;
+
         public int score;
         public int BruttoZ;
         public int BruttoS;
