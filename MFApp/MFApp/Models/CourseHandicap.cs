@@ -6,6 +6,11 @@ namespace MFApp.Models
 {
     public class CourseHandicap
     {
-        public int Handicap;
+        public double HandicapFrom;
+        public double HandicapTo;
+        public int PlayerHandicap;
+
+
+
     }
 }

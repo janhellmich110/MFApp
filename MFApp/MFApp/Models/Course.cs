@@ -10,7 +10,6 @@ namespace MFApp.Models
         public string Name;
 
         public int GolfclubId;
-        public int Par;
 
         public List<Tee> TeeList;
     }
