@@ -7,10 +7,10 @@ namespace MFApp.ViewModels
     public class PlayerDetailViewModel : BaseViewModel
     {
         public Player Player { get; set; }
-        public PlayerDetailViewModel(Player player = null)
+        public PlayerDetailViewModel(Player Player = null)
         {
-            Title = player.Name;
-            Player = player;
+            Title = Player.Name;
+            Player = Player;
         }
     }
 }

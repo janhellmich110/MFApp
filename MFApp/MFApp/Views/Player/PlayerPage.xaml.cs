@@ -30,8 +30,8 @@ namespace MFApp.Views
         async void OnItemSelected(object sender, EventArgs args)
         {
             var layout = (BindableObject)sender;
-            var player = (Player)layout.BindingContext;
-            await Navigation.PushAsync(new PlayerDetailPage(new PlayerDetailViewModel(player)));
+            var Player = (Player)layout.BindingContext;
+            await Navigation.PushAsync(new PlayerDetailPage(new PlayerDetailViewModel(Player)));
         }
 
         async void AddPlayer_Clicked(object sender, EventArgs e)

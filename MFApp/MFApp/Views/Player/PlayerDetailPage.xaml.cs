@@ -26,7 +26,7 @@ namespace MFApp.Views
         {
             InitializeComponent();
 
-            var player = new Player
+            var Player = new Player
             {
                 Name = "Jan Hellmich",
                 Initials = "JH",
@@ -35,7 +35,7 @@ namespace MFApp.Views
                 Birthday = new DateTime(1966, 10, 11)
             };
 
-            viewModel = new PlayerDetailViewModel(player);
+            viewModel = new PlayerDetailViewModel(Player);
             BindingContext = viewModel;
         }
     }
