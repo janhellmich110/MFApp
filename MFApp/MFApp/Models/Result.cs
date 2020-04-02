@@ -8,7 +8,7 @@ namespace MFApp.Models
     {
         public int Id;
 
-        public int score;
+        public int Score;
         public int BruttoZ;
         public int BruttoS;
         public int NettoZ;
@@ -17,5 +17,7 @@ namespace MFApp.Models
         public int PlayerId;
 
         public int TeeId;
+
+        public int TournamentId;
     }
 }

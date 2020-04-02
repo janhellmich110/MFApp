@@ -13,20 +13,10 @@ namespace MFApp.Services
 {
     public class PlayerDataStore : IDataStore<Player>
     {
-        private List<Player> playerList;
+        private List<Player> PlayerList;
         private SQLiteConnection conn;
-        private string dbPathPlayer => FileAccessHelper.GetLocalFilePath("player.db3");
+        private string dbPathPlayer => FileAccessHelper.GetLocalFilePath("MFApp.db3");
         public string StatusMessage { get; set; }
-
-        //public PlayerDataStore()
-        //{
-        //    playerList = new List<Player>()
-        //    {
-        //        new Player { Id = Guid.NewGuid().ToString(), Initials = "JH", UserName="janh", Name="Jan Hellmich", Handicap=1.0, Birthday=new DateTime(1966, 10, 11) },
-        //        new Player { Id = Guid.NewGuid().ToString(), Initials = "TH", UserName="tobiash", Name="Tobias Hellmich", Handicap=2.6, Birthday=new DateTime(2001, 10, 1) },
-        //        new Player { Id = Guid.NewGuid().ToString(), Initials = "SH", UserName="saskiah", Name="Saskia Hellmich", Handicap=3.5, Birthday=new DateTime(1999, 10, 18) }
-        //    };
-        //}
 
         public PlayerDataStore()
         {
@@ -35,55 +25,55 @@ namespace MFApp.Services
                 conn.CreateTable<Player>();
 
             // get all entries from table
-            playerList = conn.Table<Player>().ToList();
+            PlayerList = conn.Table<Player>().ToList();
         }
-        public async Task<bool> AddItemAsync(Player player)
+        public async Task<bool> AddItemAsync(Player Player)
         {
             int result = 0;
             try
             {
-                int playerCount = conn.Table<Player>().Count();
-                player.Id = 100000 + playerCount;
-                result = conn.Insert(player);
+                int PlayerCount = conn.Table<Player>().Count();
+                Player.Id = 100000 + PlayerCount;
+                result = conn.Insert(Player);
             }
             catch (Exception ex)
             {
-                StatusMessage = string.Format("Failed to add {0}. Error: {1}", player.Name, ex.Message);
+                StatusMessage = string.Format("Failed to add {0}. Error: {1}", Player.Name, ex.Message);
             }
-            playerList = conn.Table<Player>().ToList();
+            PlayerList = conn.Table<Player>().ToList();
 
             return await Task.FromResult(true);
         }
 
         public async Task<bool> UpdateItemAsync(Player item)
         {
-            var oldItem = playerList.Where((Player arg) => arg.Id == item.Id).FirstOrDefault();
+            var oldItem = PlayerList.Where((Player arg) => arg.Id == item.Id).FirstOrDefault();
             conn.Delete(oldItem);
             conn.Insert(item);
 
-            playerList = conn.Table<Player>().ToList();
+            PlayerList = conn.Table<Player>().ToList();
 
             return await Task.FromResult(true);
         }
 
         public async Task<bool> DeleteItemAsync(int id)
         {
-            var oldItem = playerList.Where((Player arg) => arg.Id == id).FirstOrDefault();
+            var oldItem = PlayerList.Where((Player arg) => arg.Id == id).FirstOrDefault();
             conn.Delete(oldItem);
 
-            playerList = conn.Table<Player>().ToList();
+            PlayerList = conn.Table<Player>().ToList();
 
             return await Task.FromResult(true);
         }
 
         public async Task<Player> GetItemAsync(int id)
         {
-            return await Task.FromResult(playerList.FirstOrDefault(s => s.Id == id));
+            return await Task.FromResult(PlayerList.FirstOrDefault(s => s.Id == id));
         }
 
         public async Task<IEnumerable<Player>> GetItemsAsync(bool forceRefresh = false)
         {
-            return await Task.FromResult(playerList);
+            return await Task.FromResult(PlayerList);
         }
 
         public async Task<bool> SyncMFWeb()
@@ -97,7 +87,7 @@ namespace MFApp.Services
                 bool IsConnected = Connectivity.NetworkAccess == NetworkAccess.Internet;
                 if (IsConnected)
                 {
-                    var json = await client.GetStringAsync($"MFPlayersAPI");
+                    var json = await client.GetStringAsync($"PlayersAPI");
                     items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<Player>>(json));
 
                     //conn.Table<Player>().Delete();
@@ -113,7 +103,7 @@ namespace MFApp.Services
                 return await Task.FromResult(false);
             }
             // get all entries from table
-            playerList = conn.Table<Player>().ToList();
+            PlayerList = conn.Table<Player>().ToList();
 
             return await Task.FromResult(true);
         }
