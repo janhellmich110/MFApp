@@ -12,6 +12,8 @@ namespace MFApp
         {
             InitializeComponent();
             DependencyService.Register<PlayerDataStore>();
+            DependencyService.Register<ProfileDataStore>();
+
 
             // sync events
 

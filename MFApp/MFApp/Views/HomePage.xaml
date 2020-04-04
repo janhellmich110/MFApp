@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="MFApp.Views.HomePage"
+             
              xmlns:vm="clr-namespace:MFApp.ViewModels"
              Title="{Binding Title}">
 
@@ -28,7 +29,7 @@
         <StackLayout BackgroundColor="{StaticResource Accent}" VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
                 <ContentView Padding="0,40,0,40" VerticalOptions="FillAndExpand">
-                    <Image Source="xamarin_logo.png" VerticalOptions="Center" HeightRequest="64" />
+                    <Image Source="xamarin_logo.png"  VerticalOptions="Center" HeightRequest="64" />
                 </ContentView>
             </StackLayout>
         </StackLayout>
@@ -61,7 +62,8 @@
                             </Label.FormattedText>
                         </Label>
                     </ContentView>
-                    <Button Text="Neuer Flight" />
+                    <Button Text="Neuer Flight"
+                            Clicked="Button_Clicked"/>
                 </StackLayout>
             </StackLayout>
         </ScrollView>

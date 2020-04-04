@@ -145,4 +145,7 @@
       <Name>MFApp</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\GC-Sittensen-Logo.png" />
+  </ItemGroup>
 </Project>

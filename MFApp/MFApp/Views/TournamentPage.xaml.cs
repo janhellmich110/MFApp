@@ -10,16 +10,11 @@ using Xamarin.Forms.Xaml;
 namespace MFApp.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class HomePage : ContentPage
+    public partial class TournamentPage : TabbedPage
     {
-        public HomePage()
+        public TournamentPage()
         {
             InitializeComponent();
-        }
-
-        private void Button_Clicked(object sender, EventArgs e)
-        {
-            Navigation.PushAsync(new TournamentPage());
         }
     }
 }

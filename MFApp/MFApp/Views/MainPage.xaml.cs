@@ -4,6 +4,9 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using MFApp.Services;
+using MFApp.Views;
+
 
 using MFApp.Models;
 
@@ -22,6 +25,19 @@ namespace MFApp.Views
             MasterBehavior = MasterBehavior.Popover;
 
             MenuPages.Add((int)MenuItemType.Home, (NavigationPage)Detail);
+
+            IDataStore<Profile> DataStore = DependencyService.Get<IDataStore<Profile>>();
+            var profilesTask = DataStore.GetItemsAsync();
+            var profiles = profilesTask.Result;
+
+            bool profileExists = false;
+            foreach(Profile p in profiles)
+            {
+                profileExists = true;
+                break;
+            }
+            if (!profileExists)
+                Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
         }
 
         public async Task NavigateFromMenu(int id)

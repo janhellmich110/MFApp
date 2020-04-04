@@ -50,6 +50,7 @@
                         Command="{Binding OpenWebCommand}"
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White" />
+                <Button Text="Ausloggen" Clicked="Button_Clicked_1"/>
             </StackLayout>
         </ScrollView>
     </Grid>
