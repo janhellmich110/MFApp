@@ -9,6 +9,6 @@ namespace MFApp.Models
         public int Id;
         public string Name;
 
-        public List<Tournaments> TournamentsList;
+        public List<Tournament> TournamentsList;
     }
 }
