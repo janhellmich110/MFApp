@@ -9,9 +9,7 @@
              xmlns:vm="clr-namespace:MFApp.ViewModels"
              Title="{Binding Title}">
 
-    <ContentPage.BindingContext>
-        <vm:HomeViewModel />
-    </ContentPage.BindingContext>
+
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -29,43 +27,49 @@
         <StackLayout BackgroundColor="{StaticResource Accent}" VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
                 <ContentView Padding="0,40,0,40" VerticalOptions="FillAndExpand">
-                    <Image Source="xamarin_logo.png"  VerticalOptions="Center" HeightRequest="64" />
+                    <Image Source="GCSittensenLogo.png" HorizontalOptions="Center" />
                 </ContentView>
             </StackLayout>
         </StackLayout>
         <ScrollView Grid.Row="1">
-            <StackLayout Orientation="Vertical" Padding="16,40,16,40" Spacing="10" VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
-                <StackLayout BackgroundColor="{StaticResource LightTextColor}" Orientation="Vertical"  HorizontalOptions="Center" VerticalOptions="Center">
-                    <ContentView Padding="20,20,10,0" HorizontalOptions="StartAndExpand" >
-                        <Label FontSize="22">
-                            <Label.FormattedText>
-                                <FormattedString>
-                                    <FormattedString.Spans>
-                                        <Span Text="Montagsrunde" FontAttributes="Bold" FontSize="22" />
-                                        <Span Text=" " />
-                                        <Span Text="30.03.2020" ForegroundColor="{StaticResource LightTextColor}" />
-                                    </FormattedString.Spans>
-                                </FormattedString>
-                            </Label.FormattedText>
-                        </Label>
-                    </ContentView>
-                    <ContentView Padding="20,0,10,20" HorizontalOptions="StartAndExpand">
-                        <Label FontSize="10">
-                            <Label.FormattedText>
-                                <FormattedString>
-                                    <FormattedString.Spans>
-                                        <Span Text="Golfclub Königshof Sittensen" FontAttributes="None"  FontSize="18" />
-                                        <Span Text=" " />
-                                        <Span Text="1.1" ForegroundColor="{StaticResource LightTextColor}" />
-                                    </FormattedString.Spans>
-                                </FormattedString>
-                            </Label.FormattedText>
-                        </Label>
-                    </ContentView>
-                    <Button Text="Neuer Flight"
-                            Clicked="Button_Clicked"/>
-                </StackLayout>
-            </StackLayout>
+            <CollectionView x:Name="PlayerCollectionView"
+                ItemsSource="{Binding Events}">
+                <d:CollectionView.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>First Item</x:String>
+                        <x:String>Second Item</x:String>
+                        <x:String>Third Item</x:String>
+                        <x:String>Fourth Item</x:String>
+                        <x:String>Fifth Item</x:String>
+                        <x:String>Sixth Item</x:String>
+                    </x:Array>
+                </d:CollectionView.ItemsSource>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Padding="10">
+                            <Label Text="{Binding Name}" 
+                                d:Text="{Binding .}"
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource ListItemTextStyle}" 
+                                FontSize="16" />
+                            <Label Text="{Binding EventDate}" 
+                                d:Text="Name"
+                                LineBreakMode="NoWrap"
+                                Style="{DynamicResource ListItemDetailTextStyle}"
+                                FontSize="13" />
+                            <Label Text="{Binding EventType}" 
+                                d:Text="Handicap"
+                                LineBreakMode="NoWrap"
+                                Style="{DynamicResource ListItemDetailTextStyle}"
+                                FontSize="13" />
+                            <Button Text="Neuer Flight" Clicked="Button_Clicked"/>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </ScrollView>
     </Grid>
 </ContentPage>
