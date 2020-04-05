@@ -13,7 +13,10 @@ namespace MFApp
             InitializeComponent();
             DependencyService.Register<PlayerDataStore>();
             DependencyService.Register<ProfileDataStore>();
-
+            DependencyService.Register<GolfclubDataStore>();
+            DependencyService.Register<EventDataStore>();
+            DependencyService.Register<TournamentDataStore>();
+            DependencyService.Register<CourseDataStore>();
 
             // sync events
 

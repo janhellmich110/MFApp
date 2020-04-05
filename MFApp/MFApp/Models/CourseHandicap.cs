@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using SQLite;
 
 namespace MFApp.Models
 {
     public class CourseHandicap
     {
-        public int Id;
-        public double HandicapFrom;
-        public double HandicapTo;
-        public int PlayerHandicap;
+        [PrimaryKey]
+        public int Id { get; set; }
+        public double HandicapFrom { get; set; }
+        public double HandicapTo { get; set; }
+        public int PlayerHandicap { get; set; }
     }
 }

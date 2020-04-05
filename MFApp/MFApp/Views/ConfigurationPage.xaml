@@ -45,7 +45,8 @@
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
-                <Button x:Name="SyncProgressButton" Text="Sync Spieler" Clicked="Button_Clicked" />
+                <Button x:Name="SyncProgressButton" Text="Sync Data" Clicked="Button_Clicked" />
+                <Button x:Name="ResetDB" Text="Reset DB" Clicked="ResetDB_Clicked" />
                 <Button Margin="0,10,0,0" Text="MF Web öffnen"
                         Command="{Binding OpenWebCommand}"
                         BackgroundColor="{StaticResource Primary}"

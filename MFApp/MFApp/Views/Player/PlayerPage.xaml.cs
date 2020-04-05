@@ -43,7 +43,7 @@ namespace MFApp.Views
         {
             base.OnAppearing();
 
-            if (viewModel.Player.Count == 0)
+            //if (viewModel.Player.Count == 0)
                 viewModel.IsBusy = true;
         }
     }

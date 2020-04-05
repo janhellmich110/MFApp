@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using SQLite;
 
 namespace MFApp.Models
 {
     public class Golfclub
     {
-        public int Id;
-        public string Name;
-
-        public List<Course> CourseList;
+        [PrimaryKey]
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

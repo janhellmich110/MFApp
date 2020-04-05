@@ -11,74 +11,74 @@ using Xamarin.Essentials;
 
 namespace MFApp.Services
 {
-    public class TournamentsDataStore : IDataStore<Tournaments>
+    public class TournamentDataStore : IDataStore<Tournament>
     {
-        private List<Tournaments> TournamentsList;
+        private List<Tournament> TournamentList;
         private SQLiteConnection conn;
         private string dbPathTournaments => FileAccessHelper.GetLocalFilePath("MFApp.db3");
         public string StatusMessage { get; set; }
 
-        public TournamentsDataStore()
+        public TournamentDataStore()
         {
             conn = new SQLiteConnection(dbPathTournaments);
-            if(!SQLiteHelper.TableExists("Tournaments", conn))
-                conn.CreateTable<Tournaments>();
+            if(!SQLiteHelper.TableExists("Tournament", conn))
+                conn.CreateTable<Tournament>();
 
             // get all entries from table
-            TournamentsList = conn.Table<Tournaments>().ToList();
+            TournamentList = conn.Table<Tournament>().ToList();
         }
-        public async Task<bool> AddItemAsync(Tournaments Tournaments)
+        public async Task<bool> AddItemAsync(Tournament Tournament)
         {
             int result = 0;
             try
             {
-                int TournamentsCount = conn.Table<Tournaments>().Count();
-                Tournaments.Id = 100000 + TournamentsCount;
-                result = conn.Insert(Tournaments);
+                int TournamentsCount = conn.Table<Tournament>().Count();
+                Tournament.Id = 100000 + TournamentsCount;
+                result = conn.Insert(Tournament);
             }
             catch (Exception ex)
             {
-                StatusMessage = string.Format("Failed to add {0}. Error: {1}", Tournaments.Name, ex.Message);
+                StatusMessage = string.Format("Failed to add {0}. Error: {1}", Tournament.Name, ex.Message);
             }
-            TournamentsList = conn.Table<Tournaments>().ToList();
+            TournamentList = conn.Table<Tournament>().ToList();
 
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> UpdateItemAsync(Tournaments item)
+        public async Task<bool> UpdateItemAsync(Tournament item)
         {
-            var oldItem = TournamentsList.Where((Tournaments arg) => arg.Id == item.Id).FirstOrDefault();
+            var oldItem = TournamentList.Where((Tournament arg) => arg.Id == item.Id).FirstOrDefault();
             conn.Delete(oldItem);
             conn.Insert(item);
 
-            TournamentsList = conn.Table<Tournaments>().ToList();
+            TournamentList = conn.Table<Tournament>().ToList();
 
             return await Task.FromResult(true);
         }
 
         public async Task<bool> DeleteItemAsync(int id)
         {
-            var oldItem = TournamentsList.Where((Tournaments arg) => arg.Id == id).FirstOrDefault();
+            var oldItem = TournamentList.Where((Tournament arg) => arg.Id == id).FirstOrDefault();
             conn.Delete(oldItem);
 
-            TournamentsList = conn.Table<Tournaments>().ToList();
+            TournamentList = conn.Table<Tournament>().ToList();
 
             return await Task.FromResult(true);
         }
 
-        public async Task<Tournaments> GetItemAsync(int id)
+        public async Task<Tournament> GetItemAsync(int id)
         {
-            return await Task.FromResult(TournamentsList.FirstOrDefault(s => s.Id == id));
+            return await Task.FromResult(TournamentList.FirstOrDefault(s => s.Id == id));
         }
 
-        public async Task<IEnumerable<Tournaments>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<Tournament>> GetItemsAsync(bool forceRefresh = false)
         {
-            return await Task.FromResult(TournamentsList);
+            return await Task.FromResult(TournamentList);
         }
 
         public async Task<bool> SyncMFWeb()
         {
-            IEnumerable<Tournaments> items;
+            IEnumerable<Tournament> items;
             try
             {
                 HttpClient client = new HttpClient();
@@ -88,11 +88,11 @@ namespace MFApp.Services
                 if (IsConnected)
                 {
                     var json = await client.GetStringAsync($"TournamentssAPI");
-                    items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<Tournaments>>(json));
+                    items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<Tournament>>(json));
 
                     //conn.Table<Tournaments>().Delete();
-                    conn.Execute("DELETE FROM Tournaments");
-                    foreach (Tournaments item in items)
+                    conn.Execute("DELETE FROM Tournament");
+                    foreach (Tournament item in items)
                     {
                         conn.Insert(item);
                     }
@@ -103,7 +103,7 @@ namespace MFApp.Services
                 return await Task.FromResult(false);
             }
             // get all entries from table
-            TournamentsList = conn.Table<Tournaments>().ToList();
+            TournamentList = conn.Table<Tournament>().ToList();
 
             return await Task.FromResult(true);
         }

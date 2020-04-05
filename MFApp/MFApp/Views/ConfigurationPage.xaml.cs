@@ -20,18 +20,21 @@ namespace MFApp.Views
 
         private async void Button_Clicked(object sender, EventArgs e)
         {
-            IDataStore<Player> DataStore = DependencyService.Get<IDataStore<Player>>();
+            //IDataStore<Player> DataStore = DependencyService.Get<IDataStore<Player>>();
 
-            bool result = await DataStore.SyncMFWeb();
+            //bool result = await DataStore.SyncMFWeb();
+
+            MFWebDataSync DataSync = new MFWebDataSync();
+            bool result = await DataSync.SyncMFWeb();
 
             Button button = sender as Button;
             if (result)
             {
-                button.Text = "Spieler erfolgreich synchonisiert";
+                button.Text = "Daten wurden erfolgreich synchonisiert";
             }
             else
             {
-                button.Text = "Fehler bei Spieler-Sync";
+                button.Text = "Fehler bei Daten-Sync";
             }
 
         }
@@ -39,6 +42,39 @@ namespace MFApp.Views
         private void Button_Clicked_1(object sender, EventArgs e)
         {
             Navigation.PushAsync(new LogoutPage());
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            Button button = (Button) this.FindByName("SyncProgressButton");
+            if (button != null)
+            {
+                button.Text = "Sync Data";
+            }
+
+            button = (Button)this.FindByName("ResetDB");
+            if (button != null)
+            {
+                button.Text = "Reset DB";
+            }
+        }
+
+        private async void ResetDB_Clicked(object sender, EventArgs e)
+        {
+            MFWebDataSync DataSync = new MFWebDataSync();
+            bool result = await DataSync.ResetDB();
+
+            Button button = sender as Button;
+            if (result)
+            {
+                button.Text = "Daten wurden erfolgreich gelöscht";
+            }
+            else
+            {
+                button.Text = "Fehler bei Reset DB";
+            }
         }
     }
 }

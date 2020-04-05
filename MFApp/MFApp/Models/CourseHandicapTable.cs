@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using SQLite;
 
 namespace MFApp.Models
 {
     public class CourseHandicapTable
     {
-        public int Id;
+        [PrimaryKey]
+        public int Id { get; set; }
 
-        List<CourseHandicap> CourseHandicapList;
-        public int CourseId;
-        public string TeeColour;
-        public Gender TeeGender;
+        List<CourseHandicap> CourseHandicapList { get; set; }
+        public int CourseId { get; set; }
+        public string TeeColour { get; set; }
+        public Gender TeeGender { get; set; }
 
-        public int Par;
-        public double CR;
-        public int Slope;
+        public int Par { get; set; }
+        public double CR { get; set; }
+        public int Slope { get; set; }
     }
 }

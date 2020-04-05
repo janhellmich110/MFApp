@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using SQLite;
 
 namespace MFApp.Models
 {
     public class Tee
     {
-        public int Id;
-        public int Length;
-        public int hcp;
-        public int Name;
-        public string Textname;
+        [PrimaryKey]
+        public int Id { get; set; }
+
+        public int Length { get; set; }
+        public int hcp { get; set; }
+        public int Name { get; set; }
+        public string Textname { get; set; }
 
         public int CourseId;
 

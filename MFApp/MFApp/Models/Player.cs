@@ -1,4 +1,5 @@
 ﻿using System;
+using SQLite;
 
 namespace MFApp.Models
 {
@@ -9,6 +10,7 @@ namespace MFApp.Models
     }
     public class Player
     {
+        [PrimaryKey]
         public int Id { get; set; }
         public string UserName { get; set; }
         public string UserPassword { get; set; }

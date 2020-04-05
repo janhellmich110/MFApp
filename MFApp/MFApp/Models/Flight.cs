@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using SQLite;
 
 namespace MFApp.Models
 {
     public class Flight
     {
-        public int Id;
-        public int FlightNumber;
-        public List<Player> PlayerList;
+        [PrimaryKey]
+        public int Id { get; set; }
+        public int FlightNumber { get; set; }
+        public List<Player> PlayerList { get; set; }
     }
 }
