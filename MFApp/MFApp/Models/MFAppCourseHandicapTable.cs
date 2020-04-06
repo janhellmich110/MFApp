@@ -5,11 +5,12 @@ using SQLite;
 
 namespace MFApp.Models
 {
-    public class CourseHandicapTable
+    public class MFAppCourseHandicapTable
     {
         [PrimaryKey]
         public int Id { get; set; }
 
+        public List<CourseHandicap> CourseHandicaps;
         public int CourseId { get; set; }
         public string TeeColour { get; set; }
         public Gender TeeGender { get; set; }

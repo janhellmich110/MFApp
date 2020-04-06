@@ -14,9 +14,11 @@ namespace MFApp.Models
 
         public List<Course> Courses;
 
-        //public List<Flight> Flights;
+        public List<Tee> Tees;
 
-        //public List<CourseHandicapTable> CourseHandicapTables;
+        public List<MFAppFlight> Flights;
+
+        public List<MFAppCourseHandicapTable> CourseHandicapTables;
 
         public List<Player> AllPlayers { get; set; }
     }

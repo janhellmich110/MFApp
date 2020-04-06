@@ -16,6 +16,8 @@ namespace MFApp.Models
 
         public int CourseId { get; set; }
 
-        public int CourseHandicapTableId { get; set; }
+        public int HandicapTableFemaleId { get; set; }
+        public int HandicapTableMaleId { get; set; }
+        public int EventId { get; set; }
     }
 }

@@ -12,5 +12,7 @@ namespace MFApp.Models
         public double HandicapFrom { get; set; }
         public double HandicapTo { get; set; }
         public int PlayerHandicap { get; set; }
+        public int CourseHandicapTableId { get; set; }
+
     }
 }

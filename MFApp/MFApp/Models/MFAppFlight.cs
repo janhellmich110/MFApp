@@ -5,11 +5,11 @@ using SQLite;
 
 namespace MFApp.Models
 {
-    public class Flight
+    public class MFAppFlight
     {
         [PrimaryKey]
         public int Id { get; set; }
         public int FlightNumber { get; set; }
-
+        public List<Player> Players { get; set; }
     }
 }

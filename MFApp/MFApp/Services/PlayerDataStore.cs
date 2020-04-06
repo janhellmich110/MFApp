@@ -32,8 +32,11 @@ namespace MFApp.Services
             int result = 0;
             try
             {
-                int PlayerCount = conn.Table<Player>().Count();
-                Player.Id = 100000 + PlayerCount;
+                if (Player.Id == 0)
+                {
+                    int PlayerCount = conn.Table<Player>().Count();
+                    Player.Id = 100000 + PlayerCount;
+                }
                 result = conn.Insert(Player);
             }
             catch (Exception ex)

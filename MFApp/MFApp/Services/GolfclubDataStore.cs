@@ -32,8 +32,6 @@ namespace MFApp.Services
             int result = 0;
             try
             {
-                int GolfclubCount = conn.Table<Golfclub>().Count();
-                Golfclub.Id = 100000 + GolfclubCount;
                 result = conn.Insert(Golfclub);
             }
             catch (Exception ex)

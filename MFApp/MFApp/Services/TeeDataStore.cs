@@ -32,8 +32,6 @@ namespace MFApp.Services
             int result = 0;
             try
             {
-                int TeeCount = conn.Table<Tee>().Count();
-                Tee.Id = 100000 + TeeCount;
                 result = conn.Insert(Tee);
             }
             catch (Exception ex)

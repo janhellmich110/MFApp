@@ -32,8 +32,6 @@ namespace MFApp.Services
             int result = 0;
             try
             {
-                int FlightCount = conn.Table<Flight>().Count();
-                Flight.Id = 100000 + FlightCount;
                 result = conn.Insert(Flight);
             }
             catch (Exception ex)

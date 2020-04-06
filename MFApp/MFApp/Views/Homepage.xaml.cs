@@ -38,19 +38,20 @@ namespace MFApp.Views
         {
             var layout = (BindableObject)sender;
             var Event = (Event)layout.BindingContext;
-            TournamentPageData pageData = new TournamentPageData();
-            pageData.TournamentEvent = Event;
 
-            IDataStore<Player> DataStore = DependencyService.Get<IDataStore<Player>>();
-            var PlayerTask = DataStore.GetItemsAsync();
-            List<Player> players = PlayerTask.Result.ToList();
+            // get Tournament
+            IDataStore<Tournament> DataStore = DependencyService.Get<IDataStore<Tournament>>();
+            var TournamentTask = DataStore.GetItemsAsync();
+            List<Tournament> Tournaments = TournamentTask.Result.ToList();
 
-            foreach (Player p in players)
+            foreach (Tournament t in Tournaments)
             {
-                pageData.AllPlayers.Add(p);
+                if(t.EventId == Event.Id)
+                {
+                    Navigation.PushAsync(new TournamentPage(t));
+                    break;
+                }
             }
-
-            Navigation.PushAsync(new TournamentPage(pageData));
         }
 
         private void TapGestureRecognizer_Tapped(object sender, EventArgs e)

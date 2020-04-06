@@ -32,8 +32,6 @@ namespace MFApp.Services
             int result = 0;
             try
             {
-                int EventCount = conn.Table<Event>().Count();
-                Event.Id = 100000 + EventCount;
                 result = conn.Insert(Event);
             }
             catch (Exception ex)

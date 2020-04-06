@@ -81,7 +81,7 @@ namespace MFApp.Services
                     #region Course
                     try
                     {
-                        conn.Execute("DELETE FROM Courses");
+                        conn.Execute("DELETE FROM Course");
                     }
                     catch (Exception) { }
 
@@ -91,6 +91,98 @@ namespace MFApp.Services
                         DataStoreCourse.AddItemAsync(c);
                     }
                     #endregion
+
+                    #region Tee
+                    try
+                    {
+                        conn.Execute("DELETE FROM Tee");
+                    }
+                    catch (Exception) { }
+
+                    IDataStore<Tee> DataStoreTee = DependencyService.Get<IDataStore<Tee>>();
+                    foreach (Tee t in item.Tees)
+                    {
+                        DataStoreTee.AddItemAsync(t);
+                    }
+                    #endregion
+
+                    #region Flight
+                    try
+                    {
+                        conn.Execute("DELETE FROM Flight2Player");
+                    }
+                    catch (Exception) { }
+                    try
+                    {
+                        conn.Execute("DELETE FROM Flight");
+                    }
+                    catch (Exception) { }
+
+                    IDataStore<Flight> DataStoreFlight = DependencyService.Get<IDataStore<Flight>>();
+                    IDataStore<Flight2Player> DataStoreFlight2Player = DependencyService.Get<IDataStore<Flight2Player>>();
+
+                    foreach (MFAppFlight t in item.Flights)
+                    {
+                        Flight f = new Flight()
+                        {
+                            Id = t.Id,
+                            FlightNumber = t.FlightNumber
+                        };
+
+                        DataStoreFlight.AddItemAsync(f);
+
+                        foreach (Player p in t.Players)
+                        {
+                            Flight2Player f2p = new Flight2Player()
+                            {
+                                Id = (t.Id * 10000) + p.Id,
+                                FlightId = t.Id,
+                                PlayerId = p.Id
+                            };
+
+                            DataStoreFlight2Player.AddItemAsync(f2p);
+                        }
+                    }
+                    #endregion
+
+                    #region CourseHandicapTable
+                    try
+                    {
+                        conn.Execute("DELETE FROM CourseHandicap");
+                    }
+                    catch (Exception) { }
+                    try
+                    {
+                        conn.Execute("DELETE FROM CourseHandicapTable");
+                    }
+                    catch (Exception) { }
+
+                    IDataStore<CourseHandicapTable> DataStoreCourseHandicapTable = DependencyService.Get<IDataStore<CourseHandicapTable>>();
+                    IDataStore<CourseHandicap> DataStoreCourseHandicap = DependencyService.Get<IDataStore<CourseHandicap>>();
+
+                    foreach (MFAppCourseHandicapTable ct in item.CourseHandicapTables)
+                    {
+                        CourseHandicapTable cht = new CourseHandicapTable
+                        {
+                            Id = ct.Id,
+                            TeeColour = ct.TeeColour,
+                            TeeGender = ct.TeeGender,
+                            CourseId = ct.CourseId,
+                            Par = ct.Par,
+                            CR = ct.CR,
+                            Slope = ct.Slope
+                        };
+
+                        DataStoreCourseHandicapTable.AddItemAsync(cht);
+
+                        foreach (CourseHandicap ch in ct.CourseHandicaps)
+                        {
+                            DataStoreCourseHandicap.AddItemAsync(ch);
+
+                        }
+                    }
+                    #endregion
+
 
                     try
                     {

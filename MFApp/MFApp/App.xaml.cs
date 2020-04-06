@@ -17,6 +17,11 @@ namespace MFApp
             DependencyService.Register<EventDataStore>();
             DependencyService.Register<TournamentDataStore>();
             DependencyService.Register<CourseDataStore>();
+            DependencyService.Register<CourseHandicapTableDataStore>();
+            DependencyService.Register<CourseHandicapDataStore>();
+            DependencyService.Register<FlightDataStore>();
+            DependencyService.Register<Flight2PlayerDataStore>();
+            DependencyService.Register<TeeDataStore>();
 
             // sync events
 

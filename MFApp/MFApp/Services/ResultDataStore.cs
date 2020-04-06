@@ -32,8 +32,11 @@ namespace MFApp.Services
             int result = 0;
             try
             {
-                int ResultCount = conn.Table<Result>().Count();
-                Result.Id = 100000 + ResultCount;
+                if (Result.Id == 0)
+                {
+                    int ResultCount = conn.Table<Result>().Count();
+                    Result.Id = 100000 + ResultCount;
+                }
                 result = conn.Insert(Result);
             }
             catch (Exception ex)

@@ -36,13 +36,13 @@
                                 LineBreakMode="NoWrap" 
                                 Style="{DynamicResource ListItemTextStyle}" 
                                 FontSize="16" />
-                            <Switch x:Name="{Binding Id}"  IsToggled="False" Toggled="Switch_Toggled"/>
+                            <Switch x:Name="{Binding Id}"  IsToggled="{Binding Selected}" Toggled="Switch_Toggled"/>
                         </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </ContentPage>
-        <ContentPage Title="Scorecard">
+        <ContentPage Title="Scorecard" Appearing="ContentPage_Scorecard_Appearing">
             <Grid x:Name="ScoreKarte">
 
                 <!--<Grid.RowDefinitions>

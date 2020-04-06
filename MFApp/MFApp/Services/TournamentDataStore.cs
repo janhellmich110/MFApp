@@ -32,8 +32,6 @@ namespace MFApp.Services
             int result = 0;
             try
             {
-                int TournamentsCount = conn.Table<Tournament>().Count();
-                Tournament.Id = 100000 + TournamentsCount;
                 result = conn.Insert(Tournament);
             }
             catch (Exception ex)

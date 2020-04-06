@@ -31,9 +31,7 @@ namespace MFApp.Services
         {
             int result = 0;
             try
-            {
-                int CourseHandicapTableCount = conn.Table<CourseHandicapTable>().Count();
-                CourseHandicapTable.Id = 100000 + CourseHandicapTableCount;
+            {                
                 result = conn.Insert(CourseHandicapTable);
             }
             catch (Exception ex)
