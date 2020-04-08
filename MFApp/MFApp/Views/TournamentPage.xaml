@@ -43,44 +43,13 @@
             </CollectionView>
         </ContentPage>
         <ContentPage Title="Scorecard" Appearing="ContentPage_Scorecard_Appearing">
-            <Grid x:Name="ScoreKarte">
-
-                <!--<Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"  />
-                    <ColumnDefinition Width="*"  />
-                </Grid.ColumnDefinitions>
-
-                <Label Text="Spieler" Grid.Row="0" Grid.Column="0" />
-                <Label Text="1" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
-                <Label Text="2" Grid.Row="2" Grid.Column="1" />
-                <Label Text="3" Grid.Row="3" Grid.Column="1" />
-                <Label Text="4" Grid.Row="4" Grid.Column="1" />
-                <Label Text="5" Grid.Row="5" Grid.Column="1" />
-                <Label Text="6" Grid.Row="6" Grid.Column="1" />
-                <Label Text="7" Grid.Row="7" Grid.Column="1" />
-                <Label Text="8" Grid.Row="8" Grid.Column="1" />
-                <Label Text="9" Grid.Row="9" Grid.Column="1" />
-
-                <Entry Text="" Grid.Row="0" Grid.Column="2" />
-                <Entry Text="" Grid.Row="1" Grid.Column="2" />
-                <Entry Text="" Grid.Row="2" Grid.Column="2" />
-                <Entry Text="" Grid.Row="3" Grid.Column="2" />
-                <Entry Text="" Grid.Row="4" Grid.Column="2" />
-                <Entry Text="" Grid.Row="5" Grid.Column="2" />
-                <Entry Text="" Grid.Row="6" Grid.Column="2" />
-                <Entry Text="" Grid.Row="7" Grid.Column="2" />
-                <Entry Text="" Grid.Row="8" Grid.Column="2" />
-                <Entry Text="" Grid.Row="9" Grid.Column="2" />
-                <Button Text="click" x:Name="Button" Grid.Row="10" Grid.Column="2" BackgroundColor="Yellow"/>-->
-
-            </Grid>
+            <ScrollView Orientation="Vertical"  VerticalScrollBarVisibility="Default" BackgroundColor="LightGray">
+                <Grid x:Name="ScoreKarte">
 
 
+                </Grid>
+
+            </ScrollView>
         </ContentPage>
     </TabbedPage.Children>
 
