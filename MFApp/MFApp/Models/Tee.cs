@@ -15,7 +15,7 @@ namespace MFApp.Models
         public int Name { get; set; }
         public string Textname { get; set; }
 
-        public int CourseId;
+        public int CourseId { get; set; }
 
     }
 }

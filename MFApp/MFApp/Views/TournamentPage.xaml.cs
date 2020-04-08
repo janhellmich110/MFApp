@@ -22,43 +22,6 @@ namespace MFApp.Views
             TournamentPageData PageData = new TournamentPageData(tournament);
 
             BindingContext = this.TournamentPageData = PageData;
-
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-
-            ScoreKarte.ColumnDefinitions.Add(new ColumnDefinition());
-            ScoreKarte.ColumnDefinitions.Add(new ColumnDefinition());
-            ScoreKarte.ColumnDefinitions.Add(new ColumnDefinition());
-
-            for (int rowIndex = 0; rowIndex < 11; rowIndex++)
-            {
-                for (int columnIndex = 0; columnIndex < 3; columnIndex++)
-                {
-                    var stackLayout = new StackLayout();
-
-                    if ((rowIndex == 0) || (columnIndex == 0))
-                        stackLayout.BackgroundColor = Color.Gray;
-
-                    var label = new Label
-                    {
-                        Text = rowIndex.ToString() + "-" + columnIndex.ToString(),
-                        VerticalOptions = LayoutOptions.Center,
-                        HorizontalOptions = LayoutOptions.Center,
-                    };
-                    stackLayout.Children.Add(label);
-                    ScoreKarte.Children.Add(stackLayout, columnIndex, rowIndex);
-                }
-            }
-
         }
 
         public TournamentPage()
@@ -69,9 +32,9 @@ namespace MFApp.Views
         private void Switch_Toggled(object sender, ToggledEventArgs e)
         {
             Switch CurrentSwitch = (Switch)sender;
-            TournamentPlayer p = (TournamentPlayer)CurrentSwitch.BindingContext;            
+            TournamentPlayer p = (TournamentPlayer)CurrentSwitch.BindingContext;
 
-            if(e.Value)
+            if (e.Value)
             {
                 TournamentPageData.SelectedPlayers.Add(p);
             }
@@ -80,6 +43,15 @@ namespace MFApp.Views
                 TournamentPageData.SelectedPlayers.Remove(p);
             }
         }
+        void Entry_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var oldText = e.OldTextValue;
+            var newText = e.NewTextValue;
+
+            
+
+        }
+
 
         private void ContentPage_Scorecard_Appearing(object sender, EventArgs e)
         {
@@ -89,23 +61,9 @@ namespace MFApp.Views
             ScoreKarte.Children.Clear();
 
             int playerCount = this.TournamentPageData.SelectedPlayers.Count();
+            int teeCount = this.TournamentPageData.TeeList.Count();
 
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-            ScoreKarte.RowDefinitions.Add(new RowDefinition());
 
-            for(int i = 0; i < (playerCount + 1); i++)
-            {
-                ScoreKarte.ColumnDefinitions.Add(new ColumnDefinition());
-            }
 
             // header row
             for (int columnIndex = 0; columnIndex < (playerCount + 1); columnIndex++)
@@ -129,25 +87,235 @@ namespace MFApp.Views
             }
 
             // add tee rows
-            for (int rowIndex = 1; rowIndex < 11; rowIndex++)
+            if (teeCount == 9)
             {
-                for (int columnIndex = 0; columnIndex < (playerCount + 1); columnIndex++)
+
+                for (int i = 0; i < (teeCount + 2); i++)
                 {
-                    var stackLayout = new StackLayout();
+                    ScoreKarte.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
+                }
 
-                    if ((rowIndex == 0) || (columnIndex == 0))
-                        stackLayout.BackgroundColor = Color.Gray;
 
-                    var label = new Label
+                for (int i = 0; i < (playerCount + 1); i++)
+                {
+                    ScoreKarte.ColumnDefinitions.Add(new ColumnDefinition());
+                }
+
+                for (int rowIndex = 1; rowIndex < (teeCount + 2); rowIndex++)
+                {
+                    for (int columnIndex = 0; columnIndex < (playerCount + 1); columnIndex++)
                     {
-                        Text = rowIndex.ToString() + "-" + columnIndex.ToString(),
-                        VerticalOptions = LayoutOptions.Center,
-                        HorizontalOptions = LayoutOptions.Center,
-                    };
-                    stackLayout.Children.Add(label);
-                    ScoreKarte.Children.Add(stackLayout, columnIndex, rowIndex);
+                        var stackLayout = new StackLayout();
+
+                        if ((columnIndex == 0) || (rowIndex == 0) || (rowIndex == 10) )
+                            stackLayout.BackgroundColor = Color.Gray;
+
+                        if (!((rowIndex == 0) || (columnIndex == 0) || (rowIndex == 10)))
+                            stackLayout.BackgroundColor = Color.White;
+
+
+                        if ((columnIndex == 0) && !(rowIndex == 10))
+                        {
+                            var label = new Label
+                            {
+                                Text = rowIndex.ToString(),
+                                VerticalOptions = LayoutOptions.Center,
+                                HorizontalOptions = LayoutOptions.Center,
+                            };
+                            stackLayout.Children.Add(label);
+                            ScoreKarte.Children.Add(stackLayout, columnIndex, rowIndex);
+                        }
+
+                        if ((columnIndex == 0) && (rowIndex == 10))
+                        {
+                            var label = new Label
+                            {
+                                Text = "Total",
+                                VerticalOptions = LayoutOptions.Center,
+                                HorizontalOptions = LayoutOptions.Center,
+                            };
+                            stackLayout.Children.Add(label);
+                            ScoreKarte.Children.Add(stackLayout, columnIndex, rowIndex);
+                        }
+
+
+                        if ((columnIndex > 0) && (rowIndex == 10))
+                        {
+                            var label = new Label
+                            {
+                                Text = "",
+                                VerticalOptions = LayoutOptions.Center,
+                                HorizontalOptions = LayoutOptions.Center,
+                            };
+                            stackLayout.Children.Add(label);
+                            ScoreKarte.Children.Add(stackLayout, columnIndex, rowIndex);
+                        }
+
+
+                        if (columnIndex > 0)
+                        {
+                            for (int i = 0; i < rowIndex; i++)
+                            {
+                                if (!(rowIndex == 10) )
+                                {
+                                    Entry entry = new Entry
+                                    {
+                                        Text = "",
+                                        VerticalOptions = LayoutOptions.Center,
+                                        HorizontalOptions = LayoutOptions.Center,
+                                        Keyboard = Keyboard.Numeric,
+                                        ReturnCommandParameter = columnIndex.ToString() + "_" + rowIndex.ToString()
+                                        
+                                    };
+                                    entry.TextChanged += Entry_TextChanged;
+
+                                    stackLayout.Children.Add(entry);
+                                    ScoreKarte.Children.Add(stackLayout, columnIndex, rowIndex);
+
+                                }
+                            }
+                        }
+                    }
                 }
             }
+            if (teeCount == 18)
+            {
+
+                for (int i = 0; i < (teeCount + 4); i++)
+                {
+                    ScoreKarte.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
+                }
+
+
+                for (int i = 0; i < (playerCount + 1); i++)
+                {
+                    ScoreKarte.ColumnDefinitions.Add(new ColumnDefinition ());
+                }
+
+                for (int rowIndex = 1; rowIndex < (teeCount + 4); rowIndex++)
+                {
+                    for (int columnIndex = 0; columnIndex < (playerCount + 1); columnIndex++)
+                    {
+                        var stackLayout = new StackLayout();
+
+                        if ((columnIndex == 0) || (rowIndex == 0) || (rowIndex == 10) || (rowIndex == 21) || (rowIndex == 20))
+                            stackLayout.BackgroundColor = Color.Gray;
+
+                        if (!((rowIndex == 0) || (columnIndex == 0) || (rowIndex == 10) || (rowIndex == 21) || (rowIndex == 20)))
+                            stackLayout.BackgroundColor = Color.White;
+
+
+                        if((columnIndex == 0) && !((rowIndex == 10) || (rowIndex == 20) || (rowIndex == 21)))
+                        {
+                            var label = new Label
+                            {
+                                Text = rowIndex.ToString(),
+                                VerticalOptions = LayoutOptions.Center,
+                                HorizontalOptions = LayoutOptions.Center,
+                            };
+                            stackLayout.Children.Add(label);
+                            ScoreKarte.Children.Add(stackLayout, columnIndex, rowIndex);
+                        }
+
+                        if ((columnIndex == 0) && (rowIndex == 10) ) 
+                        {
+                            var label = new Label
+                            {
+                                Text = "Out",
+                                VerticalOptions = LayoutOptions.Center,
+                                HorizontalOptions = LayoutOptions.Center,
+                            };
+                            stackLayout.Children.Add(label);
+                            ScoreKarte.Children.Add(stackLayout, columnIndex, rowIndex);
+                        }
+
+                        if ((columnIndex == 0) && (rowIndex == 20))
+                        {
+                            var label = new Label
+                            {
+                                Text = "In",
+                                VerticalOptions = LayoutOptions.Center,
+                                HorizontalOptions = LayoutOptions.Center,
+                            };
+                            stackLayout.Children.Add(label);
+                            ScoreKarte.Children.Add(stackLayout, columnIndex, rowIndex);
+                        }
+
+                        if ((columnIndex == 0) && (rowIndex == 21))
+                        {
+                            var label = new Label
+                            {
+                                Text = "Total",
+                                VerticalOptions = LayoutOptions.Center,
+                                HorizontalOptions = LayoutOptions.Center,
+                            };
+                            stackLayout.Children.Add(label);
+                            ScoreKarte.Children.Add(stackLayout, columnIndex, rowIndex);
+                        }
+
+                        if ((columnIndex == 1) && (rowIndex == 10))
+                        {
+                            var label = new Label
+                            {
+                                Text = "",
+                                VerticalOptions = LayoutOptions.Center,
+                                HorizontalOptions = LayoutOptions.Center,
+                            };
+                            stackLayout.Children.Add(label);
+                            ScoreKarte.Children.Add(stackLayout, columnIndex, rowIndex);
+                        }
+
+                        if ((columnIndex == 1) && (rowIndex == 20))
+                        {
+                            var label = new Label
+                            {
+                                Text = "",
+                                VerticalOptions = LayoutOptions.Center,
+                                HorizontalOptions = LayoutOptions.Center,
+                            };
+                            stackLayout.Children.Add(label);
+                            ScoreKarte.Children.Add(stackLayout, columnIndex, rowIndex);
+                        }
+
+                        if ((columnIndex == 1) && (rowIndex == 21))
+                        {
+                            var label = new Label
+                            {
+                                Text = "",
+                                VerticalOptions = LayoutOptions.Center,
+                                HorizontalOptions = LayoutOptions.Center,
+                            };
+                            stackLayout.Children.Add(label);
+                            ScoreKarte.Children.Add(stackLayout, columnIndex, rowIndex);
+                        }
+
+                        if (columnIndex > 0)
+                        {
+                            for (int i = 0; i < rowIndex; i++)
+                            {
+                                if (!((rowIndex == 10) || (rowIndex == 20) || (rowIndex == 21)))
+                                {
+                                    Entry entry = new Entry
+                                    {
+                                        Text ="",
+                                        VerticalOptions = LayoutOptions.Center,
+                                        HorizontalOptions = LayoutOptions.Center,
+                                        Keyboard = Keyboard.Numeric,
+                                        ReturnCommandParameter = columnIndex.ToString() + "_" + rowIndex.ToString()
+
+                                    };
+                                    entry.TextChanged += Entry_TextChanged;
+
+                                    stackLayout.Children.Add(entry);
+                                    ScoreKarte.Children.Add(stackLayout, columnIndex, rowIndex);
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }    
+            
         }
     }
 }

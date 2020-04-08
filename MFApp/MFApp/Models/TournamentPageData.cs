@@ -35,6 +35,27 @@ namespace MFApp.Models
                 }
             }
 
+            // get course
+            IDataStore<Course> DataStoreCourse = DependencyService.Get<IDataStore<Course>>();
+            var CourseTask = DataStoreCourse.GetItemsAsync();
+            List<Course> Courses = CourseTask.Result.ToList();
+
+            foreach (Course c in Courses)
+            {
+                if (Tournament.CourseId == c.Id)
+                {
+                    Course = c;
+                    break;
+                }
+            }
+
+            // get list of tees
+            IDataStore<Tee> DataStoreTee = DependencyService.Get<IDataStore<Tee>>();
+            var TeeTask = DataStoreTee.GetItemsAsync();
+            List<Tee> Tees = TeeTask.Result.ToList();
+
+            TeeList = Tees.Where(x => x.CourseId == Course.Id).OrderBy(y => y.Name).ToList();
+
             AllPlayers = new ObservableCollection<TournamentPlayer>();
             SelectedPlayers = new ObservableCollection<TournamentPlayer>();
 
@@ -83,6 +104,10 @@ namespace MFApp.Models
         public Event TournamentEvent { get; set; }
 
         public Tournament Tournament { get; set; }
+
+        public Course Course { get; set; }
+
+        public List<Tee> TeeList { get; set; }
 
         public ObservableCollection<TournamentPlayer> AllPlayers{ get; set;}
 
