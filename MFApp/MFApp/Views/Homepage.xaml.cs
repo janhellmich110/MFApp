@@ -58,5 +58,7 @@ namespace MFApp.Views
         {
             Navigation.PushAsync(new TournamentPage());
         }
+
+
     }
 }

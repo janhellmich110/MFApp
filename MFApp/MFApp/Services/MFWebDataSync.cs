@@ -297,6 +297,19 @@ namespace MFApp.Services
                     conn.Execute("DROP TABLE Tournament;");
                 }
                 catch (Exception) { }
+
+                // recreate all tables by calling contructor
+                PlayerDataStore playerds = new PlayerDataStore();
+                ProfileDataStore profilsDs = new ProfileDataStore();
+                GolfclubDataStore clubds = new GolfclubDataStore();
+                EventDataStore eventDs = new EventDataStore();
+                TournamentDataStore tourDs = new TournamentDataStore();
+                CourseDataStore ourseDs = new CourseDataStore();
+                CourseHandicapTableDataStore courseht = new CourseHandicapTableDataStore();
+                CourseHandicapDataStore courseh = new CourseHandicapDataStore();
+                FlightDataStore flightDs = new FlightDataStore();
+                Flight2PlayerDataStore f2pDs = new Flight2PlayerDataStore();
+                TeeDataStore teeDs = new TeeDataStore();
             }
             catch (Exception exp)
             {
