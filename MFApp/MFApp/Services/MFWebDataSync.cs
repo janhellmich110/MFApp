@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
-using System.Data;
+using System.Net.Http.Headers;
+using System.Text;
 
 using MFApp.Models;
 
@@ -202,6 +203,28 @@ namespace MFApp.Services
                 return await Task.FromResult(false);
             }
 
+            return await Task.FromResult(true);
+        }
+
+        public async Task<bool> SendResults(List<TournamentResult> ResultList)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri($"https://demo.portivity.de/mfweb/api/");
+
+                bool IsConnected = Connectivity.NetworkAccess == NetworkAccess.Internet;
+                if (IsConnected)
+                {
+                    var content = new StringContent(JsonConvert.SerializeObject(ResultList).ToString(), Encoding.UTF8, "application/json");
+                    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    var result = client.PostAsync($"MyAppData/SendTournamentResults", content).Result;
+                }
+            }
+            catch(Exception exp)
+            {
+                return await Task.FromResult(false);
+            }
             return await Task.FromResult(true);
         }
 
