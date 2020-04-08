@@ -146,6 +146,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\GC-Sittensen-Logo.png" />
+    <BundleResource Include="Resources\mf.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\MFBackground.jpg" />
   </ItemGroup>
 </Project>
