@@ -72,6 +72,16 @@ namespace MFApp.Models
                 break;
             }
 
+            // find existing flight
+            List<int> FlightPlayerIds = new List<int>();
+            int flightNumber = Tournament.Id * 10000 + CurrentProfile.Id;
+
+            IDataStore<Flight2Player> DataStoreFlight2Player = DependencyService.Get<IDataStore<Flight2Player>>();
+            var Flight2PlayerTask = DataStoreFlight2Player.GetItemsAsync();
+            List<Flight2Player> Flight2Players = Flight2PlayerTask.Result.ToList();
+
+            FlightPlayerIds = Flight2Players.Where(x => x.FlightId == flightNumber).Select(x=>x.PlayerId).ToList();
+
             // Fill All Players
             IDataStore<Player> DataStore = DependencyService.Get<IDataStore<Player>>();
             var PlayerTask = DataStore.GetItemsAsync();
@@ -94,13 +104,31 @@ namespace MFApp.Models
 
                 if(CurrentProfile.UserName.ToLower() == tp.UserName.ToLower())
                 {
-                    tp.Selected = true;
+                    // currentplayer is in flight, if no flight is saved
+                    if(FlightPlayerIds.Count() ==0)
+                        tp.Selected = true;
+                    CurrentPlayer = p;
                     //SelectedPlayers.Add(tp);
+                }
+
+                if (FlightPlayerIds.Count() > 0)
+                {
+                    foreach(int i in FlightPlayerIds)
+                    {
+                        if(i==tp.Id)
+                        {
+                            tp.Selected = true;
+                            break;
+                        }
+                    }
                 }
 
                 AllPlayers.Add(tp);
             }
         }
+
+        public Player CurrentPlayer { get; set; }
+
         public Event TournamentEvent { get; set; }
 
         public Tournament Tournament { get; set; }

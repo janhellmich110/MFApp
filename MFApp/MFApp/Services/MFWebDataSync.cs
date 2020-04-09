@@ -110,12 +110,12 @@ namespace MFApp.Services
                     #region Flight
                     try
                     {
-                        conn.Execute("DELETE FROM Flight2Player");
+                        conn.Execute("DELETE FROM Flight2Player Where Id < 100000");
                     }
                     catch (Exception) { }
                     try
                     {
-                        conn.Execute("DELETE FROM Flight");
+                        conn.Execute("DELETE FROM Flight Where Id < 10000");
                     }
                     catch (Exception) { }
 
@@ -127,7 +127,8 @@ namespace MFApp.Services
                         Flight f = new Flight()
                         {
                             Id = t.Id,
-                            FlightNumber = t.FlightNumber
+                            FlightNumber = t.FlightNumber,
+                            TournamentId=t.TournamentId
                         };
 
                         DataStoreFlight.AddItemAsync(f);

@@ -52,6 +52,7 @@ namespace MFApp.Views
             {
                 TournamentPageData.SelectedPlayers.Remove(p);
             }
+            SaveFlight();
         }
 
         private void ContentPage_Scorecard_Appearing(object sender, EventArgs e)
@@ -346,9 +347,55 @@ namespace MFApp.Views
             await DataSync.SendResults(TournamentResultList);
         }
 
-        private async SaveFlight()
+        private void SaveFlight()
         {
+            int tournamentId = TournamentPageData.Tournament.Id;
 
+            IDataStore<Flight> DataStoreFlight = DependencyService.Get<IDataStore<Flight>>();
+            IDataStore<Flight2Player> DataStoreFlight2Player = DependencyService.Get<IDataStore<Flight2Player>>();
+
+            var FlightTask = DataStoreFlight.GetItemsAsync();
+            List<Flight> Flights = FlightTask.Result.ToList();
+
+            // check if flight exists
+            int flightNumber = TournamentPageData.Tournament.Id * 10000 + TournamentPageData.CurrentPlayer.Id;
+            Flight f = Flights.Where(x => x.TournamentId == tournamentId).Where(y => y.FlightNumber == flightNumber).FirstOrDefault();
+            if(f == null)
+            {
+                // create flight
+                f = new Flight()
+                {
+                    Id = flightNumber,
+                    FlightNumber = flightNumber,
+                    TournamentId = tournamentId
+                };
+
+                DataStoreFlight.AddItemAsync(f);
+            }
+            else
+            {
+                // remove all players from flight
+                var Flight2PlayerTask = DataStoreFlight2Player.GetItemsAsync();
+                List<Flight2Player> Flight2Players = Flight2PlayerTask.Result.ToList();
+
+                List<Flight2Player> CurrentFlightPlayers = Flight2Players.Where(x => x.FlightId == flightNumber).ToList();
+                foreach(Flight2Player f2p in CurrentFlightPlayers)
+                {
+                    DataStoreFlight2Player.DeleteItemAsync(f2p.Id);
+                }
+            }
+
+            // add players to flight
+            foreach(TournamentPlayer p in TournamentPageData.SelectedPlayers)
+            {
+                Flight2Player f2p = new Flight2Player
+                {
+                    Id = flightNumber + (p.Id * 100000),
+                    FlightId = flightNumber,
+                    PlayerId = p.Id
+                };
+                DataStoreFlight2Player.AddItemAsync(f2p);
+            }
         }
     }
 }

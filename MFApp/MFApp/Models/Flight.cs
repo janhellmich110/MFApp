@@ -9,7 +9,9 @@ namespace MFApp.Models
     {
         [PrimaryKey]
         public int Id { get; set; }
+
         public int FlightNumber { get; set; }
 
+        public int TournamentId { get; set; }
     }
 }

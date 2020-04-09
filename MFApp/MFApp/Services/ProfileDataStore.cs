@@ -31,8 +31,11 @@ namespace MFApp.Services
             int result = 0;
             try
             {
-                int ProfileCount = conn.Table<Profile>().Count();
-                Profile.Id = 100000 + ProfileCount;
+                if (Profile.Id == 0)
+                {
+                    int ProfileCount = conn.Table<Profile>().Count();
+                    Profile.Id = 100000 + ProfileCount;
+                }
                 result = conn.Insert(Profile);
             }
             catch (Exception ex)
