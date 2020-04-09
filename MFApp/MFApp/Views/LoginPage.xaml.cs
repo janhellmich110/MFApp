@@ -76,6 +76,8 @@ namespace MFApp.Views
                 p.Mail = currentPlayer.Mail;
                 DataStoreProfile.AddItemAsync(p);
 
+                MFWebDataSync DataSync = new MFWebDataSync();
+                DataSync.SyncMFWeb();
 
                 Navigation.PopModalAsync();
             }

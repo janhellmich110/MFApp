@@ -20,6 +20,8 @@ namespace MFApp.Views
         Label[] OutSumLabels = null;
         Label[] TotalSumLabels = null;
 
+        int LastPlayerId = 0;
+
         public TournamentPage(Tournament tournament)
         {
             InitializeComponent();
@@ -27,7 +29,7 @@ namespace MFApp.Views
             TournamentPageData PageData = new TournamentPageData(tournament);
             InSumLabels = new Label[4];
             OutSumLabels = new Label[4];
-            TotalSumLabels = new Label[4];
+            TotalSumLabels = new Label[4];            
 
             BindingContext = this.TournamentPageData = PageData;
         }
@@ -60,9 +62,16 @@ namespace MFApp.Views
             ScoreKarte.Children.Clear();
 
             int playerCount = this.TournamentPageData.SelectedPlayers.Count();
+            LastPlayerId = TournamentPageData.SelectedPlayers[playerCount - 1].Id;
             int teeCount = this.TournamentPageData.TeeList.Count();
 
             int rowcount = teeCount == 9 ? 11 : 22;
+
+            // get saved results
+            IDataStore<Result> DataStore = DependencyService.Get<IDataStore<Result>>();
+            var ResultTask = DataStore.GetItemsAsync();
+            List<Result> Results = ResultTask.Result.ToList();
+            List<Result> SavedResults = Results.Where(x => x.TournamentId == TournamentPageData.Tournament.Id).ToList();
 
             for (int columnIndex = 0; columnIndex < (playerCount + 1); columnIndex++)
             {
@@ -91,8 +100,15 @@ namespace MFApp.Views
                         }
                         else
                         {
+                            // get saved value
+                            Result SavedResult = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[columnIndex - 1].Id).Where(y => y.TeeId == TournamentPageData.TeeList[rowIndex - 1].Id).FirstOrDefault();
+                            string savedScore = "";
+                            if(SavedResult!=null)
+                            {
+                                savedScore = SavedResult.Score.ToString();
+                            }
                             string entryParameter = rowIndex.ToString() + "_" + columnIndex.ToString();
-                            AddEntryCell(entryParameter, columnIndex, rowIndex);
+                            AddEntryCell(entryParameter, columnIndex, rowIndex, savedScore);
                         }
                     }
                     else if (rowIndex == 10)
@@ -121,8 +137,15 @@ namespace MFApp.Views
                         }
                         else
                         {
+                            // get saved value
+                            Result SavedResult = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[columnIndex - 1].Id).Where(y => y.TeeId == TournamentPageData.TeeList[rowIndex - 2].Id).FirstOrDefault();
+                            string savedScore = "";
+                            if (SavedResult != null)
+                            {
+                                savedScore = SavedResult.Score.ToString();
+                            }
                             string entryParameter = (rowIndex - 1).ToString() + "_" + columnIndex.ToString();
-                            AddEntryCell(entryParameter, columnIndex, rowIndex);
+                            AddEntryCell(entryParameter, columnIndex, rowIndex, savedScore);
                         }
                     }
                     else if ((teeCount > 9) && (rowIndex == 20))
@@ -173,13 +196,14 @@ namespace MFApp.Views
             return label;
         }
 
-        private void AddEntryCell(string CommandParameter, int ColumnIndex, int RowIndex)
+        private void AddEntryCell(string CommandParameter, int ColumnIndex, int RowIndex, string EntryText = "")
         {
             var stackLayout = new StackLayout();
             stackLayout.BackgroundColor = Color.White;
 
             var entry = new Entry
             {
+                Text= EntryText,
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.Center,
                 Keyboard = Keyboard.Numeric,
@@ -195,6 +219,18 @@ namespace MFApp.Views
 
         private async void Entry_TextChanged(object sender, TextChangedEventArgs e)
         {
+            // save result
+            var oldText = e.OldTextValue;
+            var newText = e.NewTextValue;
+
+            string[] currentCommandParameter = ((Entry)sender).ReturnCommandParameter.ToString().Split('_');
+            int currentrowIndex = Convert.ToInt32(currentCommandParameter[0].ToString());
+            int currentColumnIndex = Convert.ToInt32(currentCommandParameter[1].ToString());
+            int currentPlayerId = TournamentPageData.SelectedPlayers[currentColumnIndex - 1].Id;
+
+            SaveResultLocal(newText, currentColumnIndex, currentrowIndex);
+
+            // calculate sum fields
             int[] InSum = new int[4] { 0, 0, 0, 0 };
             int[] OutSum = new int[4] { 0, 0, 0, 0 };
             int[] TotalSum = new int[4] { 0, 0, 0, 0 };
@@ -269,9 +305,50 @@ namespace MFApp.Views
             }
 
             // send results to webapp
-            
+            SaveResultsWeb(TournamentResultList);
+        }
+
+        private void SaveResultLocal(string NewText, int ColumnIndex, int RowIndex)
+        {
+            int playerId = TournamentPageData.SelectedPlayers[ColumnIndex - 1].Id;
+            int tournamentId = TournamentPageData.Tournament.Id;
+            int teeId = TournamentPageData.TeeList[RowIndex - 1].Id;
+
+            // local saving
+            IDataStore<Result> DataStore = DependencyService.Get<IDataStore<Result>>();
+            var ResultTask = DataStore.GetItemsAsync();
+            List<Result> Results = ResultTask.Result.ToList();
+
+            Result res = Results.Where(x => x.TournamentId == tournamentId).Where(y => y.PlayerId == playerId).Where(z => z.TeeId == teeId).FirstOrDefault();
+            if(res != null)
+            {
+                res.Score = Convert.ToInt32(NewText);
+                DataStore.UpdateItemAsync(res);
+            }
+            else
+            {
+                int newScore = Convert.ToInt32(NewText);
+                Result newRes = new Result
+                {
+                    Score = newScore,
+                    TournamentId = tournamentId,
+                    PlayerId = playerId,
+                    TeeId = teeId
+                };
+                DataStore.AddItemAsync(newRes);
+            }
+        }
+
+        private async void SaveResultsWeb(List<TournamentResult> TournamentResultList)
+        {
+            // send results to web
             MFWebDataSync DataSync = new MFWebDataSync();
             await DataSync.SendResults(TournamentResultList);
+        }
+
+        private async SaveFlight()
+        {
+
         }
     }
 }

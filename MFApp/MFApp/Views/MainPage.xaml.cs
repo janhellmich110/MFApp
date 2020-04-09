@@ -38,6 +38,11 @@ namespace MFApp.Views
             }
             if (!profileExists)
                 Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
+            else
+            {
+                MFWebDataSync DataSync = new MFWebDataSync();
+                DataSync.SyncMFWeb();
+            }
         }
 
         public async Task NavigateFromMenu(int id)
