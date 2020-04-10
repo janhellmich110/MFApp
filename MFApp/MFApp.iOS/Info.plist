@@ -30,9 +30,9 @@
 	<string>LaunchScreen</string>
 	<key>CFBundleName</key>
 	<string>MFApp</string>
-	<key>XSAppIconAssets</key>
-	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>CFBundleIdentifier</key>
 	<string>xamarin.portivity.de.MFApp</string>
+	<key>XSAppIconAssets</key>
+	<string>Assets.xcassets/AppIcon.appiconset</string>
 </dict>
 </plist>
