@@ -8,11 +8,15 @@
   <!--Pages can be added as references or inline-->
     <TabbedPage.Children>
         <ContentPage Title="Tunierinfo">
-            <StackLayout>
-                <Label Text="{Binding TournamentEvent.Name}"
-                       HorizontalOptions="CenterAndExpand"
-                       VerticalOptions="Center" />
-                <Label Text="{Binding TournamentEvent.EventDate}"/>
+            <StackLayout Padding="40,20,40,20">
+                <StackLayout Padding="30,20,30,20" BackgroundColor="#90EE90">
+                    <Label Text="{Binding TournamentEvent.Name}"
+                           HorizontalOptions="CenterAndExpand"
+                           VerticalOptions="Center" />
+                    <Label Text="{Binding TournamentEvent.EventDate}"
+                           HorizontalOptions="CenterAndExpand"
+                           VerticalOptions="Center"/>
+                </StackLayout>
             </StackLayout>
         </ContentPage>
         <ContentPage Title="Spielerauswahl">
