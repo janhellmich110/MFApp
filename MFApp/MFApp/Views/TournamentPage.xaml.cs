@@ -193,14 +193,21 @@ namespace MFApp.Views
 
         private Label AddLabelCell(string LabelText, int ColumnIndex, int RowIndex)
         {
-            var stackLayout = new StackLayout();
+            var stackLayout = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                HorizontalOptions = LayoutOptions.FillAndExpand
+            };
             stackLayout.BackgroundColor = Color.LightGray;
 
             var label = new Label
             {
                 Text = LabelText,
+                VerticalTextAlignment = TextAlignment.Center,
                 VerticalOptions = LayoutOptions.Center,
-                HorizontalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                FontSize = 20,
+                FontAttributes = FontAttributes.Bold
             };
             stackLayout.Children.Add(label);
             ScoreKarte.Children.Add(stackLayout, ColumnIndex, RowIndex);
@@ -210,17 +217,23 @@ namespace MFApp.Views
 
         private void AddEntryCell(string CommandParameter, int ColumnIndex, int RowIndex, string EntryText = "")
         {
-            var stackLayout = new StackLayout();
+            var stackLayout = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                HorizontalOptions = LayoutOptions.FillAndExpand
+            };
             stackLayout.BackgroundColor = Color.White;
 
             var entry = new Entry
             {
                 Text= EntryText,
+                VerticalTextAlignment= TextAlignment.Center,
                 VerticalOptions = LayoutOptions.Center,
-                HorizontalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
                 Keyboard = Keyboard.Numeric,
                 ReturnCommandParameter = CommandParameter,
-                MinimumWidthRequest = 20
+                MinimumWidthRequest = 100,
+                WidthRequest=100
             };
 
             entry.TextChanged += Entry_TextChanged;

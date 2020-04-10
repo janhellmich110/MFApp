@@ -51,26 +51,29 @@
                 </d:CollectionView.ItemsSource>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout Padding="10">
+                        <StackLayout Padding="40,20,40,20">
+                            <StackLayout Padding="30,20,30,20" BackgroundColor="#90EE90">
                             <Label Text="{Binding Name}" 
                                 d:Text="{Binding .}"
-                                LineBreakMode="NoWrap" 
+                                LineBreakMode="NoWrap"
+                                   HorizontalOptions="Center"
                                 Style="{DynamicResource ListItemTextStyle}" 
                                 FontSize="16" />
                             <Label Text="{Binding EventDate}" 
                                 d:Text="Name"
                                 LineBreakMode="NoWrap"
+                                   HorizontalOptions="Center"
                                 Style="{DynamicResource ListItemDetailTextStyle}"
                                 FontSize="13" />
-                            <Label Text="{Binding EventType}" 
-                                d:Text="Handicap"
-                                LineBreakMode="NoWrap"
-                                Style="{DynamicResource ListItemDetailTextStyle}"
-                                FontSize="13" />
-                            <Button Text="Neuer Flight" Clicked="Button_Clicked"/>
+                            <Button 
+                                Text="Runde starten" 
+                                Clicked="Button_Clicked"
+                                TextColor="#999999"
+                                BackgroundColor="#1E2768"/>
                             <StackLayout.GestureRecognizers>
                                 <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
                             </StackLayout.GestureRecognizers>
+                        </StackLayout>
                         </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
