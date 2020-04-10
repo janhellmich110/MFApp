@@ -41,6 +41,9 @@
     <Compile Update="Views\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\MFWeb.xaml.cs">
+      <DependentUpon>MFWeb.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Player\NewPlayerPage.xaml.cs">
       <DependentUpon>NewPlayerPage.xaml</DependentUpon>
     </Compile>

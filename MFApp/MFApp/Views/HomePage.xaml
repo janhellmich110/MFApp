@@ -24,10 +24,17 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackLayout HeightRequest="120" BackgroundColor="{StaticResource Accent}" VerticalOptions="Fill" HorizontalOptions="Fill">
-            <ContentView Padding="0,20,0,20" VerticalOptions="Fill">
-                <Image Source="mf.png" HorizontalOptions="Center" HeightRequest="80" />
-            </ContentView>
+        <StackLayout BackgroundColor="{StaticResource Accent}" VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
+            <StackLayout Padding="0,0,0,0" Orientation="Horizontal" HorizontalOptions="CenterAndExpand"  VerticalOptions="FillAndExpand">
+                <ContentView Padding="0,10,0,0" VerticalOptions="Start" HorizontalOptions="CenterAndExpand">
+                    <Image Source="mf.png" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="64" />
+                </ContentView>
+            </StackLayout>
+            <StackLayout>
+                <ContentView Padding="0,0,0,10" VerticalOptions="End" HorizontalOptions="CenterAndExpand">
+                    <Label Text="Konfiguration" FontSize="Large"  VerticalOptions="Center"  HorizontalOptions="Center"></Label>
+                </ContentView>
+            </StackLayout>
         </StackLayout>
         <ScrollView Grid.Row="1">
             <CollectionView x:Name="PlayerCollectionView"

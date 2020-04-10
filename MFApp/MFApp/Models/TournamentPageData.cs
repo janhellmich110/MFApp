@@ -82,6 +82,11 @@ namespace MFApp.Models
 
             FlightPlayerIds = Flight2Players.Where(x => x.FlightId == flightNumber).Select(x=>x.PlayerId).ToList();
 
+            if(FlightPlayerIds.Count() == 0)
+            {
+                // no player in flight, add current player
+                FlightPlayerIds.Add(CurrentProfile.Id);
+            }
             // Fill All Players
             IDataStore<Player> DataStore = DependencyService.Get<IDataStore<Player>>();
             var PlayerTask = DataStore.GetItemsAsync();
@@ -104,11 +109,7 @@ namespace MFApp.Models
 
                 if(CurrentProfile.UserName.ToLower() == tp.UserName.ToLower())
                 {
-                    // currentplayer is in flight, if no flight is saved
-                    if(FlightPlayerIds.Count() ==0)
-                        tp.Selected = true;
                     CurrentPlayer = p;
-                    //SelectedPlayers.Add(tp);
                 }
 
                 if (FlightPlayerIds.Count() > 0)

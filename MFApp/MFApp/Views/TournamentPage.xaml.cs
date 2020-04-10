@@ -46,7 +46,18 @@ namespace MFApp.Views
 
             if (e.Value)
             {
-                TournamentPageData.SelectedPlayers.Add(p);
+                bool found = false;
+                foreach(TournamentPlayer tp in TournamentPageData.SelectedPlayers)
+                {
+                    if(p.Id == tp.Id)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if(!found)
+                    TournamentPageData.SelectedPlayers.Add(p);
             }
             else
             {
@@ -223,6 +234,11 @@ namespace MFApp.Views
             // save result
             var oldText = e.OldTextValue;
             var newText = e.NewTextValue;
+
+            if(string.IsNullOrEmpty(newText))
+            {
+                return;
+            }
 
             string[] currentCommandParameter = ((Entry)sender).ReturnCommandParameter.ToString().Split('_');
             int currentrowIndex = Convert.ToInt32(currentCommandParameter[0].ToString());

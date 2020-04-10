@@ -9,6 +9,8 @@ namespace MFApp.Models
         Home,
         Player,
         Configuration,
+        LogOff,
+        MFWeb,
         About
     }
     public class HomeMenuItem

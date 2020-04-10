@@ -24,6 +24,7 @@ namespace MFApp.Views
 
             MasterBehavior = MasterBehavior.Popover;
 
+            ((NavigationPage)Detail).BarBackgroundColor = Color.FromRgb(30, 39, 104);
             MenuPages.Add((int)MenuItemType.Home, (NavigationPage)Detail);
 
             IDataStore<Profile> DataStore = DependencyService.Get<IDataStore<Profile>>();
@@ -52,13 +53,33 @@ namespace MFApp.Views
                 switch (id)
                 {
                     case (int)MenuItemType.Home:
-                        MenuPages.Add(id, new NavigationPage(new HomePage()));
+                        MenuPages.Add(id, new NavigationPage(new HomePage()) {
+                            BarBackgroundColor = Color.FromRgb(30, 39, 104)
+                        });
                         break;
                     case (int)MenuItemType.Player:
-                        MenuPages.Add(id, new NavigationPage(new PlayerPage()));
+                        MenuPages.Add(id, new NavigationPage(new PlayerPage())
+                        {
+                            BarBackgroundColor = Color.FromRgb(30, 39, 104)
+                        });
                         break;
                     case (int)MenuItemType.Configuration:
-                        MenuPages.Add(id, new NavigationPage(new ConfigurationPage()));
+                        MenuPages.Add(id, new NavigationPage(new ConfigurationPage())
+                        {
+                            BarBackgroundColor = Color.FromRgb(30, 39, 104)
+                        });
+                        break;
+                    case (int)MenuItemType.LogOff:
+                        MenuPages.Add(id, new NavigationPage(new LogoutPage())
+                        {
+                            BarBackgroundColor = Color.FromRgb(30, 39, 104)
+                        });
+                        break;
+                    case (int)MenuItemType.MFWeb:
+                        MenuPages.Add(id, new NavigationPage(new MFWebPage())
+                        {
+                            BarBackgroundColor = Color.FromRgb(30, 39, 104)
+                        });
                         break;
                 }
             }
