@@ -27,6 +27,24 @@
                             VerticalOptions="Center" 
                             VerticalTextAlignment="Center"></Label>
                     </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <StackLayout Padding="5,5,5,5" HorizontalOptions="StartAndExpand">
+                            <Label 
+                            Text="Score" 
+                            FontSize="Large"
+                            FontAttributes="Bold"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"></Label>
+                        </StackLayout>
+                        <StackLayout Padding="5,5,5,5" HorizontalOptions="EndAndExpand">
+                            <Label 
+                            Text="Putts" 
+                            FontSize="Large"
+                            FontAttributes="Bold"
+                            VerticalOptions="Center" 
+                            VerticalTextAlignment="Center"></Label>
+                        </StackLayout>
+                    </StackLayout>
                 </StackLayout>
                 <StackLayout Grid.Column="0" Grid.Row="1" HorizontalOptions="FillAndExpand"  VerticalOptions="FillAndExpand">
                     <StackLayout BackgroundColor="Gray" Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">

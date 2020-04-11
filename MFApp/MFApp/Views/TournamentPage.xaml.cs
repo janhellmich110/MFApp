@@ -109,14 +109,16 @@ namespace MFApp.Views
                     if ((rowIndex == 0) && (columnIndex > 0))
                     {
                         // first row header row with player intials
-                        AddLabelCell(TournamentPageData.SelectedPlayers[columnIndex - 1].Initials, columnIndex, rowIndex);
+                        AddHeaderPuttsLabelCell(TournamentPageData.SelectedPlayers[columnIndex - 1].Initials, columnIndex, rowIndex);
                     }
                     else if ((rowIndex > 0) && (rowIndex < 10))
                     {
                         // erste 9 Löcher
                         if (columnIndex == 0)
                         {
-                            AddLabelCell(rowIndex.ToString(), columnIndex, rowIndex);
+                            // get tee
+                            Tee tee = TournamentPageData.TeeList[rowIndex - 1];
+                            AddHoleLabelCell(tee, columnIndex, rowIndex);
                         }
                         else
                         {
@@ -183,7 +185,8 @@ namespace MFApp.Views
                         // zweite 9 Löcher
                         if (columnIndex == 0)
                         {
-                            AddLabelCell((rowIndex - 1).ToString(), columnIndex, rowIndex);
+                            Tee tee = TournamentPageData.TeeList[rowIndex - 1];
+                            AddHoleLabelCell(tee, columnIndex, rowIndex);
                         }
                         else
                         {
@@ -313,6 +316,152 @@ namespace MFApp.Views
             };
             subStackLayout.Children.Add(label);
             stackLayout.Children.Add(subStackLayout);
+            ScoreKarte.Children.Add(stackLayout, ColumnIndex, RowIndex);
+
+            return label;
+        }
+
+        private Label AddHoleLabelCell(Tee tee, int ColumnIndex, int RowIndex)
+        {
+            var stackLayout = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                BackgroundColor = Color.LightGray
+            };
+            var subStackLayout = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                HorizontalOptions = LayoutOptions.CenterAndExpand
+            };
+            stackLayout.BackgroundColor = Color.LightGray;
+
+            var label = new Label
+            {
+                Text = tee.Name.ToString(),
+                VerticalTextAlignment = TextAlignment.Center,
+                VerticalOptions = LayoutOptions.Center,
+                FontSize = 20,
+                FontAttributes = FontAttributes.Bold
+            };
+            subStackLayout.Children.Add(label);
+            stackLayout.Children.Add(subStackLayout);
+
+            #region add tee info header
+            var subTeeHeaderStackLayout = new StackLayout
+            {
+                Orientation = StackOrientation.Horizontal
+            };
+            var subTeeParHeaderStackLayout = new StackLayout
+            {
+                Padding = new Thickness(5),
+                HorizontalOptions = LayoutOptions.StartAndExpand
+            };
+            var subTeeHdcpHeaderStackLayout = new StackLayout
+            {
+                Padding = new Thickness(5),
+                HorizontalOptions = LayoutOptions.EndAndExpand
+            };
+
+            var parLabel = new Label
+            {
+                Text = tee.Par.ToString(),
+                VerticalTextAlignment = TextAlignment.Center,
+                VerticalOptions = LayoutOptions.Center,
+                FontSize = 20,
+                FontAttributes = FontAttributes.None
+            };
+            var hdcpLabel = new Label
+            {
+                Text = tee.Hcp.ToString(),
+                VerticalTextAlignment = TextAlignment.Center,
+                VerticalOptions = LayoutOptions.Center,
+                FontSize = 20,
+                FontAttributes = FontAttributes.None
+            };
+
+            subTeeParHeaderStackLayout.Children.Add(parLabel);
+            subTeeHdcpHeaderStackLayout.Children.Add(hdcpLabel);
+
+            subTeeHeaderStackLayout.Children.Add(subTeeParHeaderStackLayout);
+            subTeeHeaderStackLayout.Children.Add(subTeeHdcpHeaderStackLayout);
+
+            stackLayout.Children.Add(subTeeHeaderStackLayout);
+            #endregion
+
+            ScoreKarte.Children.Add(stackLayout, ColumnIndex, RowIndex);
+
+            return label;
+        }
+
+        private Label AddHeaderPuttsLabelCell(string LabelText, int ColumnIndex, int RowIndex)
+        {
+            var stackLayout = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                BackgroundColor = Color.LightGray
+            };
+            var subStackLayout = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                HorizontalOptions = LayoutOptions.CenterAndExpand
+            };
+            stackLayout.BackgroundColor = Color.LightGray;
+
+            var label = new Label
+            {
+                Text = LabelText,
+                VerticalTextAlignment = TextAlignment.Center,
+                VerticalOptions = LayoutOptions.Center,
+                FontSize = 20,
+                FontAttributes = FontAttributes.Bold
+            };
+            subStackLayout.Children.Add(label);
+            stackLayout.Children.Add(subStackLayout);
+
+            #region add score putts header
+            var subScorePuttHeaderStackLayout = new StackLayout
+            {
+                Orientation= StackOrientation.Horizontal
+            };
+            var subScoreHeaderStackLayout = new StackLayout
+            {
+                Padding = new Thickness(5),
+                HorizontalOptions = LayoutOptions.StartAndExpand
+            };
+            var subPuttsHeaderStackLayout = new StackLayout
+            {
+                Padding = new Thickness(5),
+                HorizontalOptions = LayoutOptions.EndAndExpand
+            };
+
+            var scoreLabel = new Label
+            {
+                Text = "Score",
+                VerticalTextAlignment = TextAlignment.Center,
+                VerticalOptions = LayoutOptions.Center,
+                FontSize = 20,
+                FontAttributes = FontAttributes.None
+            };
+            var puttsLabel = new Label
+            {
+                Text = "Putts",
+                VerticalTextAlignment = TextAlignment.Center,
+                VerticalOptions = LayoutOptions.Center,
+                FontSize = 20,
+                FontAttributes = FontAttributes.None
+            };
+
+            subScoreHeaderStackLayout.Children.Add(scoreLabel);
+            subPuttsHeaderStackLayout.Children.Add(puttsLabel);
+
+            subScorePuttHeaderStackLayout.Children.Add(subScoreHeaderStackLayout);
+            subScorePuttHeaderStackLayout.Children.Add(subPuttsHeaderStackLayout);
+
+            stackLayout.Children.Add(subScorePuttHeaderStackLayout);
+            #endregion
+
             ScoreKarte.Children.Add(stackLayout, ColumnIndex, RowIndex);
 
             return label;
