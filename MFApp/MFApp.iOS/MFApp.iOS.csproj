@@ -155,4 +155,7 @@
   <ItemGroup>
     <BundleResource Include="Resources\MFBackground.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Background.jpg" />
+  </ItemGroup>
 </Project>
