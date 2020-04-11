@@ -11,5 +11,6 @@ namespace MFApp.Models
         public int TournamentId { get; set; }
         public int TeeId { get; set; }
         public int Score { get; set; }
+        public int Putts { get; set; }
     }
 }

@@ -25,6 +25,8 @@ namespace MFApp.Views
             InitializeComponent();
 
             BindingContext = viewModel = new PlayerViewModel();
+
+            viewModel.IsBusy = true;
         }
 
         async void OnItemSelected(object sender, EventArgs args)
@@ -43,8 +45,7 @@ namespace MFApp.Views
         {
             base.OnAppearing();
 
-            //if (viewModel.Player.Count == 0)
-                viewModel.IsBusy = true;
+            viewModel.IsBusy = true;
         }
     }
 }

@@ -47,8 +47,8 @@
             </CollectionView>
         </ContentPage>
         <ContentPage Title="Scorecard" Appearing="ContentPage_Scorecard_Appearing">
-            <ScrollView Orientation="Vertical"  VerticalScrollBarVisibility="Default" BackgroundColor="LightGray">
-                <Grid x:Name="ScoreKarte">
+            <ScrollView Orientation="Vertical"  VerticalScrollBarVisibility="Default" BackgroundColor="Gray">
+                <Grid x:Name="ScoreKarte" Padding="5,5,5,5">
 
 
                 </Grid>

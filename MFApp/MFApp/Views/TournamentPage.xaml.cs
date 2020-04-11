@@ -20,6 +20,10 @@ namespace MFApp.Views
         Label[] OutSumLabels = null;
         Label[] TotalSumLabels = null;
 
+        Label[] InSumPuttsLabels = null;
+        Label[] OutSumPuttsLabels = null;
+        Label[] TotalSumPuttsLabels = null;
+
         int LastPlayerId = 0;
 
         public TournamentPage(Tournament tournament)
@@ -29,7 +33,11 @@ namespace MFApp.Views
             TournamentPageData PageData = new TournamentPageData(tournament);
             InSumLabels = new Label[4];
             OutSumLabels = new Label[4];
-            TotalSumLabels = new Label[4];            
+            TotalSumLabels = new Label[4];
+
+            InSumPuttsLabels = new Label[4];
+            OutSumPuttsLabels = new Label[4];
+            TotalSumPuttsLabels = new Label[4];
 
             BindingContext = this.TournamentPageData = PageData;
         }
@@ -115,12 +123,14 @@ namespace MFApp.Views
                             // get saved value
                             Result SavedResult = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[columnIndex - 1].Id).Where(y => y.TeeId == TournamentPageData.TeeList[rowIndex - 1].Id).FirstOrDefault();
                             string savedScore = "";
-                            if(SavedResult!=null)
+                            string savedPutts = "";
+                            if (SavedResult!=null)
                             {
                                 savedScore = SavedResult.Score.ToString();
+                                savedPutts = SavedResult.Putts.ToString();
                             }
                             string entryParameter = rowIndex.ToString() + "_" + columnIndex.ToString();
-                            AddEntryCell(entryParameter, columnIndex, rowIndex, savedScore);
+                            AddEntryCell(entryParameter, columnIndex, rowIndex, savedScore, savedPutts);
                         }
                     }
                     else if (rowIndex == 10)
@@ -136,8 +146,36 @@ namespace MFApp.Views
                         }
                         else
                         {
-                            Label label = AddLabelCell("", columnIndex, rowIndex);
-                            InSumLabels[columnIndex - 1] = label;
+                            // insum with putts
+                            var StackLayout = new StackLayout
+                            {
+                                BackgroundColor = Color.LightGray,
+                                Orientation = StackOrientation.Horizontal,
+                                VerticalOptions = LayoutOptions.FillAndExpand,
+                                HorizontalOptions = LayoutOptions.FillAndExpand,                                
+                            };
+                            var subScoreStackLayout = new StackLayout
+                            {
+                                VerticalOptions = LayoutOptions.FillAndExpand,
+                                HorizontalOptions = LayoutOptions.FillAndExpand
+                            };
+                            var subPuttsStackLayout = new StackLayout
+                            {
+                                BackgroundColor = Color.White,
+                                VerticalOptions = LayoutOptions.FillAndExpand,
+                                HorizontalOptions = LayoutOptions.FillAndExpand
+                            };
+
+                            Label ScoreLabel = AddLabelCell("", subScoreStackLayout);
+                            Label PuttsLabel = AddLabelCell("", subPuttsStackLayout);
+
+                            StackLayout.Children.Add(subScoreStackLayout);
+                            StackLayout.Children.Add(subPuttsStackLayout);
+
+                            ScoreKarte.Children.Add(StackLayout, columnIndex, rowIndex);
+
+                            InSumLabels[columnIndex - 1] = ScoreLabel;
+                            InSumPuttsLabels[columnIndex - 1] = PuttsLabel;
                         }
                     }
                     else if ((teeCount > 9) && (rowIndex > 10) && (rowIndex < 20))
@@ -152,12 +190,15 @@ namespace MFApp.Views
                             // get saved value
                             Result SavedResult = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[columnIndex - 1].Id).Where(y => y.TeeId == TournamentPageData.TeeList[rowIndex - 2].Id).FirstOrDefault();
                             string savedScore = "";
+                            string savedPutts = "";
                             if (SavedResult != null)
                             {
                                 savedScore = SavedResult.Score.ToString();
+                                savedPutts = SavedResult.Putts.ToString();
                             }
+
                             string entryParameter = (rowIndex - 1).ToString() + "_" + columnIndex.ToString();
-                            AddEntryCell(entryParameter, columnIndex, rowIndex, savedScore);
+                            AddEntryCell(entryParameter, columnIndex, rowIndex, savedScore, savedPutts);
                         }
                     }
                     else if ((teeCount > 9) && (rowIndex == 20))
@@ -169,8 +210,36 @@ namespace MFApp.Views
                         }
                         else
                         {
-                            Label label = AddLabelCell("", columnIndex, rowIndex);
-                            OutSumLabels[columnIndex - 1] = label;
+                            // insum with putts
+                            var StackLayout = new StackLayout
+                            {
+                                BackgroundColor = Color.LightGray,
+                                Orientation = StackOrientation.Horizontal,
+                                VerticalOptions = LayoutOptions.FillAndExpand,
+                                HorizontalOptions = LayoutOptions.FillAndExpand,
+                            };
+                            var subScoreStackLayout = new StackLayout
+                            {
+                                VerticalOptions = LayoutOptions.FillAndExpand,
+                                HorizontalOptions = LayoutOptions.FillAndExpand
+                            };
+                            var subPuttsStackLayout = new StackLayout
+                            {
+                                BackgroundColor = Color.White,
+                                VerticalOptions = LayoutOptions.FillAndExpand,
+                                HorizontalOptions = LayoutOptions.FillAndExpand
+                            };
+
+                            Label ScoreLabel = AddLabelCell("", subScoreStackLayout);
+                            Label PuttsLabel = AddLabelCell("", subPuttsStackLayout);
+
+                            StackLayout.Children.Add(subScoreStackLayout);
+                            StackLayout.Children.Add(subPuttsStackLayout);
+
+                            ScoreKarte.Children.Add(StackLayout, columnIndex, rowIndex);
+
+                            OutSumLabels[columnIndex - 1] = ScoreLabel;
+                            OutSumPuttsLabels[columnIndex - 1] = PuttsLabel;
                         }
                     }
                     else if ((teeCount > 9) && (rowIndex == 21))
@@ -182,8 +251,36 @@ namespace MFApp.Views
                         }
                         else
                         {
-                            Label label = AddLabelCell("", columnIndex, rowIndex);
-                            TotalSumLabels[columnIndex - 1] = label;
+                            // insum with putts
+                            var StackLayout = new StackLayout
+                            {
+                                BackgroundColor = Color.LightGray,
+                                Orientation = StackOrientation.Horizontal,
+                                VerticalOptions = LayoutOptions.FillAndExpand,
+                                HorizontalOptions = LayoutOptions.FillAndExpand,
+                            };
+                            var subScoreStackLayout = new StackLayout
+                            {
+                                VerticalOptions = LayoutOptions.FillAndExpand,
+                                HorizontalOptions = LayoutOptions.FillAndExpand
+                            };
+                            var subPuttsStackLayout = new StackLayout
+                            {
+                                BackgroundColor = Color.White,
+                                VerticalOptions = LayoutOptions.FillAndExpand,
+                                HorizontalOptions = LayoutOptions.FillAndExpand
+                            };
+
+                            Label ScoreLabel = AddLabelCell("", subScoreStackLayout);
+                            Label PuttsLabel = AddLabelCell("", subPuttsStackLayout);
+
+                            StackLayout.Children.Add(subScoreStackLayout);
+                            StackLayout.Children.Add(subPuttsStackLayout);
+
+                            ScoreKarte.Children.Add(StackLayout, columnIndex, rowIndex);
+
+                            TotalSumLabels[columnIndex - 1] = ScoreLabel;
+                            TotalSumPuttsLabels[columnIndex - 1] = PuttsLabel;
                         }
                     }
 
@@ -196,7 +293,13 @@ namespace MFApp.Views
             var stackLayout = new StackLayout
             {
                 VerticalOptions = LayoutOptions.FillAndExpand,
-                HorizontalOptions = LayoutOptions.FillAndExpand
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                BackgroundColor=Color.LightGray
+            };
+            var subStackLayout = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                HorizontalOptions = LayoutOptions.CenterAndExpand
             };
             stackLayout.BackgroundColor = Color.LightGray;
 
@@ -205,40 +308,117 @@ namespace MFApp.Views
                 Text = LabelText,
                 VerticalTextAlignment = TextAlignment.Center,
                 VerticalOptions = LayoutOptions.Center,
-                HorizontalOptions = LayoutOptions.Center,
                 FontSize = 20,
                 FontAttributes = FontAttributes.Bold
             };
-            stackLayout.Children.Add(label);
+            subStackLayout.Children.Add(label);
+            stackLayout.Children.Add(subStackLayout);
             ScoreKarte.Children.Add(stackLayout, ColumnIndex, RowIndex);
 
             return label;
         }
 
-        private void AddEntryCell(string CommandParameter, int ColumnIndex, int RowIndex, string EntryText = "")
+        private Label AddLabelCell(string LabelText, StackLayout parent)
+        {
+            var stackLayout = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                BackgroundColor = Color.LightGray
+            };
+            var subStackLayout = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                HorizontalOptions = LayoutOptions.CenterAndExpand
+            };
+            stackLayout.BackgroundColor = Color.LightGray;
+
+            var label = new Label
+            {
+                Text = LabelText,
+                VerticalTextAlignment = TextAlignment.Center,
+                VerticalOptions = LayoutOptions.Center,
+                FontSize = 20,
+                FontAttributes = FontAttributes.Bold
+            };
+            subStackLayout.Children.Add(label);
+            stackLayout.Children.Add(subStackLayout);
+            parent.Children.Add(stackLayout);
+
+            return label;
+        }
+
+        private void AddEntryCell(string CommandParameter, int ColumnIndex, int RowIndex, string EntryText, string EntryText1)
         {
             var stackLayout = new StackLayout
             {
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 HorizontalOptions = LayoutOptions.FillAndExpand
             };
-            stackLayout.BackgroundColor = Color.White;
+            var subStackLayout = new StackLayout
+            {
+                BackgroundColor=Color.Gray,
+                Orientation=StackOrientation.Horizontal,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                HorizontalOptions = LayoutOptions.FillAndExpand
+            };
+            var subsubScoreStackLayout = new StackLayout
+            {
+                BackgroundColor=Color.White,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                HorizontalOptions = LayoutOptions.FillAndExpand
+            };
+            var subsubPuttsStackLayout = new StackLayout
+            {
+                BackgroundColor = Color.White,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                HorizontalOptions = LayoutOptions.FillAndExpand
+            };
 
+
+            var stackLayoutScore = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.CenterAndExpand
+            };
             var entry = new Entry
             {
                 Text= EntryText,
-                VerticalTextAlignment= TextAlignment.Center,
-                VerticalOptions = LayoutOptions.Center,
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
-                Keyboard = Keyboard.Numeric,
+                HorizontalTextAlignment=TextAlignment.Center,
                 ReturnCommandParameter = CommandParameter,
-                MinimumWidthRequest = 100,
-                WidthRequest=100
+                FontSize=20,
+                MinimumWidthRequest = 100
             };
 
             entry.TextChanged += Entry_TextChanged;
 
-            stackLayout.Children.Add(entry);
+            stackLayoutScore.Children.Add(entry);
+
+            var stackLayoutPutts = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.CenterAndExpand
+            };
+            CommandParameter = "putts_" + CommandParameter;
+            var entryPutts = new Entry
+            {
+                Text = EntryText1,
+                HorizontalTextAlignment = TextAlignment.Center,
+                ReturnCommandParameter = CommandParameter,
+                FontSize = 20,
+                MinimumWidthRequest = 100
+            };
+
+            entryPutts.TextChanged += Entry_TextChanged;
+
+            stackLayoutScore.Children.Add(entry);
+            stackLayoutPutts.Children.Add(entryPutts);
+
+            subsubScoreStackLayout.Children.Add(stackLayoutScore);
+            subsubPuttsStackLayout.Children.Add(stackLayoutPutts);
+
+            subStackLayout.Children.Add(subsubScoreStackLayout);
+            subStackLayout.Children.Add(subsubPuttsStackLayout);
+
+            stackLayout.Children.Add(subStackLayout);
             ScoreKarte.Children.Add(stackLayout, ColumnIndex, RowIndex);
         }
 
@@ -253,66 +433,139 @@ namespace MFApp.Views
                 return;
             }
 
-            string[] currentCommandParameter = ((Entry)sender).ReturnCommandParameter.ToString().Split('_');
+            string currentCommand = ((Entry)sender).ReturnCommandParameter.ToString();
+            bool isScore = true;
+            if(currentCommand.StartsWith("putts"))
+            {
+                isScore = false;
+                currentCommand = currentCommand.Replace("putts_", "");
+            }
+
+
+            string[] currentCommandParameter = currentCommand.Split('_');
             int currentrowIndex = Convert.ToInt32(currentCommandParameter[0].ToString());
             int currentColumnIndex = Convert.ToInt32(currentCommandParameter[1].ToString());
             int currentPlayerId = TournamentPageData.SelectedPlayers[currentColumnIndex - 1].Id;
 
-            SaveResultLocal(newText, currentColumnIndex, currentrowIndex);
+            SaveResultLocal(newText, currentColumnIndex, currentrowIndex, isScore);
 
             // calculate sum fields
             int[] InSum = new int[4] { 0, 0, 0, 0 };
             int[] OutSum = new int[4] { 0, 0, 0, 0 };
             int[] TotalSum = new int[4] { 0, 0, 0, 0 };
 
+            int[] InSumPutts = new int[4] { 0, 0, 0, 0 };
+            int[] OutSumPutts = new int[4] { 0, 0, 0, 0 };
+            int[] TotalSumPutts = new int[4] { 0, 0, 0, 0 };
+
             List<TournamentResult> TournamentResultList = new List<TournamentResult>();
 
             foreach (View v in ScoreKarte.Children)
             {
-                if ((v is StackLayout) && (((StackLayout)v).Children.Count > 0))
+                if ((v is StackLayout) && (((StackLayout)v).Children.Count > 0) && (((StackLayout)v).Children[0] is StackLayout))
                 {
-                    if (((StackLayout)v).Children[0] is Entry)
+                    StackLayout subStack = (StackLayout)((StackLayout)v).Children[0];
+                    int score = 0;
+                    int putts = 0;
+
+                    int rowIndex = 0;
+                    int columnIndex = 0;
+
+                    if ((subStack.Children.Count() > 0) && (subStack.Children[0] is StackLayout))
                     {
-                        // entry
-                        Entry tmpEntry = ((Entry)(((StackLayout)v).Children[0]));
-                        string[] commandParameter = tmpEntry.ReturnCommandParameter.ToString().Split('_');
+                        StackLayout subsubScoreStack = (StackLayout)subStack.Children[0];
 
-                        int rowIndex = Convert.ToInt32(commandParameter[0].ToString());
-                        int columnIndex = Convert.ToInt32(commandParameter[1].ToString());
-                        string entryText = tmpEntry.Text;
-
-                        if (!string.IsNullOrEmpty(entryText))
+                        if ((subsubScoreStack.Children.Count() > 0) && (subsubScoreStack.Children[0] is StackLayout))
                         {
-                            int score = 0;
-                            try
-                            {
-                                score = Convert.ToInt32(entryText);
-                            }
-                            catch(Exception exp) { }
+                            StackLayout scoreStack = (StackLayout)subsubScoreStack.Children[0];
 
-                            if (rowIndex < 10)
+                            if (scoreStack.Children[0] is Entry)
                             {
-                                InSum[columnIndex - 1] = InSum[columnIndex - 1] + score;
-                            }
-                            else
-                            {
-                                OutSum[columnIndex - 1] = OutSum[columnIndex - 1] + score;
-                            }
-                            TotalSum[columnIndex - 1] = TotalSum[columnIndex - 1] + score;
+                                // entry
+                                Entry tmpEntry = ((Entry)(scoreStack.Children[0]));
+                                string[] commandParameter = tmpEntry.ReturnCommandParameter.ToString().Split('_');
 
-                            // add result
-                            int playerId = TournamentPageData.SelectedPlayers[columnIndex - 1].Id;
-                            int tournamentId = TournamentPageData.Tournament.Id;
-                            int teeId = TournamentPageData.TeeList[rowIndex - 1].Id;
-                            TournamentResult tr = new TournamentResult
-                            {
-                                PlayerId = playerId,
-                                TournamentId = tournamentId,
-                                TeeId = teeId,
-                                Score = score
-                            };
-                            TournamentResultList.Add(tr);
+                                rowIndex = Convert.ToInt32(commandParameter[0].ToString());
+                                columnIndex = Convert.ToInt32(commandParameter[1].ToString());
+                                string entryText = tmpEntry.Text;
+
+                                if (!string.IsNullOrEmpty(entryText))
+                                {
+                                    try
+                                    {
+                                        score = Convert.ToInt32(entryText);
+                                    }
+                                    catch (Exception exp) { }
+
+                                    if (rowIndex < 10)
+                                    {
+                                        InSum[columnIndex - 1] = InSum[columnIndex - 1] + score;
+                                    }
+                                    else
+                                    {
+                                        OutSum[columnIndex - 1] = OutSum[columnIndex - 1] + score;
+                                    }
+                                    TotalSum[columnIndex - 1] = TotalSum[columnIndex - 1] + score;
+                                }
+                            }
                         }
+                    }
+
+                    if ((subStack.Children.Count() > 1) && (subStack.Children[1] is StackLayout))
+                    {
+                        StackLayout subsubPuttsStack = (StackLayout)subStack.Children[1];
+
+                        if ((subsubPuttsStack.Children.Count() > 0) && (subsubPuttsStack.Children[0] is StackLayout))
+                        {
+                            StackLayout puttStack = (StackLayout)subsubPuttsStack.Children[0];
+
+                            if (puttStack.Children[0] is Entry)
+                            {
+                                // entry
+                                Entry tmpEntry = ((Entry)(puttStack.Children[0]));
+                                string[] commandParameter = tmpEntry.ReturnCommandParameter.ToString().Replace("putts_", "").Split('_');
+
+                                rowIndex = Convert.ToInt32(commandParameter[0].ToString());
+                                columnIndex = Convert.ToInt32(commandParameter[1].ToString());
+                                string entryText = tmpEntry.Text;
+
+                                if (!string.IsNullOrEmpty(entryText))
+                                {
+                                    try
+                                    {
+                                        putts = Convert.ToInt32(entryText);
+                                    }
+                                    catch (Exception exp) { }
+
+                                    if (rowIndex < 10)
+                                    {
+                                        InSumPutts[columnIndex - 1] = InSumPutts[columnIndex - 1] + putts;
+                                    }
+                                    else
+                                    {
+                                        OutSumPutts[columnIndex - 1] = OutSumPutts[columnIndex - 1] + putts;
+                                    }
+                                    TotalSumPutts[columnIndex - 1] = TotalSumPutts[columnIndex - 1] + putts;
+                                }
+                            }
+                        }
+                    }
+
+                    if ((columnIndex > 0) && (rowIndex > 0) && ((score > 0) || (putts > 0)))
+                    {
+                        // add result
+                        int playerId = TournamentPageData.SelectedPlayers[columnIndex - 1].Id;
+                        int tournamentId = TournamentPageData.Tournament.Id;
+                        int teeId = TournamentPageData.TeeList[rowIndex - 1].Id;
+                        TournamentResult tr = new TournamentResult
+                        {
+                            PlayerId = playerId,
+                            TournamentId = tournamentId,
+                            TeeId = teeId,
+                            Score = score,
+                            Putts = putts
+                        };
+                        TournamentResultList.Add(tr);
                     }
                 }
             }
@@ -332,13 +585,26 @@ namespace MFApp.Views
                 {
                     TotalSumLabels[i].Text = TotalSum[i].ToString();
                 }
+
+                if (InSumPuttsLabels[i] != null)
+                {
+                    InSumPuttsLabels[i].Text = InSumPutts[i].ToString();
+                }
+                if (OutSumPuttsLabels[i] != null)
+                {
+                    OutSumPuttsLabels[i].Text = OutSumPutts[i].ToString();
+                }
+                if (TotalSumPuttsLabels[i] != null)
+                {
+                    TotalSumPuttsLabels[i].Text = TotalSumPutts[i].ToString();
+                }
             }
 
             // send results to webapp
             SaveResultsWeb(TournamentResultList);
         }
 
-        private void SaveResultLocal(string NewText, int ColumnIndex, int RowIndex)
+        private void SaveResultLocal(string NewText, int ColumnIndex, int RowIndex, bool score)
         {
             int playerId = TournamentPageData.SelectedPlayers[ColumnIndex - 1].Id;
             int tournamentId = TournamentPageData.Tournament.Id;
@@ -352,15 +618,34 @@ namespace MFApp.Views
             Result res = Results.Where(x => x.TournamentId == tournamentId).Where(y => y.PlayerId == playerId).Where(z => z.TeeId == teeId).FirstOrDefault();
             if(res != null)
             {
-                res.Score = Convert.ToInt32(NewText);
+                if (score)
+                {
+                    res.Score = Convert.ToInt32(NewText);
+                }
+                else
+                {
+                    res.Putts = Convert.ToInt32(NewText);
+                }
+                
                 DataStore.UpdateItemAsync(res);
             }
             else
             {
-                int newScore = Convert.ToInt32(NewText);
+                int newScore = 0;
+                int newPutts = 0;
+                if(score)
+                {
+                    newScore = Convert.ToInt32(NewText);
+                }
+                else
+                {
+                    newPutts = Convert.ToInt32(NewText);
+                }
+
                 Result newRes = new Result
                 {
                     Score = newScore,
+                    Putts = newPutts,
                     TournamentId = tournamentId,
                     PlayerId = playerId,
                     TeeId = teeId

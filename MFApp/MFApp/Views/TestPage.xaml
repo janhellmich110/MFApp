@@ -6,11 +6,59 @@
              mc:Ignorable="d"
              x:Class="MFApp.Views.TestPage">
     <ContentPage.Content>
-        <StackLayout Padding="40,20,40,20" HorizontalOptions="Fill" VerticalOptions="FillAndExpand" HeightRequest="200">
-            <StackLayout Padding="40,20,40,20" HeightRequest="180">
-                <Entry Text="" HorizontalOptions="CenterAndExpand" 
-                       VerticalTextAlignment="Center" />
-            </StackLayout>
-        </StackLayout>
+        <ScrollView Orientation="Vertical"  VerticalScrollBarVisibility="Default" BackgroundColor="Gray">
+            <Grid Padding="5,5,5,5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height=""></RowDefinition>
+                    <RowDefinition Height=""></RowDefinition>
+                    <RowDefinition Height=""></RowDefinition>
+                </Grid.RowDefinitions>
+                <d:Grid.ColumnDefinitions>
+                    <ColumnDefinition Width=""></ColumnDefinition>
+                    <ColumnDefinition Width=""></ColumnDefinition>
+                </d:Grid.ColumnDefinitions>
+
+                <StackLayout Grid.Column="0" Grid.Row="0" BackgroundColor="LightGray" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                    <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                        <Label 
+                            Text="header1" 
+                            FontSize="Large"
+                            FontAttributes="Bold"
+                            VerticalOptions="Center" 
+                            VerticalTextAlignment="Center"></Label>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout Grid.Column="0" Grid.Row="1" HorizontalOptions="FillAndExpand"  VerticalOptions="FillAndExpand">
+                    <StackLayout BackgroundColor="Gray" Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White" >
+                            <StackLayout VerticalOptions="CenterAndExpand">
+                                <Entry 
+                                    Text="1" 
+                                    FontSize="Large"
+                                    HorizontalTextAlignment="Center"></Entry>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="Yellow" >
+                            <StackLayout VerticalOptions="CenterAndExpand">
+                                <Entry Text="2" HorizontalTextAlignment="Center"></Entry>
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout Grid.Column="0" Grid.Row="2">
+                    <Entry Text=""></Entry>
+                </StackLayout>
+                <StackLayout Grid.Column="1" Grid.Row="0" BackgroundColor="LightGray">
+                    <Label Text="header2"></Label>
+                </StackLayout>
+                <StackLayout Grid.Column="1" Grid.Row="1">
+                    <Entry Text=""></Entry>
+                </StackLayout>
+                <StackLayout Grid.Column="1" Grid.Row="2">
+                    <Entry Text=""></Entry>
+                </StackLayout>
+
+            </Grid>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

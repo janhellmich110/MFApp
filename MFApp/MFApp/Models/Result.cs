@@ -11,6 +11,7 @@ namespace MFApp.Models
         public int Id { get; set; }
 
         public int Score { get; set; }
+        public int Putts { get; set; }
         public int BruttoZ { get; set; }
         public int BruttoS { get; set; }
         public int NettoZ { get; set; }
