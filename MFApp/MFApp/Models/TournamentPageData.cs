@@ -119,6 +119,8 @@ namespace MFApp.Models
                         if(i==tp.Id)
                         {
                             tp.Selected = true;
+                            // add to selected players
+                            SelectedPlayers.Add(tp);
                             break;
                         }
                     }

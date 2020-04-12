@@ -30,7 +30,7 @@ namespace MFApp.Views
 
             LoginPageData = new LoginPageData
             {
-                UserName = "aaa",
+                UserName = "",
                 Password = "",
                 Message = ""
             };

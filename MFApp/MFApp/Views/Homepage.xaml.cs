@@ -22,13 +22,37 @@ namespace MFApp.Views
 
             HomePageEvents = new HomePageData();
 
-            IDataStore<Event> DataStore = DependencyService.Get<IDataStore<Event>>();
-            var EventTask = DataStore.GetItemsAsync();
+            IDataStore<Golfclub> DataStore = DependencyService.Get<IDataStore<Golfclub>>();
+            var GolfclubTask = DataStore.GetItemsAsync();
+            List<Golfclub> Golfclubs = GolfclubTask.Result.ToList();
+
+            IDataStore<Event> DataStoreEvent = DependencyService.Get<IDataStore<Event>>();
+            var EventTask = DataStoreEvent.GetItemsAsync();
             List<Event> Events = EventTask.Result.ToList();
 
-            foreach(Event e in Events)
+            IDataStore<Tournament> DataStoreTournament = DependencyService.Get<IDataStore<Tournament>>();
+            var TournamentTask = DataStoreTournament.GetItemsAsync();
+            List<Tournament> Tournaments = TournamentTask.Result.ToList();
+
+            foreach (Tournament t in Tournaments)
             {
-                HomePageEvents.Events.Add(e);
+                HomePageEvent hpe = new HomePageEvent();
+
+                Event e = (Event)Events.Where(x => x.Id == t.EventId).FirstOrDefault();
+
+                Golfclub gc = Golfclubs.Where(x => x.Id == e.GolfclubId).FirstOrDefault();
+
+                if (gc != null)
+                    hpe.EventClub = Golfclubs.Where(x => x.Id == e.GolfclubId).Select(y => y.Name).First();
+                else
+                    hpe.EventClub = "";
+
+                hpe.EventDate = t.Datum.ToString("dd.MM.yyy hh:mm");
+                hpe.EventName = e.Name;
+                hpe.TournamentName = t.Name;
+                hpe.EventTournament = t;
+
+                HomePageEvents.Events.Add(hpe);
             }
             BindingContext = HomePageEvents;
 
@@ -37,21 +61,9 @@ namespace MFApp.Views
         private void Button_Clicked(object sender, EventArgs e)
         {
             var layout = (BindableObject)sender;
-            var Event = (Event)layout.BindingContext;
-
-            // get Tournament
-            IDataStore<Tournament> DataStore = DependencyService.Get<IDataStore<Tournament>>();
-            var TournamentTask = DataStore.GetItemsAsync();
-            List<Tournament> Tournaments = TournamentTask.Result.ToList();
-
-            foreach (Tournament t in Tournaments)
-            {
-                if(t.EventId == Event.Id)
-                {
-                    Navigation.PushAsync(new TournamentPage(t));
-                    break;
-                }
-            }
+            var homepageEvent = (HomePageEvent)layout.BindingContext;
+            
+            Navigation.PushAsync(new TournamentPage(homepageEvent.EventTournament));
         }
 
         private void TapGestureRecognizer_Tapped(object sender, EventArgs e)

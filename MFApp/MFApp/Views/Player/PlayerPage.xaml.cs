@@ -26,7 +26,6 @@ namespace MFApp.Views
 
             BindingContext = viewModel = new PlayerViewModel();
 
-            viewModel.IsBusy = true;
         }
 
         async void OnItemSelected(object sender, EventArgs args)

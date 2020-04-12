@@ -53,13 +53,19 @@
                     <DataTemplate>
                         <StackLayout Padding="40,20,40,20">
                             <StackLayout Padding="30,20,30,20" BackgroundColor="#90EE90">
-                            <Label Text="{Binding Name}" 
+                                <Label Text="{Binding EventClub}" 
                                 d:Text="{Binding .}"
                                 LineBreakMode="NoWrap"
                                    HorizontalOptions="Center"
                                 Style="{DynamicResource ListItemTextStyle}" 
                                 FontSize="16" />
-                            <Label Text="{Binding EventDate}" 
+                                <Label Text="{Binding EventName}" 
+                                d:Text="Name"
+                                LineBreakMode="NoWrap"
+                                   HorizontalOptions="Center"
+                                Style="{DynamicResource ListItemDetailTextStyle}"
+                                FontSize="13" />
+                                <Label Text="{Binding TournamentName}" 
                                 d:Text="Name"
                                 LineBreakMode="NoWrap"
                                    HorizontalOptions="Center"
@@ -68,7 +74,7 @@
                             <Button 
                                 Text="Runde starten" 
                                 Clicked="Button_Clicked"
-                                TextColor="#999999"
+                                TextColor="White"
                                 BackgroundColor="#1E2768"/>
                             <StackLayout.GestureRecognizers>
                                 <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>

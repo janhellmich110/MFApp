@@ -81,6 +81,9 @@ namespace MFApp.Views
             ScoreKarte.ColumnDefinitions.Clear();
             ScoreKarte.Children.Clear();
 
+            if (TournamentPageData.SelectedPlayers.Count() == 0)
+                return;
+
             int playerCount = this.TournamentPageData.SelectedPlayers.Count();
             LastPlayerId = TournamentPageData.SelectedPlayers[playerCount - 1].Id;
             int teeCount = this.TournamentPageData.TeeList.Count();
@@ -95,15 +98,19 @@ namespace MFApp.Views
 
             for (int columnIndex = 0; columnIndex < (playerCount + 1); columnIndex++)
             {
-                ScoreKarte.ColumnDefinitions.Add(new ColumnDefinition());
+                if(columnIndex==0)
+                    ScoreKarte.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(45) });
+                else
+                    ScoreKarte.ColumnDefinitions.Add(new ColumnDefinition());
+
                 for (int rowIndex = 0; rowIndex < rowcount; rowIndex++)
                 {
                     if (columnIndex == 0)
                     { 
-                        if (teeCount == 9)
+                        //if (teeCount == 9)
                             ScoreKarte.RowDefinitions.Add(new RowDefinition());
-                        else
-                            ScoreKarte.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
+                        //else
+                        //    ScoreKarte.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
                     }
 
                     if ((rowIndex == 0) && (columnIndex > 0))
@@ -185,7 +192,7 @@ namespace MFApp.Views
                         // zweite 9 Löcher
                         if (columnIndex == 0)
                         {
-                            Tee tee = TournamentPageData.TeeList[rowIndex - 1];
+                            Tee tee = TournamentPageData.TeeList[rowIndex - 2];
                             AddHoleLabelCell(tee, columnIndex, rowIndex);
                         }
                         else
@@ -368,7 +375,7 @@ namespace MFApp.Views
                 Text = tee.Par.ToString(),
                 VerticalTextAlignment = TextAlignment.Center,
                 VerticalOptions = LayoutOptions.Center,
-                FontSize = 20,
+                FontSize = 16,
                 FontAttributes = FontAttributes.None
             };
             var hdcpLabel = new Label
@@ -376,7 +383,7 @@ namespace MFApp.Views
                 Text = tee.Hcp.ToString(),
                 VerticalTextAlignment = TextAlignment.Center,
                 VerticalOptions = LayoutOptions.Center,
-                FontSize = 20,
+                FontSize = 16,
                 FontAttributes = FontAttributes.None
             };
 
@@ -427,12 +434,12 @@ namespace MFApp.Views
             };
             var subScoreHeaderStackLayout = new StackLayout
             {
-                Padding = new Thickness(5),
+                Padding = new Thickness(1),
                 HorizontalOptions = LayoutOptions.StartAndExpand
             };
             var subPuttsHeaderStackLayout = new StackLayout
             {
-                Padding = new Thickness(5),
+                Padding = new Thickness(1),
                 HorizontalOptions = LayoutOptions.EndAndExpand
             };
 
@@ -441,7 +448,7 @@ namespace MFApp.Views
                 Text = "Score",
                 VerticalTextAlignment = TextAlignment.Center,
                 VerticalOptions = LayoutOptions.Center,
-                FontSize = 20,
+                FontSize = 12,
                 FontAttributes = FontAttributes.None
             };
             var puttsLabel = new Label
@@ -449,7 +456,7 @@ namespace MFApp.Views
                 Text = "Putts",
                 VerticalTextAlignment = TextAlignment.Center,
                 VerticalOptions = LayoutOptions.Center,
-                FontSize = 20,
+                FontSize = 12,
                 FontAttributes = FontAttributes.None
             };
 
@@ -535,7 +542,8 @@ namespace MFApp.Views
                 HorizontalTextAlignment=TextAlignment.Center,
                 ReturnCommandParameter = CommandParameter,
                 FontSize=20,
-                MinimumWidthRequest = 100
+                MinimumWidthRequest = 100,
+                Keyboard= Keyboard.Numeric
             };
 
             entry.TextChanged += Entry_TextChanged;
@@ -553,7 +561,8 @@ namespace MFApp.Views
                 HorizontalTextAlignment = TextAlignment.Center,
                 ReturnCommandParameter = CommandParameter,
                 FontSize = 20,
-                MinimumWidthRequest = 100
+                MinimumWidthRequest = 100,
+                Keyboard = Keyboard.Numeric
             };
 
             entryPutts.TextChanged += Entry_TextChanged;
