@@ -48,7 +48,12 @@ namespace MFApp.Views
 
         public async Task NavigateFromMenu(int id)
         {
-            if (!MenuPages.ContainsKey(id))
+            if (MenuPages.ContainsKey(id))
+            {
+                MenuPages.Remove(id);
+            }
+                //if (!MenuPages.ContainsKey(id))
+            if (true)
             {
                 switch (id)
                 {
@@ -70,7 +75,7 @@ namespace MFApp.Views
                         });
                         break;
                     case (int)MenuItemType.LogOff:
-                        MenuPages.Add(id, new NavigationPage(new LogoutPage())
+                        MenuPages.Add(id, new NavigationPage(new MeinProfil())
                         {
                             BarBackgroundColor = Color.FromRgb(30, 39, 104)
                         });

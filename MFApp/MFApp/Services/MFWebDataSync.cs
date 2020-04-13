@@ -213,6 +213,7 @@ namespace MFApp.Services
             {
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new Uri($"https://demo.portivity.de/mfweb/api/");
+                //client.BaseAddress = new Uri($"https://80.228.37.106/mfweb/api/");
 
                 bool IsConnected = Connectivity.NetworkAccess == NetworkAccess.Internet;
                 if (IsConnected)

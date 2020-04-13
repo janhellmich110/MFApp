@@ -7,7 +7,7 @@
              x:Class="MFApp.Views.TournamentPage">
   <!--Pages can be added as references or inline-->
     <TabbedPage.Children>
-        <ContentPage Title="Tunierinfo">
+        <ContentPage Title="Turnier">
             <StackLayout Padding="40,20,40,20">
                 <StackLayout Padding="30,20,30,20" BackgroundColor="#90EE90">
                     <Label Text="{Binding TournamentEvent.Name}"
@@ -19,7 +19,7 @@
                 </StackLayout>
             </StackLayout>
         </ContentPage>
-        <ContentPage Title="Spielerauswahl">
+        <ContentPage Title="Spieler">
             <CollectionView x:Name="PlayerCollectionView"
                 ItemsSource="{Binding AllPlayers}">
                 <d:CollectionView.ItemsSource>
@@ -47,13 +47,124 @@
             </CollectionView>
         </ContentPage>
         <ContentPage Title="Scorecard" Appearing="ContentPage_Scorecard_Appearing">
-            <ScrollView Orientation="Vertical"  VerticalScrollBarVisibility="Default" BackgroundColor="#90EE90">
-                <Grid x:Name="ScoreKarte" Padding="1,1,1,1">
+            <ScrollView Orientation="Vertical"  VerticalScrollBarVisibility="Default" BackgroundColor="#1E2768">
+                <Grid x:Name="ScoreKarte" Padding="1,1,0,0">
 
 
                 </Grid>
 
             </ScrollView>
+        </ContentPage>
+        <ContentPage Title="Ergebnisse" Appearing="ContentPageResults_Appearing">
+            <StackLayout Padding="20, 20, 20, 20">
+                <CollectionView x:Name="PlayerResultCollectionView" ItemsSource="{Binding PlayerResults}">
+                <CollectionView.Header>
+                    <Grid Padding="10,10,10,10" BackgroundColor="LightGray">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <StackLayout VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="0">
+                                <Label Text="Spieler"
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="16"
+                                    FontAttributes="Bold"/>
+                            </StackLayout>
+                            <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1">
+                                <Label Text="Schläge Brutto" 
+                                    Grid.Column="2"
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="16" 
+                                       FontAttributes="Bold"/>
+                            </StackLayout>
+                            <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="2">
+                                <Label Text="Schläge Netto" 
+                                    Grid.Column="3"
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="16" 
+                                       FontAttributes="Bold"/>
+                            </StackLayout>
+                            <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="3">
+                                <Label Text="Punkte Brutto" 
+                                Grid.Column="4"
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource ListItemTextStyle}" 
+                                FontSize="16" 
+                                       FontAttributes="Bold"/>
+                            </StackLayout>
+                            <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="4">
+                                <Label Text="Punkte Netto" 
+                                Grid.Column="5"
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource ListItemTextStyle}" 
+                                FontSize="16" 
+                                       FontAttributes="Bold"/>
+                            </StackLayout>
+                            <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="5">
+                                <Label Text="Putts"
+                                Grid.Column="6"
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource ListItemTextStyle}" 
+                                FontSize="16" 
+                                       FontAttributes="Bold"/>
+                            </StackLayout>
+                        </Grid>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10, 20, 10, 20">
+                                <StackLayout VerticalOptions="Center" HorizontalOptions="StartAndExpand" Grid.Column="0">
+                                <Label Text="{Binding PlayerName}"                                   
+                                d:Text="{Binding .}"
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource ListItemTextStyle}" 
+                                FontSize="16" />
+                            </StackLayout>
+                                <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1">
+                                    <Label Text="{Binding ScoreBrutto}" 
+                                d:Text="{Binding .}"
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource ListItemTextStyle}" 
+                                FontSize="16" />
+                                </StackLayout>
+                                <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="2">
+                                    <Label Text="{Binding ScoreNetto}" 
+                                d:Text="{Binding .}"
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource ListItemTextStyle}" 
+                                FontSize="16" />
+                                </StackLayout>
+                                <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="3">
+                                    <Label Text="{Binding BruttoPoints}" 
+                                       Grid.Column="4"
+                                d:Text="{Binding .}"
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource ListItemTextStyle}" 
+                                FontSize="16" />
+                                </StackLayout>
+                                <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="4">
+                                    <Label Text="{Binding NettoPoints}" 
+                                       Grid.Column="5"
+                                d:Text="{Binding .}"
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource ListItemTextStyle}" 
+                                FontSize="16" />
+                                </StackLayout>
+                                <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="5">
+                                    <Label Text="{Binding Putts}"
+                                       Grid.Column="6"
+                                d:Text="{Binding .}"
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource ListItemTextStyle}" 
+                                FontSize="16" />
+                                </StackLayout>
+                            </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            </StackLayout>
         </ContentPage>
     </TabbedPage.Children>
 

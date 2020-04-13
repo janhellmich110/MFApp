@@ -361,12 +361,12 @@ namespace MFApp.Views
             };
             var subTeeParHeaderStackLayout = new StackLayout
             {
-                Padding = new Thickness(5),
+                Padding = new Thickness(2),
                 HorizontalOptions = LayoutOptions.StartAndExpand
             };
             var subTeeHdcpHeaderStackLayout = new StackLayout
             {
-                Padding = new Thickness(5),
+                Padding = new Thickness(2),
                 HorizontalOptions = LayoutOptions.EndAndExpand
             };
 
@@ -448,7 +448,7 @@ namespace MFApp.Views
                 Text = "Score",
                 VerticalTextAlignment = TextAlignment.Center,
                 VerticalOptions = LayoutOptions.Center,
-                FontSize = 12,
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 FontAttributes = FontAttributes.None
             };
             var puttsLabel = new Label
@@ -456,7 +456,7 @@ namespace MFApp.Views
                 Text = "Putts",
                 VerticalTextAlignment = TextAlignment.Center,
                 VerticalOptions = LayoutOptions.Center,
-                FontSize = 12,
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 FontAttributes = FontAttributes.None
             };
 
@@ -867,6 +867,49 @@ namespace MFApp.Views
                     PlayerId = p.Id
                 };
                 DataStoreFlight2Player.AddItemAsync(f2p);
+            }
+        }
+
+        private void ContentPageResults_Appearing(object sender, EventArgs e)
+        {
+            TournamentPageData.PlayerResults.Clear();
+            IDataStore<Result> DataStore = DependencyService.Get<IDataStore<Result>>();
+            var ResultTask = DataStore.GetItemsAsync();
+            List<Result> Results = ResultTask.Result.ToList();
+            List<Result> SavedResults = Results.Where(x => x.TournamentId == TournamentPageData.Tournament.Id).ToList();
+
+            foreach (TournamentPlayer tp in TournamentPageData.SelectedPlayers)
+            {
+                TournamentResultSummary trs = new TournamentResultSummary();
+                trs.PlayerId = tp.Id;
+                trs.PlayerName = tp.Name;
+
+                int BruttoScore = 0;
+                int NettoScore = 0;
+                int BruttoPoints = 0;
+                int NettoPoints = 0;
+                int Putts = 0;
+
+                foreach (Tee t in TournamentPageData.TeeList)
+                {
+                    // get result by player and tee
+                    Result PlayerResult = SavedResults.Where(x => x.PlayerId == tp.Id).Where(y => y.TeeId == t.Id).FirstOrDefault();
+                    {
+                        if(PlayerResult != null)
+                        {
+                            BruttoScore = BruttoScore + PlayerResult.Score;
+                            Putts = Putts + PlayerResult.Putts;
+                        }
+                    }
+                }
+
+                trs.ScoreBrutto = BruttoScore;
+                trs.ScoreNetto = NettoScore;
+                trs.BruttoPoints = BruttoPoints;
+                trs.NettoPoints = NettoPoints;
+                trs.Putts = Putts;
+
+                TournamentPageData.PlayerResults.Add(trs);
             }
         }
     }

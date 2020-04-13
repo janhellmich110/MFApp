@@ -18,6 +18,7 @@ namespace MFApp.Models
         }
         public TournamentPageData(Tournament tournament)
         {
+            PlayerResults = new ObservableCollection<TournamentResultSummary>();
             Tournament = tournament;
 
             // get event
@@ -143,5 +144,8 @@ namespace MFApp.Models
         public ObservableCollection<TournamentPlayer> AllPlayers{ get; set;}
 
         public ObservableCollection<TournamentPlayer> SelectedPlayers { get; set;}
+
+        public ObservableCollection<TournamentResultSummary> PlayerResults { get; set; }
+        
     }
 }

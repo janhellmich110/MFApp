@@ -32,7 +32,7 @@
             </StackLayout>
             <StackLayout>
                 <ContentView Padding="0,0,0,10" VerticalOptions="End" HorizontalOptions="CenterAndExpand">
-                    <Label Text="Konfiguration" FontSize="Large"  VerticalOptions="Center"  HorizontalOptions="Center"></Label>
+                    <Label Text="Startseite" FontSize="Large"  VerticalOptions="Center"  HorizontalOptions="Center"></Label>
                 </ContentView>
             </StackLayout>
         </StackLayout>
