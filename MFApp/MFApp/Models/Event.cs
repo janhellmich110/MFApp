@@ -14,6 +14,8 @@ namespace MFApp.Models
         public DateTime EventDate { get; set; }
 
         public EventTypeEnum EventType { get; set; }
+
+        public int GolfclubId { get; set; }
     }
 
     public enum EventTypeEnum
