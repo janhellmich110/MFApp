@@ -895,7 +895,7 @@ namespace MFApp.Views
                     // get result by player and tee
                     Result PlayerResult = SavedResults.Where(x => x.PlayerId == tp.Id).Where(y => y.TeeId == t.Id).FirstOrDefault();
                     {
-                        if (PlayerResult != null)
+                        if(PlayerResult != null)
                         {
                             BruttoScore = BruttoScore + PlayerResult.Score;
                             Putts = Putts + PlayerResult.Putts;
