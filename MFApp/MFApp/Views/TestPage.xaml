@@ -48,12 +48,13 @@
                 </StackLayout>
                 <StackLayout Grid.Column="0" Grid.Row="1" HorizontalOptions="FillAndExpand"  VerticalOptions="FillAndExpand">
                     <StackLayout BackgroundColor="Gray" Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White" >
+                        <StackLayout WidthRequest="70" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White" >
                             <StackLayout VerticalOptions="CenterAndExpand">
                                 <Entry 
                                     Text="1" 
                                     FontSize="Large"
-                                    HorizontalTextAlignment="Center"></Entry>
+                                    HorizontalTextAlignment="Center">
+                                </Entry>
                             </StackLayout>
                         </StackLayout>
                         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="Yellow" >

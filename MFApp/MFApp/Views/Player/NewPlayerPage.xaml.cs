@@ -5,6 +5,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 using MFApp.Models;
+using MFApp.Services;
 
 namespace MFApp.Views
 {
@@ -34,6 +35,14 @@ namespace MFApp.Views
         async void Save_Clicked(object sender, EventArgs e)
         {
             MessagingCenter.Send(this, "AddItem", Player);
+
+            // send new player to web
+            MFWebDataSync DataSync = new MFWebDataSync();
+            await DataSync.SendNewPlayer(Player);
+
+            IDataStore<Player> DataStore = DependencyService.Get<IDataStore<Player>>();
+            await DataStore.SyncMFWeb();
+
             await Navigation.PopModalAsync();
         }
 

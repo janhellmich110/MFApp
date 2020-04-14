@@ -41,7 +41,7 @@ namespace MFApp.Services
                     #region golfclubs
                     try
                     {
-                        conn.Execute("DROP TABLE Golfclub;");
+                        conn.Execute("DELETE FROM Golfclub");
                     }
                     catch (Exception) { }
 
@@ -79,6 +79,7 @@ namespace MFApp.Services
                         DataStoreTournament.AddItemAsync(t);
                     }
                     #endregion
+
                     #region Course
                     try
                     {
@@ -128,6 +129,7 @@ namespace MFApp.Services
                         {
                             Id = t.Id,
                             FlightNumber = t.FlightNumber,
+                            FlightName = t.FlightName,
                             TournamentId=t.TournamentId
                         };
 
@@ -224,6 +226,28 @@ namespace MFApp.Services
                 }
             }
             catch(Exception exp)
+            {
+                return await Task.FromResult(false);
+            }
+            return await Task.FromResult(true);
+        }
+
+        public async Task<bool> SendNewPlayer(Player NewPlayer)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri($"https://demo.portivity.de/mfweb/api/");
+
+                bool IsConnected = Connectivity.NetworkAccess == NetworkAccess.Internet;
+                if (IsConnected)
+                {
+                    var content = new StringContent(JsonConvert.SerializeObject(NewPlayer).ToString(), Encoding.UTF8, "application/json");
+                    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    var result = client.PostAsync($"MyAppData/SendNewPlayer", content).Result;
+                }
+            }
+            catch (Exception exp)
             {
                 return await Task.FromResult(false);
             }

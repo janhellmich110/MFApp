@@ -18,6 +18,10 @@ namespace MFApp.Models
 
         public int HandicapTableFemaleId { get; set; }
         public int HandicapTableMaleId { get; set; }
+
+        public bool ManagedFlights { get; set; }
+        public bool WithPutts { get; set; }
+
         public int EventId { get; set; }
     }
 }
