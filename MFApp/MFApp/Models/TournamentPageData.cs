@@ -20,7 +20,7 @@ namespace MFApp.Models
         {
             PlayerResults = new ObservableCollection<TournamentResultSummary>();
             Tournament = tournament;
-
+            TournamentDate = tournament.Datum.ToString("dd.MM.yyyy hh:mm");
             // get event
             // get Tournament
             IDataStore<Event> DataStoreEvent = DependencyService.Get<IDataStore<Event>>();
@@ -35,6 +35,13 @@ namespace MFApp.Models
                     break;
                 }
             }
+
+            // get club
+            IDataStore<Golfclub> DataStoreGolfclub = DependencyService.Get<IDataStore<Golfclub>>();
+            var GolfclubTask = DataStoreGolfclub.GetItemsAsync();
+            List<Golfclub> Golfclubs = GolfclubTask.Result.ToList();
+
+            TournamentClub = Golfclubs.Where(x => x.Id == TournamentEvent.GolfclubId).FirstOrDefault();
 
             // get course
             IDataStore<Course> DataStoreCourse = DependencyService.Get<IDataStore<Course>>();
@@ -75,19 +82,49 @@ namespace MFApp.Models
 
             // find existing flight
             List<int> FlightPlayerIds = new List<int>();
-            int flightNumber = Tournament.Id * 10000 + CurrentProfile.Id;
+
+            IDataStore<Flight> DataStoreFlight = DependencyService.Get<IDataStore<Flight>>();
+            var FlightTask = DataStoreFlight.GetItemsAsync();
+            List<Flight> Flights = FlightTask.Result.ToList();
 
             IDataStore<Flight2Player> DataStoreFlight2Player = DependencyService.Get<IDataStore<Flight2Player>>();
             var Flight2PlayerTask = DataStoreFlight2Player.GetItemsAsync();
             List<Flight2Player> Flight2Players = Flight2PlayerTask.Result.ToList();
 
-            FlightPlayerIds = Flight2Players.Where(x => x.FlightId == flightNumber).Select(x=>x.PlayerId).ToList();
-
-            if(FlightPlayerIds.Count() == 0)
+            if (!Tournament.ManagedFlights)
             {
-                // no player in flight, add current player
-                FlightPlayerIds.Add(CurrentProfile.Id);
+                int flightNumber = Tournament.Id * 10000 + CurrentProfile.Id;
+
+                FlightPlayerIds = Flight2Players.Where(x => x.FlightId == flightNumber).Select(x => x.PlayerId).ToList();
+
+                if (FlightPlayerIds.Count() == 0)
+                {
+                    // no player in flight, add current player
+                    FlightPlayerIds.Add(CurrentProfile.Id);
+                }
+                TournamentFlight = "MeinFlight";
             }
+            else
+            {
+                // get my flight number
+                List<Flight> flightList = Flights.Where(x => x.TournamentId == Tournament.Id).ToList();
+                foreach(Flight f in flightList)
+                {
+                    // check if I am in flight
+                    var flightPlayer = Flight2Players.Where(x => x.FlightId == f.Id).Where(y => y.PlayerId == CurrentProfile.Id).FirstOrDefault();
+                    if(flightPlayer != null)
+                    {
+                        // flight found
+                        TournamentFlight = f.FlightNumber.ToString() + ": " + f.FlightName;
+                    }
+                    else
+                    {
+                        // no flight found
+                        TournamentFlight = "Aktuell noch kein Flight!";
+                    }
+                }
+            }
+
             // Fill All Players
             IDataStore<Player> DataStore = DependencyService.Get<IDataStore<Player>>();
             var PlayerTask = DataStore.GetItemsAsync();
@@ -133,10 +170,15 @@ namespace MFApp.Models
 
         public Player CurrentPlayer { get; set; }
 
+        public Golfclub TournamentClub { get; set; }
+
         public Event TournamentEvent { get; set; }
 
         public Tournament Tournament { get; set; }
 
+        public string TournamentDate { get; set; }
+
+        public string TournamentFlight { get; set; }
         public Course Course { get; set; }
 
         public List<Tee> TeeList { get; set; }

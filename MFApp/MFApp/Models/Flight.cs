@@ -11,6 +11,7 @@ namespace MFApp.Models
         public int Id { get; set; }
 
         public int FlightNumber { get; set; }
+        public string FlightName { get; set; }
 
         public int TournamentId { get; set; }
     }

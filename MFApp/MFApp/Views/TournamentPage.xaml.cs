@@ -107,10 +107,7 @@ namespace MFApp.Views
                 {
                     if (columnIndex == 0)
                     { 
-                        //if (teeCount == 9)
-                            ScoreKarte.RowDefinitions.Add(new RowDefinition());
-                        //else
-                        //    ScoreKarte.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
+                        ScoreKarte.RowDefinitions.Add(new RowDefinition());
                     }
 
                     if ((rowIndex == 0) && (columnIndex > 0))
@@ -167,24 +164,28 @@ namespace MFApp.Views
                             {
                                 VerticalOptions = LayoutOptions.FillAndExpand,
                                 HorizontalOptions = LayoutOptions.FillAndExpand
-                            };
-                            var subPuttsStackLayout = new StackLayout
-                            {
-                                BackgroundColor = Color.White,
-                                VerticalOptions = LayoutOptions.FillAndExpand,
-                                HorizontalOptions = LayoutOptions.FillAndExpand
-                            };
+                            };                            
 
                             Label ScoreLabel = AddLabelCell("", subScoreStackLayout);
-                            Label PuttsLabel = AddLabelCell("", subPuttsStackLayout);
-
+                            
                             StackLayout.Children.Add(subScoreStackLayout);
-                            StackLayout.Children.Add(subPuttsStackLayout);
+
+                            if (TournamentPageData.Tournament.WithPutts)
+                            {
+                                var subPuttsStackLayout = new StackLayout
+                                {
+                                    BackgroundColor = Color.White,
+                                    VerticalOptions = LayoutOptions.FillAndExpand,
+                                    HorizontalOptions = LayoutOptions.FillAndExpand
+                                };
+                                Label PuttsLabel = AddLabelCell("", subPuttsStackLayout);
+                                StackLayout.Children.Add(subPuttsStackLayout);
+                                InSumPuttsLabels[columnIndex - 1] = PuttsLabel;
+                            }
 
                             ScoreKarte.Children.Add(StackLayout, columnIndex, rowIndex);
 
-                            InSumLabels[columnIndex - 1] = ScoreLabel;
-                            InSumPuttsLabels[columnIndex - 1] = PuttsLabel;
+                            InSumLabels[columnIndex - 1] = ScoreLabel;                            
                         }
                     }
                     else if ((teeCount > 9) && (rowIndex > 10) && (rowIndex < 20))
@@ -233,23 +234,26 @@ namespace MFApp.Views
                                 VerticalOptions = LayoutOptions.FillAndExpand,
                                 HorizontalOptions = LayoutOptions.FillAndExpand
                             };
-                            var subPuttsStackLayout = new StackLayout
-                            {
-                                BackgroundColor = Color.White,
-                                VerticalOptions = LayoutOptions.FillAndExpand,
-                                HorizontalOptions = LayoutOptions.FillAndExpand
-                            };
 
                             Label ScoreLabel = AddLabelCell("", subScoreStackLayout);
-                            Label PuttsLabel = AddLabelCell("", subPuttsStackLayout);
-
                             StackLayout.Children.Add(subScoreStackLayout);
-                            StackLayout.Children.Add(subPuttsStackLayout);
+
+                            if (TournamentPageData.Tournament.WithPutts)
+                            {
+                                var subPuttsStackLayout = new StackLayout
+                                {
+                                    BackgroundColor = Color.White,
+                                    VerticalOptions = LayoutOptions.FillAndExpand,
+                                    HorizontalOptions = LayoutOptions.FillAndExpand
+                                };
+                                Label PuttsLabel = AddLabelCell("", subPuttsStackLayout);
+                                StackLayout.Children.Add(subPuttsStackLayout);
+                                OutSumPuttsLabels[columnIndex - 1] = PuttsLabel;
+                            }
 
                             ScoreKarte.Children.Add(StackLayout, columnIndex, rowIndex);
 
-                            OutSumLabels[columnIndex - 1] = ScoreLabel;
-                            OutSumPuttsLabels[columnIndex - 1] = PuttsLabel;
+                            OutSumLabels[columnIndex - 1] = ScoreLabel;                            
                         }
                     }
                     else if ((teeCount > 9) && (rowIndex == 21))
@@ -274,23 +278,29 @@ namespace MFApp.Views
                                 VerticalOptions = LayoutOptions.FillAndExpand,
                                 HorizontalOptions = LayoutOptions.FillAndExpand
                             };
-                            var subPuttsStackLayout = new StackLayout
-                            {
-                                BackgroundColor = Color.White,
-                                VerticalOptions = LayoutOptions.FillAndExpand,
-                                HorizontalOptions = LayoutOptions.FillAndExpand
-                            };
-
-                            Label ScoreLabel = AddLabelCell("", subScoreStackLayout);
-                            Label PuttsLabel = AddLabelCell("", subPuttsStackLayout);
 
                             StackLayout.Children.Add(subScoreStackLayout);
-                            StackLayout.Children.Add(subPuttsStackLayout);
+                            Label ScoreLabel = AddLabelCell("", subScoreStackLayout);
+
+                            if (TournamentPageData.Tournament.WithPutts)
+                            {
+                                var subPuttsStackLayout = new StackLayout
+                                {
+                                    BackgroundColor = Color.White,
+                                    VerticalOptions = LayoutOptions.FillAndExpand,
+                                    HorizontalOptions = LayoutOptions.FillAndExpand
+                                };
+
+                                Label PuttsLabel = AddLabelCell("", subPuttsStackLayout);
+                                StackLayout.Children.Add(subPuttsStackLayout);
+
+                                TotalSumPuttsLabels[columnIndex - 1] = PuttsLabel;
+                            }
+
 
                             ScoreKarte.Children.Add(StackLayout, columnIndex, rowIndex);
 
-                            TotalSumLabels[columnIndex - 1] = ScoreLabel;
-                            TotalSumPuttsLabels[columnIndex - 1] = PuttsLabel;
+                            TotalSumLabels[columnIndex - 1] = ScoreLabel;                            
                         }
                     }
 
@@ -428,45 +438,48 @@ namespace MFApp.Views
             stackLayout.Children.Add(subStackLayout);
 
             #region add score putts header
-            var subScorePuttHeaderStackLayout = new StackLayout
+            if (TournamentPageData.Tournament.WithPutts)
             {
-                Orientation= StackOrientation.Horizontal
-            };
-            var subScoreHeaderStackLayout = new StackLayout
-            {
-                Padding = new Thickness(1),
-                HorizontalOptions = LayoutOptions.StartAndExpand
-            };
-            var subPuttsHeaderStackLayout = new StackLayout
-            {
-                Padding = new Thickness(1),
-                HorizontalOptions = LayoutOptions.EndAndExpand
-            };
+                var subScorePuttHeaderStackLayout = new StackLayout
+                {
+                    Orientation = StackOrientation.Horizontal
+                };
+                var subScoreHeaderStackLayout = new StackLayout
+                {
+                    Padding = new Thickness(1),
+                    HorizontalOptions = LayoutOptions.StartAndExpand
+                };
+                var subPuttsHeaderStackLayout = new StackLayout
+                {
+                    Padding = new Thickness(1),
+                    HorizontalOptions = LayoutOptions.EndAndExpand
+                };
 
-            var scoreLabel = new Label
-            {
-                Text = "Score",
-                VerticalTextAlignment = TextAlignment.Center,
-                VerticalOptions = LayoutOptions.Center,
-                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                FontAttributes = FontAttributes.None
-            };
-            var puttsLabel = new Label
-            {
-                Text = "Putts",
-                VerticalTextAlignment = TextAlignment.Center,
-                VerticalOptions = LayoutOptions.Center,
-                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                FontAttributes = FontAttributes.None
-            };
+                var scoreLabel = new Label
+                {
+                    Text = "Score",
+                    VerticalTextAlignment = TextAlignment.Center,
+                    VerticalOptions = LayoutOptions.Center,
+                    FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)),
+                    FontAttributes = FontAttributes.None
+                };
+                var puttsLabel = new Label
+                {
+                    Text = "Putts",
+                    VerticalTextAlignment = TextAlignment.Center,
+                    VerticalOptions = LayoutOptions.Center,
+                    FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)),
+                    FontAttributes = FontAttributes.None
+                };
 
-            subScoreHeaderStackLayout.Children.Add(scoreLabel);
-            subPuttsHeaderStackLayout.Children.Add(puttsLabel);
+                subScoreHeaderStackLayout.Children.Add(scoreLabel);
+                subPuttsHeaderStackLayout.Children.Add(puttsLabel);
 
-            subScorePuttHeaderStackLayout.Children.Add(subScoreHeaderStackLayout);
-            subScorePuttHeaderStackLayout.Children.Add(subPuttsHeaderStackLayout);
+                subScorePuttHeaderStackLayout.Children.Add(subScoreHeaderStackLayout);
+                subScorePuttHeaderStackLayout.Children.Add(subPuttsHeaderStackLayout);
 
-            stackLayout.Children.Add(subScorePuttHeaderStackLayout);
+                stackLayout.Children.Add(subScorePuttHeaderStackLayout);
+            }
             #endregion
 
             ScoreKarte.Children.Add(stackLayout, ColumnIndex, RowIndex);
@@ -542,39 +555,43 @@ namespace MFApp.Views
                 HorizontalTextAlignment=TextAlignment.Center,
                 ReturnCommandParameter = CommandParameter,
                 FontSize=20,
-                MinimumWidthRequest = 100,
-                Keyboard= Keyboard.Numeric
+                WidthRequest = 40,
+                Keyboard = Keyboard.Numeric
             };
 
             entry.TextChanged += Entry_TextChanged;
 
-            stackLayoutScore.Children.Add(entry);
-
-            var stackLayoutPutts = new StackLayout
+            if (TournamentPageData.Tournament.WithPutts)
             {
-                VerticalOptions = LayoutOptions.CenterAndExpand
-            };
-            CommandParameter = "putts_" + CommandParameter;
-            var entryPutts = new Entry
-            {
-                Text = EntryText1,
-                HorizontalTextAlignment = TextAlignment.Center,
-                ReturnCommandParameter = CommandParameter,
-                FontSize = 20,
-                MinimumWidthRequest = 100,
-                Keyboard = Keyboard.Numeric
-            };
+                var stackLayoutPutts = new StackLayout
+                {
+                    VerticalOptions = LayoutOptions.CenterAndExpand
+                };
+                CommandParameter = "putts_" + CommandParameter;
+                var entryPutts = new Entry
+                {
+                    Text = EntryText1,
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    ReturnCommandParameter = CommandParameter,
+                    FontSize = 20,
+                    WidthRequest = 30,
+                    Keyboard = Keyboard.Numeric
+                };
 
-            entryPutts.TextChanged += Entry_TextChanged;
+                entryPutts.TextChanged += Entry_TextChanged;
+
+                stackLayoutPutts.Children.Add(entryPutts);
+
+                subsubPuttsStackLayout.Children.Add(stackLayoutPutts);                
+            }
 
             stackLayoutScore.Children.Add(entry);
-            stackLayoutPutts.Children.Add(entryPutts);
-
             subsubScoreStackLayout.Children.Add(stackLayoutScore);
-            subsubPuttsStackLayout.Children.Add(stackLayoutPutts);
-
+            
             subStackLayout.Children.Add(subsubScoreStackLayout);
-            subStackLayout.Children.Add(subsubPuttsStackLayout);
+
+            if (TournamentPageData.Tournament.WithPutts)
+                subStackLayout.Children.Add(subsubPuttsStackLayout);
 
             stackLayout.Children.Add(subStackLayout);
             ScoreKarte.Children.Add(stackLayout, ColumnIndex, RowIndex);
@@ -839,6 +856,7 @@ namespace MFApp.Views
                 {
                     Id = flightNumber,
                     FlightNumber = flightNumber,
+                    FlightName = "Mein Flight",
                     TournamentId = tournamentId
                 };
 
@@ -876,6 +894,7 @@ namespace MFApp.Views
             IDataStore<Result> DataStore = DependencyService.Get<IDataStore<Result>>();
             var ResultTask = DataStore.GetItemsAsync();
             List<Result> Results = ResultTask.Result.ToList();
+
             List<Result> SavedResults = Results.Where(x => x.TournamentId == TournamentPageData.Tournament.Id).ToList();
 
             foreach (TournamentPlayer tp in TournamentPageData.SelectedPlayers)
@@ -897,6 +916,7 @@ namespace MFApp.Views
                     {
                         if(PlayerResult != null)
                         {
+                            // result found
                             BruttoScore = BruttoScore + PlayerResult.Score;
                             Putts = Putts + PlayerResult.Putts;
 
