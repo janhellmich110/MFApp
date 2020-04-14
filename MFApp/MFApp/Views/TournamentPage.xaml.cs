@@ -895,13 +895,68 @@ namespace MFApp.Views
                     // get result by player and tee
                     Result PlayerResult = SavedResults.Where(x => x.PlayerId == tp.Id).Where(y => y.TeeId == t.Id).FirstOrDefault();
                     {
-                        if(PlayerResult != null)
+                        if (PlayerResult != null)
                         {
                             BruttoScore = BruttoScore + PlayerResult.Score;
                             Putts = Putts + PlayerResult.Putts;
+
+
+
+                            //Bruttopunkte
+
+                            int points = 0;
+                            points = t.Par - PlayerResult.Score + 2;
+
+                            if (points > 0)
+                            {
+                                BruttoPoints += points;
+                            }
+
+                            //netto Par erstellen
+
+                            int nPar = t.Par;
+
+
+                            int Teeanzahl = TournamentPageData.TeeList.Count;
+                            int Handicap = Convert.ToInt32(tp.Handicap);
+
+
+                            int Lochvorgabe = 0;
+                            //spielvorgabe zugreifen
+                            Lochvorgabe = Handicap / 18;
+
+
+                            nPar += Lochvorgabe;
+
+
+                            int evtlLochvorgabe = 0;
+                            evtlLochvorgabe = Handicap % 18;
+
+                            if (t.Hcp <= evtlLochvorgabe)
+                            {
+                                nPar += 1;
+                            }
+
+
+                            //NettoZählspiel
+
+                            NettoScore += PlayerResult.Score - (nPar - t.Par) ;
+
+
+                            //Nettopunkte
+
+                            int npoints = 0;
+                            npoints = nPar - PlayerResult.Score + 2;
+
+                            if (points > 0)
+                            {
+                                NettoPoints += npoints;
+                            }
                         }
                     }
+
                 }
+
 
                 trs.ScoreBrutto = BruttoScore;
                 trs.ScoreNetto = NettoScore;
