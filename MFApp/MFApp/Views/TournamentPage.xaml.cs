@@ -968,7 +968,7 @@ namespace MFApp.Views
                             int npoints = 0;
                             npoints = nPar - PlayerResult.Score + 2;
 
-                            if (points > 0)
+                            if (npoints > 0)
                             {
                                 NettoPoints += npoints;
                             }
