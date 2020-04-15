@@ -41,10 +41,9 @@ namespace MFApp.Views
                 Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
             else
             {
-                MFWebDataSync DataSync = new MFWebDataSync();
-                DataSync.SyncMFWeb();
+                // sync data moved to app start       
             }
-        }
+        }        
 
         public async Task NavigateFromMenu(int id)
         {

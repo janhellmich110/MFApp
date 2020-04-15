@@ -20,12 +20,9 @@ namespace MFApp.Views
 
         private async void Button_Clicked(object sender, EventArgs e)
         {
-            //IDataStore<Player> DataStore = DependencyService.Get<IDataStore<Player>>();
-
-            //bool result = await DataStore.SyncMFWeb();
-
+            IsBusy = true;
             MFWebDataSync DataSync = new MFWebDataSync();
-            bool result = await DataSync.SyncMFWeb();
+            bool result = await DataSync.SyncMFWebSynchron();
 
             Button button = sender as Button;
             if (result)
@@ -36,7 +33,7 @@ namespace MFApp.Views
             {
                 button.Text = "Fehler bei Daten-Sync";
             }
-
+            IsBusy = false;
         }
 
         private void Button_Clicked_1(object sender, EventArgs e)

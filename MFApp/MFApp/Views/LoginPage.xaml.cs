@@ -19,13 +19,8 @@ namespace MFApp.Views
 
         IDataStore<Player> DataStore = DependencyService.Get<IDataStore<Player>>();
 
-
         public LoginPage()
         {
-
-            //Sync PLayer
-            DataStore.SyncMFWeb();
-
             InitializeComponent();
 
             LoginPageData = new LoginPageData
@@ -75,9 +70,6 @@ namespace MFApp.Views
                 p.Gender = currentPlayer.Gender;
                 p.Mail = currentPlayer.Mail;
                 DataStoreProfile.AddItemAsync(p);
-
-                MFWebDataSync DataSync = new MFWebDataSync();
-                DataSync.SyncMFWeb();
 
                 Navigation.PopModalAsync();
             }

@@ -27,26 +27,35 @@
             </d:CollectionView.ItemsSource>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Padding="10">
-                        <Label Text="{Binding Initials}" 
+
+                    <StackLayout Padding="10" Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <StackLayout HorizontalOptions="StartAndExpand">
+                                <Label Text="{Binding Name}" 
                                 d:Text="{Binding .}"
                                 LineBreakMode="NoWrap" 
                                 Style="{DynamicResource ListItemTextStyle}" 
-                                FontSize="16" />
-                        <Label Text="{Binding Name}" 
+                                FontSize="16" />    
+                        </StackLayout>
+                        <StackLayout Grid.Column="1" WidthRequest="50">
+                                <Label Text="{Binding Initials}" 
                                 d:Text="Name"
                                 LineBreakMode="NoWrap"
                                 Style="{DynamicResource ListItemDetailTextStyle}"
                                 FontSize="13" />
-                        <Label Text="{Binding Handicap}" 
+                        </StackLayout>
+                        <StackLayout HorizontalOptions="End" WidthRequest="50">
+                            <Label Text="{Binding Handicap}" 
                                 d:Text="Handicap"
                                 LineBreakMode="NoWrap"
                                 Style="{DynamicResource ListItemDetailTextStyle}"
                                 FontSize="13" />
+                        </StackLayout>
+                   
                         <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnItemSelected"></TapGestureRecognizer>
                         </StackLayout.GestureRecognizers>
                     </StackLayout>
+
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

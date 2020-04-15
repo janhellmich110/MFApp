@@ -10,6 +10,7 @@ using Xamarin.Forms.Xaml;
 
 using MFApp.Models;
 using MFApp.Services;
+
 namespace MFApp.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]

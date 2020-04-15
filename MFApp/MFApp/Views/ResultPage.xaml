@@ -36,7 +36,7 @@
                                        FontSize="Small" 
                                        FontAttributes="Bold"/>
                         </StackLayout>
-                        <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="4">
+                        <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="3">
                             <Label Text="Anz. Löcher" 
                                     Grid.Column="5"
                                     HorizontalTextAlignment="Center"
@@ -44,7 +44,7 @@
                                     FontSize="Small" 
                                     FontAttributes="Bold"/>
                         </StackLayout>
-                        <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="5">
+                        <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="4">
                             <Label Text="Putts"
                                         Grid.Column="6"
                                        HorizontalTextAlignment="Center"
@@ -81,7 +81,7 @@
                                     Style="{DynamicResource ListItemTextStyle}" 
                                     FontSize="Small" />
                             </StackLayout>
-                            <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="4">
+                            <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="3">
                                 <Label Text="{Binding HolesPlayed}" 
                                         d:Text="{Binding .}"
                                            HorizontalTextAlignment="Center"
@@ -89,7 +89,7 @@
                                         Style="{DynamicResource ListItemTextStyle}" 
                                         FontSize="Small" />
                             </StackLayout>
-                            <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="5">
+                            <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="4">
                                 <Label Text="{Binding Putts}"
                                         d:Text="{Binding .}"
                                         HorizontalTextAlignment="Center"

@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Linq;
 
 using Xamarin.Forms;
 
@@ -37,6 +38,7 @@ namespace MFApp.ViewModels
             {
                 Player.Clear();
                 var items = await DataStore.GetItemsAsync(true);
+                items = items.OrderBy(x => x.Name);
                 foreach (var item in items)
                 {
                     Player.Add(item);

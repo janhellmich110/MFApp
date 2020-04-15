@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using MFApp.Services;
@@ -25,8 +26,16 @@ namespace MFApp
             DependencyService.Register<ResultDataStore>();
 
             // sync events
+            SyncWebData();
 
             MainPage = new MainPage();
+        }
+
+        private async Task<bool> SyncWebData()
+        {
+            MFWebDataSync DataSync = new MFWebDataSync();
+            bool bResult = await DataSync.SyncMFWebSynchron();
+            return bResult;
         }
 
         protected override void OnStart()
