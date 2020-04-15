@@ -215,14 +215,13 @@ namespace MFApp.Services
             {
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new Uri($"https://demo.portivity.de/mfweb/api/");
-                //client.BaseAddress = new Uri($"https://80.228.37.106/mfweb/api/");
 
                 bool IsConnected = Connectivity.NetworkAccess == NetworkAccess.Internet;
                 if (IsConnected)
                 {
                     var content = new StringContent(JsonConvert.SerializeObject(ResultList).ToString(), Encoding.UTF8, "application/json");
                     content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                    var result = client.PostAsync($"MyAppData/SendTournamentResults", content).Result;
+                    var result = client.PostAsync($"MyAppResults/SendTournamentResults", content).Result;
                 }
             }
             catch(Exception exp)
@@ -230,6 +229,31 @@ namespace MFApp.Services
                 return await Task.FromResult(false);
             }
             return await Task.FromResult(true);
+        }
+
+        public async Task<IEnumerable<MFAppFullTournamentResult>> GetLastResults()
+        {
+            IEnumerable<MFAppFullTournamentResult> items = null;
+
+            try
+            {
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri($"https://demo.portivity.de/mfweb/api/");
+
+                bool IsConnected = Connectivity.NetworkAccess == NetworkAccess.Internet;
+                if (IsConnected)
+                {
+                    var ResultTask = client.GetStringAsync("MyAppResults/GetLastResults/");
+                    string json = ResultTask.Result.ToString();
+
+                    items = (IEnumerable<MFAppFullTournamentResult>)JsonConvert.DeserializeObject<IEnumerable<MFAppFullTournamentResult>>(json);
+                }
+            }
+            catch(Exception)
+            {
+                return new List<MFAppFullTournamentResult>();
+            }
+            return items;
         }
 
         public async Task<bool> SendNewPlayer(Player NewPlayer)
@@ -244,7 +268,7 @@ namespace MFApp.Services
                 {
                     var content = new StringContent(JsonConvert.SerializeObject(NewPlayer).ToString(), Encoding.UTF8, "application/json");
                     content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                    var result = client.PostAsync($"MyAppData/SendNewPlayer", content).Result;
+                    var result = client.PostAsync($"PlayersAPI/PostPlayer", content).Result;
                 }
             }
             catch (Exception exp)
@@ -325,17 +349,39 @@ namespace MFApp.Services
                 catch (Exception) { }
 
                 // recreate all tables by calling contructor
-                PlayerDataStore playerds = new PlayerDataStore();
-                ProfileDataStore profilsDs = new ProfileDataStore();
-                GolfclubDataStore clubds = new GolfclubDataStore();
-                EventDataStore eventDs = new EventDataStore();
-                TournamentDataStore tourDs = new TournamentDataStore();
-                CourseDataStore ourseDs = new CourseDataStore();
-                CourseHandicapTableDataStore courseht = new CourseHandicapTableDataStore();
-                CourseHandicapDataStore courseh = new CourseHandicapDataStore();
-                FlightDataStore flightDs = new FlightDataStore();
-                Flight2PlayerDataStore f2pDs = new Flight2PlayerDataStore();
-                TeeDataStore teeDs = new TeeDataStore();
+                IDataStore<Player> DataStorePlayer = DependencyService.Get<IDataStore<Player>>();
+                DataStorePlayer = new PlayerDataStore();
+
+                IDataStore<Profile> DataStoreProfile = DependencyService.Get<IDataStore<Profile>>();
+                DataStoreProfile = new ProfileDataStore();
+
+                IDataStore<Golfclub> DataStoreGolfclub = DependencyService.Get<IDataStore<Golfclub>>();
+                DataStoreGolfclub = new GolfclubDataStore();
+
+                IDataStore<Event> DataStoreEvent = DependencyService.Get<IDataStore<Event>>();
+                DataStoreEvent = new EventDataStore();
+
+                IDataStore<Tournament> DataStoreTournament = DependencyService.Get<IDataStore<Tournament>>();
+                DataStoreTournament = new TournamentDataStore();
+
+                IDataStore<Course> DataStoreCourse = DependencyService.Get<IDataStore<Course>>();
+                DataStoreCourse = new CourseDataStore();
+
+                IDataStore<CourseHandicapTable> DataStoreCourseHandicapTable = DependencyService.Get<IDataStore<CourseHandicapTable>>();
+                DataStoreCourseHandicapTable = new CourseHandicapTableDataStore();
+
+                IDataStore<CourseHandicap> DataStoreCourseHandicap = DependencyService.Get<IDataStore<CourseHandicap>>();
+                DataStoreCourseHandicap = new CourseHandicapDataStore();
+
+                IDataStore<Flight> DataStoreFlight = DependencyService.Get<IDataStore<Flight>>();
+                DataStoreFlight = new FlightDataStore();
+
+                IDataStore<Flight2Player> DataStoreFlight2Player = DependencyService.Get<IDataStore<Flight2Player>>();
+                DataStoreFlight2Player = new Flight2PlayerDataStore();
+
+                IDataStore<Tee> DataStoreTee = DependencyService.Get<IDataStore<Tee>>();
+                DataStoreTee = new TeeDataStore();
+
             }
             catch (Exception exp)
             {

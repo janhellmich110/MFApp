@@ -22,7 +22,7 @@ namespace MFApp.Views
             {
                 new HomeMenuItem {Id = MenuItemType.Home, Title="Startseite" },                
                 new HomeMenuItem {Id = MenuItemType.Player, Title="Spieler" },
-                new HomeMenuItem {Id = MenuItemType.MFWeb, Title="Ergebnisse" },
+                new HomeMenuItem {Id = MenuItemType.Results, Title="Ergebnisse" },
                 new HomeMenuItem {Id = MenuItemType.Configuration, Title="Einstellungen" },
                 new HomeMenuItem {Id = MenuItemType.LogOff, Title="Mein Profil" }
             };

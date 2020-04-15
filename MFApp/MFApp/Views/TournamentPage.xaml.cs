@@ -920,10 +920,7 @@ namespace MFApp.Views
                             BruttoScore = BruttoScore + PlayerResult.Score;
                             Putts = Putts + PlayerResult.Putts;
 
-
-
                             //Bruttopunkte
-
                             int points = 0;
                             points = t.Par - PlayerResult.Score + 2;
 
@@ -933,21 +930,16 @@ namespace MFApp.Views
                             }
 
                             //netto Par erstellen
-
                             int nPar = t.Par;
-
 
                             int Teeanzahl = TournamentPageData.TeeList.Count;
                             int Handicap = Convert.ToInt32(tp.Handicap);
-
 
                             int Lochvorgabe = 0;
                             //spielvorgabe zugreifen
                             Lochvorgabe = Handicap / 18;
 
-
                             nPar += Lochvorgabe;
-
 
                             int evtlLochvorgabe = 0;
                             evtlLochvorgabe = Handicap % 18;
@@ -957,14 +949,10 @@ namespace MFApp.Views
                                 nPar += 1;
                             }
 
-
                             //NettoZählspiel
-
                             NettoScore += PlayerResult.Score - (nPar - t.Par) ;
 
-
                             //Nettopunkte
-
                             int npoints = 0;
                             npoints = nPar - PlayerResult.Score + 2;
 
@@ -976,7 +964,6 @@ namespace MFApp.Views
                     }
 
                 }
-
 
                 trs.ScoreBrutto = BruttoScore;
                 trs.ScoreNetto = NettoScore;

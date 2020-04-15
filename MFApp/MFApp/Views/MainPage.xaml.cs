@@ -80,8 +80,8 @@ namespace MFApp.Views
                             BarBackgroundColor = Color.FromRgb(30, 39, 104)
                         });
                         break;
-                    case (int)MenuItemType.MFWeb:
-                        MenuPages.Add(id, new NavigationPage(new MFWebPage())
+                    case (int)MenuItemType.Results:
+                        MenuPages.Add(id, new NavigationPage(new ResultPage())
                         {
                             BarBackgroundColor = Color.FromRgb(30, 39, 104)
                         });

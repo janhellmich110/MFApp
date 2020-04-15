@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="MFApp.Views.ResultPage" Appearing="ContentPage_Appearing">
+    <ContentPage.Content>
+        <StackLayout Padding="20, 20, 20, 20">
+            <CollectionView x:Name="PlayerResultCollectionView" ItemsSource="{Binding PlayerResults}">
+                <CollectionView.Header>
+                    <Grid Padding="5,5,5,5" BackgroundColor="LightGray">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <StackLayout VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="0">
+                            <Label Text="Spieler"
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="Small"
+                                    FontAttributes="Bold"/>
+                        </StackLayout>
+                        <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1">
+                            <Label Text="Brutto" 
+                                        Grid.Column="2"
+                                        HorizontalTextAlignment="Center"
+                                        Style="{DynamicResource ListItemTextStyle}" 
+                                        FontSize="Small" 
+                                        FontAttributes="Bold"/>
+                        </StackLayout>
+                        <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="2">
+                            <Label Text="Netto" 
+                                       Grid.Column="3"
+                                       HorizontalTextAlignment="Center"
+                                       Style="{DynamicResource ListItemTextStyle}" 
+                                       FontSize="Small" 
+                                       FontAttributes="Bold"/>
+                        </StackLayout>
+                        <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="4">
+                            <Label Text="Anz. Löcher" 
+                                    Grid.Column="5"
+                                    HorizontalTextAlignment="Center"
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="Small" 
+                                    FontAttributes="Bold"/>
+                        </StackLayout>
+                        <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="5">
+                            <Label Text="Putts"
+                                        Grid.Column="6"
+                                       HorizontalTextAlignment="Center"
+                                        Style="{DynamicResource ListItemTextStyle}" 
+                                        FontSize="Small" 
+                                       FontAttributes="Bold"/>
+                        </StackLayout>
+                    </Grid>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10, 20, 10, 20">
+                            <StackLayout VerticalOptions="Center" HorizontalOptions="StartAndExpand" Grid.Column="0">
+                                <Label Text="{Binding PlayerName}"                                   
+                                    d:Text="{Binding .}"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="Small" />
+                            </StackLayout>
+                            <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1">
+                                <Label Text="{Binding ScoreBrutto}" 
+                                    d:Text="{Binding .}"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="Small" />
+                            </StackLayout>
+                            <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="2">
+                                <Label Text="{Binding ScoreNetto}" 
+                                    d:Text="{Binding .}"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="Small" />
+                            </StackLayout>
+                            <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="4">
+                                <Label Text="{Binding HolesPlayed}" 
+                                        d:Text="{Binding .}"
+                                           HorizontalTextAlignment="Center"
+                                        LineBreakMode="NoWrap" 
+                                        Style="{DynamicResource ListItemTextStyle}" 
+                                        FontSize="Small" />
+                            </StackLayout>
+                            <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="5">
+                                <Label Text="{Binding Putts}"
+                                        d:Text="{Binding .}"
+                                        HorizontalTextAlignment="Center"
+                                        LineBreakMode="NoWrap" 
+                                        Style="{DynamicResource ListItemTextStyle}" 
+                                        FontSize="Small" />
+                            </StackLayout>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
