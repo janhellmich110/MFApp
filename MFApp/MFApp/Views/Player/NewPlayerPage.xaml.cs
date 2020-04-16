@@ -42,7 +42,6 @@ namespace MFApp.Views
             // get birthday
             RadDatePicker picker = (RadDatePicker)this.FindByName("PlayerBirthday");
             Player.Birthday = picker.SelectedDate.Value;
-            if(Player.Handicap > )
 
             // send new player to web
             MFWebDataSync DataSync = new MFWebDataSync();
