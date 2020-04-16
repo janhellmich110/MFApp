@@ -15,7 +15,7 @@ namespace MFApp.Models
         public double Handicap { get; set; }
         public DateTime Birthday { get; set; }
 
-        public Gender Gender;
+        public Gender Gender { get; set; }
 
         // additional tournament properties
         public int CourseHandicap { get; set; }
