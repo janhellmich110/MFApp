@@ -4,8 +4,11 @@ using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using Telerik.XamarinForms;
+
 using MFApp.Models;
 using MFApp.Services;
+using Telerik.XamarinForms.Input;
 
 namespace MFApp.Views
 {
@@ -35,6 +38,11 @@ namespace MFApp.Views
         async void Save_Clicked(object sender, EventArgs e)
         {
             MessagingCenter.Send(this, "AddItem", Player);
+
+            // get birthday
+            RadDatePicker picker = (RadDatePicker)this.FindByName("PlayerBirthday");
+            Player.Birthday = picker.SelectedDate.Value;
+            if(Player.Handicap > )
 
             // send new player to web
             MFWebDataSync DataSync = new MFWebDataSync();

@@ -38,7 +38,9 @@ namespace MFApp.Views
                 break;
             }
             if (!profileExists)
-                Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
+                Navigation.PushModalAsync(new NavigationPage(new LoginPage()) {
+                    BarBackgroundColor = Color.FromRgb(30, 39, 104)
+                });
             else
             {
                 // sync data moved to app start       

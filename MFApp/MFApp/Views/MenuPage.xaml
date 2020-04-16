@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+xmlns:telerikDataControls="clr-namespace:Telerik.XamarinForms.DataControls;assembly=Telerik.XamarinForms.DataControls"
+xmlns:telerikListView="clr-namespace:Telerik.XamarinForms.DataControls.ListView;assembly=Telerik.XamarinForms.DataControls"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -7,26 +9,14 @@
              x:Class="MFApp.Views.MenuPage"
              Title="Menu">
 
-    <StackLayout VerticalOptions="FillAndExpand">
-        <ListView x:Name="ListViewMenu"
-                    HasUnevenRows="True">
-            <d:ListView.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>Item 1</x:String>
-                    <x:String>Item 2</x:String>
-                    <x:String>Item 3</x:String>
-                </x:Array>
-            </d:ListView.ItemsSource>
-            <ListView.ItemTemplate>
+    <StackLayout>
+        <telerikDataControls:RadListView x:Name="ListViewMenu" >
+            <telerikDataControls:RadListView.ItemTemplate>
                 <DataTemplate>
-                    <ViewCell>
-                        <Grid Padding="10">
-                            <Label Text="{Binding Title}" d:Text="{Binding .}" FontSize="Large"/>
-                        </Grid>
-                    </ViewCell>
+                    <telerikListView:ListViewTextCell Text="{Binding Title}" TextColor="Black" DetailColor="Gray" />
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </telerikDataControls:RadListView.ItemTemplate>
+        </telerikDataControls:RadListView>
     </StackLayout>
 
 </ContentPage>

@@ -23,9 +23,9 @@
             </StackLayout>
             <StackLayout VerticalOptions="StartAndExpand" >
                 <Label Text="Username" />
-                <Entry Text="{Binding LoginPageData.UserName}" />
+                <Entry Text="{Binding LoginPageData.UserName}" BackgroundColor="White" TextColor="Black" />
                 <Label Text="Password" />
-                <Entry x:Name="passwordEntry" Text="{Binding LoginPageData.Password}" IsPassword="True" />
+                <Entry x:Name="passwordEntry" Text="{Binding LoginPageData.Password}" IsPassword="True" BackgroundColor="White" TextColor="Black" />
                 <Button Text="Login" Clicked="Button_Clicked"/>
                 <Label x:Name="errorMessage" Text="" TextColor="Red" />
             </StackLayout>

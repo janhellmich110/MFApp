@@ -67,11 +67,19 @@
         <ContentPage Title="Ergebnisse" Appearing="ContentPageResults_Appearing">
             <StackLayout Padding="20, 20, 20, 20">
                 <CollectionView x:Name="PlayerResultCollectionView" ItemsSource="{Binding PlayerResults}">
-                <CollectionView.Header>
-                    <Grid Padding="10,10,10,10" BackgroundColor="LightGray">
+                    <CollectionView.Header>
+                        <Grid Padding="10,10,10,10" BackgroundColor="LightGray">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
                             <StackLayout VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="0">
                                 <Label Text="Spieler"
                                     LineBreakMode="NoWrap" 
@@ -80,44 +88,36 @@
                                     FontAttributes="Bold"/>
                             </StackLayout>
                             <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1">
-                                <Label Text="Schläge Brutto" 
-                                        Grid.Column="2"
+                                <Label Text="Brutto"
+                                       LineBreakMode="NoWrap"
                                         HorizontalTextAlignment="Center"
                                         Style="{DynamicResource ListItemTextStyle}" 
                                         FontSize="Small" 
                                         FontAttributes="Bold"/>
                             </StackLayout>
                             <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="2">
-                                <Label Text="Schläge Netto" 
-                                       Grid.Column="3"
+                                <Label Text="Netto"
+                                       LineBreakMode="NoWrap"
                                        HorizontalTextAlignment="Center"
                                        Style="{DynamicResource ListItemTextStyle}" 
                                        FontSize="Small" 
                                        FontAttributes="Bold"/>
                             </StackLayout>
                             <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="3">
-                                <Label Text="Punkte Brutto" 
-                                        Grid.Column="4"
+                                <Label Text="B.Punkte"
+                                       LineBreakMode="NoWrap"
                                        HorizontalTextAlignment="Center"
                                         Style="{DynamicResource ListItemTextStyle}" 
                                         FontSize="Small" 
                                        FontAttributes="Bold"/>
                             </StackLayout>
                             <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="4">
-                                <Label Text="Punkte Netto" 
-                                    Grid.Column="5"
+                                <Label Text="N.Punkte"
+                                       LineBreakMode="NoWrap"
                                     HorizontalTextAlignment="Center"
                                     Style="{DynamicResource ListItemTextStyle}" 
                                     FontSize="Small" 
                                     FontAttributes="Bold"/>
-                            </StackLayout>
-                            <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="5">
-                                <Label Text="Putts"
-                                        Grid.Column="6"
-                                       HorizontalTextAlignment="Center"
-                                        Style="{DynamicResource ListItemTextStyle}" 
-                                        FontSize="Small" 
-                                       FontAttributes="Bold"/>
                             </StackLayout>
                         </Grid>
                 </CollectionView.Header>
@@ -127,7 +127,7 @@
                                 <StackLayout VerticalOptions="Center" HorizontalOptions="StartAndExpand" Grid.Column="0">
                                 <Label Text="{Binding PlayerName}"                                   
                                     d:Text="{Binding .}"
-                                    HorizontalTextAlignment="Center"
+                                    HorizontalTextAlignment="Start"
                                     LineBreakMode="NoWrap" 
                                     Style="{DynamicResource ListItemTextStyle}" 
                                     FontSize="Small" />
@@ -160,14 +160,6 @@
                                     <Label Text="{Binding NettoPoints}" 
                                         d:Text="{Binding .}"
                                            HorizontalTextAlignment="Center"
-                                        LineBreakMode="NoWrap" 
-                                        Style="{DynamicResource ListItemTextStyle}" 
-                                        FontSize="Small" />
-                                </StackLayout>
-                                <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="5">
-                                    <Label Text="{Binding Putts}"
-                                        d:Text="{Binding .}"
-                                        HorizontalTextAlignment="Center"
                                         LineBreakMode="NoWrap" 
                                         Style="{DynamicResource ListItemTextStyle}" 
                                         FontSize="Small" />

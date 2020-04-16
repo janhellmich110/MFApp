@@ -17,10 +17,10 @@
                 <Label Text="Birthday:" FontSize="Medium" />
                 <Label Text="{Binding Birthday}" d:Text="Birthday" FontSize="Small"/>
             </StackLayout>
-            <StackLayout>
-                <Button Text="Abmelden?"
+            <StackLayout Spacing="20" Padding="15" VerticalOptions="CenterAndExpand">
+                <Button Text="Abmelden"
                         Clicked="Logout_Clicked"
-                    VerticalOptions="CenterAndExpand" 
+                    VerticalOptions="Center" 
                     HorizontalOptions="CenterAndExpand"/>
             </StackLayout>
         </StackLayout>

@@ -556,7 +556,9 @@ namespace MFApp.Views
                 ReturnCommandParameter = CommandParameter,
                 FontSize=20,
                 WidthRequest = 40,
-                Keyboard = Keyboard.Numeric
+                Keyboard = Keyboard.Numeric,
+                BackgroundColor = Color.White,
+                TextColor = Color.Black
             };
 
             entry.TextChanged += Entry_TextChanged;
@@ -575,7 +577,9 @@ namespace MFApp.Views
                     ReturnCommandParameter = CommandParameter,
                     FontSize = 20,
                     WidthRequest = 30,
-                    Keyboard = Keyboard.Numeric
+                    Keyboard = Keyboard.Numeric,
+                    BackgroundColor = Color.White,
+                    TextColor = Color.Black
                 };
 
                 entryPutts.TextChanged += Entry_TextChanged;

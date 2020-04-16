@@ -13,6 +13,13 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
                         <StackLayout VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="0">
                             <Label Text="Spieler"
                                     LineBreakMode="NoWrap" 
@@ -22,7 +29,6 @@
                         </StackLayout>
                         <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1">
                             <Label Text="Brutto" 
-                                        Grid.Column="2"
                                         HorizontalTextAlignment="Center"
                                         Style="{DynamicResource ListItemTextStyle}" 
                                         FontSize="Small" 
@@ -30,22 +36,20 @@
                         </StackLayout>
                         <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="2">
                             <Label Text="Netto" 
-                                       Grid.Column="3"
                                        HorizontalTextAlignment="Center"
                                        Style="{DynamicResource ListItemTextStyle}" 
                                        FontSize="Small" 
                                        FontAttributes="Bold"/>
                         </StackLayout>
                         <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="3">
-                            <Label Text="Anz. Löcher" 
-                                    Grid.Column="5"
+                            <Label Text="Löcher" 
                                     HorizontalTextAlignment="Center"
                                     Style="{DynamicResource ListItemTextStyle}" 
                                     FontSize="Small" 
                                     FontAttributes="Bold"/>
                         </StackLayout>
                         <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="4">
-                            <Label Text="Putts"
+                            <Label Text="Rel"
                                         Grid.Column="6"
                                        HorizontalTextAlignment="Center"
                                         Style="{DynamicResource ListItemTextStyle}" 
@@ -56,11 +60,11 @@
                 </CollectionView.Header>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid Padding="10, 20, 10, 20">
+                        <Grid Padding="5, 5, 5, 5">
                             <StackLayout VerticalOptions="Center" HorizontalOptions="StartAndExpand" Grid.Column="0">
                                 <Label Text="{Binding PlayerName}"                                   
                                     d:Text="{Binding .}"
-                                    HorizontalTextAlignment="Center"
+                                    HorizontalTextAlignment="Start"
                                     LineBreakMode="NoWrap" 
                                     Style="{DynamicResource ListItemTextStyle}" 
                                     FontSize="Small" />
@@ -90,7 +94,7 @@
                                         FontSize="Small" />
                             </StackLayout>
                             <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="4">
-                                <Label Text="{Binding Putts}"
+                                <Label Text="{Binding ScoreNettoRelativ}"
                                         d:Text="{Binding .}"
                                         HorizontalTextAlignment="Center"
                                         LineBreakMode="NoWrap" 
