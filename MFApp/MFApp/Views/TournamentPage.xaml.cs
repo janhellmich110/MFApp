@@ -113,7 +113,8 @@ namespace MFApp.Views
                     if ((rowIndex == 0) && (columnIndex > 0))
                     {
                         // first row header row with player intials
-                        AddHeaderPuttsLabelCell(TournamentPageData.SelectedPlayers[columnIndex - 1].Initials, columnIndex, rowIndex);
+                        string HeaderText = TournamentPageData.SelectedPlayers[columnIndex - 1].Initials + " (" + GetCourseHandicap(TournamentPageData.SelectedPlayers[columnIndex - 1]) + ')';
+                        AddHeaderPuttsLabelCell(HeaderText, columnIndex, rowIndex);
                     }
                     else if ((rowIndex > 0) && (rowIndex < 10))
                     {
@@ -937,7 +938,7 @@ namespace MFApp.Views
                             int nPar = t.Par;
 
                             int Teeanzahl = TournamentPageData.TeeList.Count;
-                            int Handicap = Convert.ToInt32(tp.Handicap);
+                            int Handicap = GetCourseHandicap(tp);
 
                             int Lochvorgabe = 0;
                             //spielvorgabe zugreifen
@@ -977,6 +978,41 @@ namespace MFApp.Views
 
                 TournamentPageData.PlayerResults.Add(trs);
             }
+        }
+
+        private int GetCourseHandicap(TournamentPlayer p)
+        {
+            int TournamentHandicapId = 0;
+
+
+            if (p.Gender == Gender.Male)
+            {
+                 TournamentHandicapId = TournamentPageData.Tournament.HandicapTableMaleId;
+            }
+            else
+            {
+                TournamentHandicapId = TournamentPageData.Tournament.HandicapTableFemaleId;
+            }
+
+
+            IDataStore<CourseHandicap> DataStore = DependencyService.Get<IDataStore<CourseHandicap>>();
+            var CourseHandicapTask = DataStore.GetItemsAsync();
+            List<CourseHandicap> CourseHandicaps = CourseHandicapTask.Result.ToList();
+
+            foreach(CourseHandicap CH in CourseHandicaps) 
+            {   
+                if(CH.CourseHandicapTableId == TournamentHandicapId)
+                {
+                    if((p.Handicap >= CH.HandicapFrom) && (p.Handicap <= CH.HandicapTo))
+                    {
+                        return CH.PlayerHandicap;
+                    }
+
+                }
+            }
+
+            return Convert.ToInt32(p.Handicap);
+
         }
     }
 }
