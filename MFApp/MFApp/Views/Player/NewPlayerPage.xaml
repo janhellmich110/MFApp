@@ -19,18 +19,17 @@ xmlns:telerikInput="clr-namespace:Telerik.XamarinForms.Input;assembly=Telerik.Xa
                 <Label Text="Initialen" FontSize="Medium" />
                 <Entry Text="{Binding Player.Initials}" d:Text="Item name" FontSize="Small" TextColor="Black" />
                 <Label Text="Name" FontSize="Medium" />
-                <Editor Text="{Binding Player.Name}" d:Text="Name" FontSize="Small" Margin="0" TextColor="Black" />
+                <Entry Text="{Binding Player.Name}" d:Text="Name" FontSize="Small" Margin="0" TextColor="Black" />
                 <Label Text="Handicap" FontSize="Medium" />
-                <Editor Text="{Binding Player.Handicap}" Keyboard="Numeric" d:Text="Handicap" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
+                <Entry Text="{Binding Player.Handicap}" Keyboard="Numeric" d:Text="Handicap" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
                 <Label Text="Username" FontSize="Medium" />
-                <Editor Text="{Binding Player.UserName}" d:Text="Username" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
+                <Entry Text="{Binding Player.UserName}" d:Text="Username" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
                 <Label Text="Kennwort" FontSize="Medium" />
-                <Editor Text="{Binding Player.UserPassword}" d:Text="Kennwort" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
+                <Entry Text="{Binding Player.UserPassword}" d:Text="Kennwort" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
                 <Label Text="Mail" FontSize="Medium" />
-                <Editor Text="{Binding Player.Mail}" d:Text="Mail" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
+                <Entry Text="{Binding Player.Mail}" d:Text="Mail" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
                 <Label Text="Geburtstag" FontSize="Medium" />
-                <telerikInput:RadDatePicker x:Name="PlayerBirthday" SpinnerFormatString="dd.MM.yyyy" DisplayStringFormat="dd.MM.yyyy" SelectedDate="01.01.2000" >
-                </telerikInput:RadDatePicker>
+                <DatePicker Date="{Binding Player.Birthday}" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>
