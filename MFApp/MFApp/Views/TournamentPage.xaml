@@ -7,7 +7,7 @@
              x:Class="MFApp.Views.TournamentPage">
   <!--Pages can be added as references or inline-->
     <TabbedPage.Children>
-        <ContentPage Title="Turnier">
+        <ContentPage Title="Turnier" IconImageSource="GolfIconInfo.jpg">
             <StackLayout Padding="40,20,40,20">
                 <StackLayout Padding="30,20,30,20" BackgroundColor="#90EE90">
                     <Label Text="{Binding TournamentClub.Name}" 
@@ -25,7 +25,7 @@
                 </StackLayout>
             </StackLayout>
         </ContentPage>
-        <ContentPage Title="Spieler">
+        <ContentPage Title="Spieler" IconImageSource="GolfIconSpieler.png">
             <CollectionView x:Name="PlayerCollectionView"
                 ItemsSource="{Binding AllPlayers}">
                 <d:CollectionView.ItemsSource>
@@ -52,7 +52,7 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </ContentPage>
-        <ContentPage Title="Scorecard" Appearing="ContentPage_Scorecard_Appearing">
+        <ContentPage Title="Scorecard" Appearing="ContentPage_Scorecard_Appearing" IconImageSource="GolfIconScorecard.png">
             <ScrollView Orientation="Vertical"  VerticalScrollBarVisibility="Default" BackgroundColor="#1E2768">
                 <Grid x:Name="ScoreKarte" Padding="1,1,0,0">
 
@@ -61,7 +61,7 @@
 
             </ScrollView>
         </ContentPage>
-        <ContentPage Title="Ergebnisse" Appearing="ContentPageResults_Appearing">
+        <ContentPage Title="Ergebnisse" Appearing="ContentPageResults_Appearing" IconImageSource="GolfIconTrophy.png">
             <StackLayout Padding="20, 20, 20, 20">
                 <CollectionView x:Name="PlayerResultCollectionView" ItemsSource="{Binding PlayerResults}">
                     <CollectionView.Header>

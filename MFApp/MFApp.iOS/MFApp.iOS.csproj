@@ -244,4 +244,16 @@
       <Visible>false</Visible>
     </ImageAsset>
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\GolfIconInfo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\GolfIconScorecard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\GolfIconSpieler.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\GolfIconTrophy.png" />
+  </ItemGroup>
 </Project>
