@@ -19,5 +19,9 @@ namespace MFApp.Models
         public DateTime Birthday { get; set; }
 
         public Gender Gender;
+
+        public int GroupId { get; set; }
+
+        public DateTime LastSync { get; set; }
     }
 }

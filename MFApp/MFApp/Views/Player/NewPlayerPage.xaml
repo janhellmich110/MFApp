@@ -28,6 +28,13 @@ xmlns:telerikInput="clr-namespace:Telerik.XamarinForms.Input;assembly=Telerik.Xa
                 <Entry Text="{Binding Player.UserPassword}" d:Text="Kennwort" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
                 <Label Text="Mail" FontSize="Medium" />
                 <Entry Text="{Binding Player.Mail}" d:Text="Mail" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
+                <Label Text="Geschlecht" FontSize="Medium" />
+                <Picker x:Name="SelectGender">
+                    <Picker.Items>
+                        <x:String>Mann</x:String>
+                        <x:String>Frau</x:String>
+                    </Picker.Items>
+                </Picker>
                 <Label Text="Geburtstag" FontSize="Medium" />
                 <DatePicker Date="{Binding Player.Birthday}" />
             </StackLayout>

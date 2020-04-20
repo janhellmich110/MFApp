@@ -9,6 +9,7 @@ using Telerik.XamarinForms;
 using MFApp.Models;
 using MFApp.Services;
 using Telerik.XamarinForms.Input;
+using System.Linq;
 
 namespace MFApp.Views
 {
@@ -37,11 +38,24 @@ namespace MFApp.Views
 
         async void Save_Clicked(object sender, EventArgs e)
         {
-            MessagingCenter.Send(this, "AddItem", Player);
+            // convert gender
+            Picker genderPicker = (Picker)this.FindByName("SelectGender");
 
-            // get birthday
-            RadDatePicker picker = (RadDatePicker)this.FindByName("PlayerBirthday");
-            Player.Birthday = picker.SelectedDate.Value;
+            if (genderPicker.SelectedItem.ToString().ToLower() == "mann")
+                Player.Gender = Gender.Mann;
+            else
+                Player.Gender = Gender.Frau;
+
+            // set group for new player from profile
+            IDataStore<Profile> DataStoreProfile = DependencyService.Get<IDataStore<Profile>>();
+            var profilesTask = DataStoreProfile.GetItemsAsync();
+            var profile = profilesTask.Result.FirstOrDefault();
+            if(profile != null)
+            {
+                Player.GroupId = profile.GroupId;
+            }
+
+            MessagingCenter.Send(this, "AddItem", Player);
 
             // send new player to web
             MFWebDataSync DataSync = new MFWebDataSync();

@@ -22,5 +22,7 @@ namespace MFApp.Models
         public int TeeId { get; set; }
 
         public int TournamentId { get; set; }
+
+        public DateTime LastModified { get; set; }
     }
 }

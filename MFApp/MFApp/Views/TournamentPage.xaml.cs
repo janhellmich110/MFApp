@@ -64,8 +64,10 @@ namespace MFApp.Views
                     }
                 }
 
-                if(!found)
+                if ((!found) && (TournamentPageData.SelectedPlayers.Count() < 4))
+                {
                     TournamentPageData.SelectedPlayers.Add(p);
+                }
             }
             else
             {
@@ -830,6 +832,7 @@ namespace MFApp.Views
                     PlayerId = playerId,
                     TeeId = teeId
                 };
+                newRes.LastModified = DateTime.Now;
                 DataStore.AddItemAsync(newRes);
             }
         }
@@ -985,7 +988,7 @@ namespace MFApp.Views
             int TournamentHandicapId = 0;
 
 
-            if (p.Gender == Gender.Male)
+            if (p.Gender == Gender.Mann)
             {
                  TournamentHandicapId = TournamentPageData.Tournament.HandicapTableMaleId;
             }

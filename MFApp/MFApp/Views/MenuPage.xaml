@@ -9,7 +9,7 @@ xmlns:telerikListView="clr-namespace:Telerik.XamarinForms.DataControls.ListView;
              x:Class="MFApp.Views.MenuPage"
              Title="Menu">
 
-    <StackLayout VerticalOptions="StartAndExpand">
+    <Grid>
         <telerikDataControls:RadListView x:Name="ListViewMenu" >
             <telerikDataControls:RadListView.ItemTemplate>
                 <DataTemplate>
@@ -17,6 +17,6 @@ xmlns:telerikListView="clr-namespace:Telerik.XamarinForms.DataControls.ListView;
                 </DataTemplate>
             </telerikDataControls:RadListView.ItemTemplate>
         </telerikDataControls:RadListView>
-    </StackLayout>
+    </Grid>
 
 </ContentPage>

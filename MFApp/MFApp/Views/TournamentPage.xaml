@@ -16,9 +16,6 @@
                                    HorizontalOptions="Center"
                                 Style="{DynamicResource ListItemTextStyle}" 
                                 FontSize="16" />
-                    <Label Text="{Binding TournamentEvent.Name}"
-                           HorizontalOptions="CenterAndExpand"
-                           VerticalOptions="Center" />
                     <Label Text="{Binding Tournament.Name}"
                            HorizontalOptions="CenterAndExpand"
                            VerticalOptions="Center" />

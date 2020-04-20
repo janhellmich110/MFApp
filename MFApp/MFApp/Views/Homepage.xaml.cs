@@ -63,12 +63,17 @@ namespace MFApp.Views
             var layout = (BindableObject)sender;
             var homepageEvent = (HomePageEvent)layout.BindingContext;
             
-            Navigation.PushAsync(new TournamentPage(homepageEvent.EventTournament));
+            if((homepageEvent!= null) && (homepageEvent.EventTournament != null))
+                Navigation.PushAsync(new TournamentPage(homepageEvent.EventTournament));
         }
 
         private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new TournamentPage());
+            var layout = (BindableObject)sender;
+            var homepageEvent = (HomePageEvent)layout.BindingContext;
+
+            if ((homepageEvent != null) && (homepageEvent.EventTournament != null))
+                Navigation.PushAsync(new TournamentPage(homepageEvent.EventTournament));
         }
 
 

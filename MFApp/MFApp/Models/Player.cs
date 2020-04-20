@@ -5,8 +5,8 @@ namespace MFApp.Models
 {
     public enum Gender
     {
-        Male = 0,
-        Female = 1
+        Mann = 0,
+        Frau = 1
     }
     public class Player
     {
@@ -21,5 +21,7 @@ namespace MFApp.Models
         public DateTime Birthday { get; set; }
 
         public Gender Gender { get; set; }
+
+        public int GroupId { get; set; }
     }
 }

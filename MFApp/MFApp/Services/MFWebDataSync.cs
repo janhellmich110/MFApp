@@ -213,13 +213,33 @@ namespace MFApp.Services
         {
             try
             {
+                // get current profile
+                IDataStore<Profile> DataStoreProfile = DependencyService.Get<IDataStore<Profile>>();
+                int currentPlayerId = 0;
+                Profile currentProfile = null;
+                try
+                {                    
+                    var profilesTask = DataStoreProfile.GetItemsAsync();
+                    currentProfile = profilesTask.Result.FirstOrDefault();
+                    if (currentProfile != null)
+                    {
+                        currentPlayerId = currentProfile.Id;
+                    }
+                }
+                catch(Exception) { }
+
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new Uri($"https://demo.portivity.de/mfweb/api/");
 
                 bool IsConnected = Connectivity.NetworkAccess == NetworkAccess.Internet;
                 if (IsConnected)
                 {
-                    var ResultTask = client.GetStringAsync($"MyAppData/GetMyAppData/");
+                    string webCall = $"MyAppData/GetMyAppData/";
+                    if(currentPlayerId > 0)
+                    {
+                        webCall = $"MyAppData/GetMyAppData?PlayerId=" + currentPlayerId.ToString();
+                    }
+                    var ResultTask = client.GetStringAsync(webCall);
                     string json = ResultTask.Result.ToString();
 
                     MFWebAPIData item = (MFWebAPIData)JsonConvert.DeserializeObject<MFWebAPIData>(json);
@@ -384,6 +404,21 @@ namespace MFApp.Services
                     foreach (Player player in item.AllPlayers)
                     {
                         DataStorePlayer.AddItemAsync(player);
+                    }
+
+                    try
+                    {
+                        // clean old result data
+                        string sqlString = "DELETE FROM Result where LastModified < '" + DateTime.Today.AddDays(-3).ToShortDateString() + "'";
+                        conn.Execute("DELETE FROM Result");
+                    }
+                    catch (Exception) { }
+
+                    // save last sync date
+                    if (currentProfile != null)
+                    {
+                        currentProfile.LastSync = DateTime.Now;
+                        DataStoreProfile.UpdateItemAsync(currentProfile);
                     }
                 }
             }

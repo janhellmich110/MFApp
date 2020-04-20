@@ -25,14 +25,22 @@
 	<key>CFBundleDisplayName</key>
 	<string>MondayFighter</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>1.1</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>CFBundleName</key>
 	<string>MFApp</string>
 	<key>CFBundleIdentifier</key>
-	<string>xamarin.portivity.de.MFApp</string>
+	<string>app.portivity.de.MFApp</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.91</string>
+	<key>UIMainStoryboardFile</key>
+	<string>LaunchScreen</string>
+	<key>CFBundleIconName</key>
+	<string>AppIcon</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>App has no access to calender.</string>
 </dict>
 </plist>

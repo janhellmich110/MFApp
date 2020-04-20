@@ -43,20 +43,16 @@
                     <Label.FormattedText>
                         <FormattedString>
                             <FormattedString.Spans>
-                                <Span Text="AppName" FontAttributes="Bold" FontSize="22" />
+                                <Span Text="MondayFighter App" FontAttributes="Bold" FontSize="22" />
                                 <Span Text=" " />
-                                <Span Text="1.0" ForegroundColor="{StaticResource LightTextColor}" />
+                                <Span Text="0.9" ForegroundColor="{StaticResource LightTextColor}" />
                             </FormattedString.Spans>
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
                 <Button x:Name="SyncProgressButton" Text="Sync Data" Clicked="Button_Clicked" />
                 <Button x:Name="ResetDB" Text="Reset DB" Clicked="ResetDB_Clicked" />
-                <Button Margin="0,10,0,0" Text="MF Web öffnen"
-                        Command="{Binding OpenWebCommand}"
-                        BackgroundColor="{StaticResource Primary}"
-                        TextColor="White" />
-                <Button Text="Ausloggen" Clicked="Button_Clicked_1"/>
+                <Button Text="Ausloggen" Clicked="Button_Clicked_1" />
             </StackLayout>
         </ScrollView>
     </Grid>

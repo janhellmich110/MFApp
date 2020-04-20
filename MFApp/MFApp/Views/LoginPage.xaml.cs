@@ -69,6 +69,8 @@ namespace MFApp.Views
                 p.Birthday = currentPlayer.Birthday;
                 p.Gender = currentPlayer.Gender;
                 p.Mail = currentPlayer.Mail;
+                p.GroupId = currentPlayer.GroupId;
+
                 DataStoreProfile.AddItemAsync(p);
 
                 Navigation.PopModalAsync();
