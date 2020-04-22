@@ -12,10 +12,12 @@
         <Label Text="{Binding Player.Initials}" d:Text="Initialen" FontSize="Small "/>
         <Label Text="Name:" FontSize="Medium" />
         <Label Text="{Binding Player.Name}" d:Text="Name" FontSize="Small"/>
+        <Label Text="Anmeldename:" FontSize="Medium" />
+        <Label Text="{Binding Player.UserName}" d:Text="Name" FontSize="Small"/>
         <Label Text="Handicap:" FontSize="Medium" />
         <Label Text="{Binding Player.Handicap}" d:Text="Handicap" FontSize="Small"/>
-        <Label Text="Birthday:" FontSize="Medium" />
-        <Label Text="{Binding Player.Birthday}" d:Text="Birthday" FontSize="Small"/>
+        <Label Text="Geburtstag:" FontSize="Medium" />
+        <Label Text="{Binding Player.Birthday, StringFormat='{0:d}'}" d:Text="Birthday" FontSize="Small"/>
     </StackLayout>
     
 </ContentPage>

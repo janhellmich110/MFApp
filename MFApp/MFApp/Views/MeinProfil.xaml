@@ -12,16 +12,22 @@
                 <Label Text="{Binding Initials}" d:Text="Initialen" FontSize="Small "/>
                 <Label Text="Name:" FontSize="Medium" />
                 <Label Text="{Binding Name}" d:Text="Name" FontSize="Small"/>
+                <Label Text="Anmeldename:" FontSize="Medium" />
+                <Label Text="{Binding UserName}" d:Text="Name" FontSize="Small"/>
                 <Label Text="Handicap:" FontSize="Medium" />
                 <Label Text="{Binding Handicap}" d:Text="Handicap" FontSize="Small"/>
-                <Label Text="Birthday:" FontSize="Medium" />
+                <Label Text="Geburtstag:" FontSize="Medium" />
                 <Label Text="{Binding Birthday, StringFormat='{0:d}'}" d:Text="Birthday" FontSize="Small" />
+                <Label Text="Mail:" FontSize="Medium" />
+                <Label Text="{Binding Mail}" d:Text="Birthday" FontSize="Small" />
             </StackLayout>
-            <StackLayout Spacing="20" Padding="15" VerticalOptions="CenterAndExpand">
+            <StackLayout Spacing="20" Padding="15" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand"  >
                 <Button Text="Abmelden"
                         Clicked="Logout_Clicked"
-                    VerticalOptions="Center" 
-                    HorizontalOptions="CenterAndExpand"/>
+                        BackgroundColor="#1E2768"
+                        TextColor="White"
+                        VerticalOptions="CenterAndExpand" 
+                        HorizontalOptions="FillAndExpand"/>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

@@ -782,8 +782,11 @@ namespace MFApp.Views
                 }
             }
 
-            // send results to webapp
-            SaveResultsWeb(TournamentResultList);
+            if (TournamentPageData.Tournament.Id > 0)
+            {
+                // send results to webapp
+                SaveResultsWeb(TournamentResultList);
+            }
         }
 
         private void SaveResultLocal(string NewText, int ColumnIndex, int RowIndex, bool score)

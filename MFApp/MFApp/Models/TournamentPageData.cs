@@ -27,6 +27,7 @@ namespace MFApp.Models
             var EventTask = DataStoreEvent.GetItemsAsync();
             List<Event> Events = EventTask.Result.ToList();
 
+            TournamentEvent = null;
             foreach (Event e in Events)
             {
                 if (e.Id == tournament.EventId)
@@ -41,7 +42,10 @@ namespace MFApp.Models
             var GolfclubTask = DataStoreGolfclub.GetItemsAsync();
             List<Golfclub> Golfclubs = GolfclubTask.Result.ToList();
 
-            TournamentClub = Golfclubs.Where(x => x.Id == TournamentEvent.GolfclubId).FirstOrDefault();
+            if(tournament.Id > 0)
+                TournamentClub = Golfclubs.Where(x => x.Id == TournamentEvent.GolfclubId).FirstOrDefault();
+            else
+                TournamentClub = Golfclubs.Where(x => x.Id == tournament.EventId).FirstOrDefault();
 
             // get course
             IDataStore<Course> DataStoreCourse = DependencyService.Get<IDataStore<Course>>();

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="MFApp.Views.AdhocTournament">
+    <ContentPage.Content>
+      <StackLayout>
+            <Label Text="Golfclub:" />
+            <Picker x:Name="ListClubs" Title="Golfclub" ItemsSource="{Binding AllClubs}"
+                ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedClub}"
+                    SelectedIndexChanged="ListClubs_SelectedIndexChanged"/>
+            <Label Text="Kurs:" />
+            <Picker x:Name="ListCourses" Title="Kurs" ItemsSource="{Binding AllCourses}"
+                ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedCourse}"/>
+            <Button 
+                Text="Runde starten" 
+                BackgroundColor="#1E2768"
+                TextColor="White"
+                Clicked="Button_Clicked" />
+        </StackLayout>
+  </ContentPage.Content>
+</ContentPage>

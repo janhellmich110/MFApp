@@ -11,7 +11,8 @@ namespace MFApp.Models
         Configuration,
         LogOff,
         Results,
-        About
+        About,
+        Adhoc
     }
     public class HomeMenuItem
     {

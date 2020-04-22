@@ -76,6 +76,21 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\LaunchScreen.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\LaunchScreen.imageset\mf.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\LaunchScreen.imageset\mf1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\LaunchScreen.imageset\mf2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\LaunchScreen.imageset\mf3.pdf">
+      <Visible>false</Visible>
+    </ImageAsset>
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -255,5 +270,8 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\GolfIconTrophy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Assets.xcassets\mf.png" />
   </ItemGroup>
 </Project>

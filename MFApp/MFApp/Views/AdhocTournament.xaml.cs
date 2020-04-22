@@ -1,0 +1,109 @@
+﻿using MFApp.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+using MFApp.Services;
+
+namespace MFApp.Views
+{    
+
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class AdhocTournament : ContentPage
+    {
+        public AdhocView AdhocModel { get; set; }
+
+        public AdhocTournament()
+        {
+            InitializeComponent();
+            AdhocModel = new AdhocView();
+            IDataStore<Golfclub> DataStore = DependencyService.Get<IDataStore<Golfclub>>();
+            var GolfclubTask = DataStore.GetItemsAsync();
+            AdhocModel.AllClubs = GolfclubTask.Result.ToList();
+
+            foreach(Golfclub gc in AdhocModel.AllClubs)
+            {
+                AdhocModel.SelectedClub = gc;
+                break;
+            }            
+            
+            this.BindingContext = AdhocModel;
+        }
+
+        private void ListClubs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // update courses
+            AdhocModel.AllCourses.Clear();
+
+            IDataStore<Course> DataStoreCourse = DependencyService.Get<IDataStore<Course>>();
+            var CourseTask = DataStoreCourse.GetItemsAsync();
+            List<Course> AllCourses = CourseTask.Result.ToList();
+
+            foreach (Course c in AllCourses)
+            {
+                if (c.GolfclubId == AdhocModel.SelectedClub.Id)
+                {
+                    AdhocModel.AllCourses.Add(c);
+                }
+            }
+            this.BindingContext = AdhocModel;
+        }
+
+        private void Button_Clicked(object sender, EventArgs e)
+        {
+            if ((AdhocModel.SelectedClub != null) && (AdhocModel.SelectedCourse != null))
+            {
+                string tournamentName = "Runde: " + DateTime.Today.ToShortDateString();
+                int courseId = AdhocModel.SelectedCourse.Id;
+                int clubId = AdhocModel.SelectedClub.Id;
+
+                // get handicaptables
+                IDataStore<CourseHandicapTable> DataStore = DependencyService.Get<IDataStore<CourseHandicapTable>>();
+                var CourseHandicapTableTask = DataStore.GetItemsAsync();
+                List<CourseHandicapTable> tables = CourseHandicapTableTask.Result.ToList();
+
+                int tableIdMale = 0;
+                int tableIdFemale = 0;
+                foreach (CourseHandicapTable cht in tables)
+                {
+                    if ((cht.CourseId == AdhocModel.SelectedCourse.Id) && (cht.TeeGender == Gender.Mann))
+                        tableIdMale = cht.Id;
+                    if ((cht.CourseId == AdhocModel.SelectedCourse.Id) && (cht.TeeGender == Gender.Frau))
+                        tableIdFemale = cht.Id;
+                }
+
+                Tournament t = new Tournament
+                {
+                    Id=0,
+                    EventId = clubId,
+                    Name = tournamentName,
+                    Datum = DateTime.Today,
+                    CourseId = courseId,
+                    ManagedFlights = false,
+                    WithPutts = false,
+                    HandicapTableFemaleId = tableIdFemale,
+                    HandicapTableMaleId = tableIdMale
+                };
+
+                Navigation.PushAsync(new TournamentPage(t));
+            }
+        }
+    }
+
+    public class AdhocView
+    {
+        public AdhocView()
+        {
+            AllClubs = new List<Golfclub>();
+            AllCourses = new List<Course>();
+        }
+        public List<Golfclub> AllClubs { get; set; }
+        public Golfclub SelectedClub { get; set; }
+        public List<Course> AllCourses { get; set; }
+        public Course SelectedCourse { get; set; }
+    }
+}

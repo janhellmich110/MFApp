@@ -87,6 +87,12 @@ namespace MFApp.Views
                             BarBackgroundColor = Color.FromRgb(30, 39, 104)
                         });
                         break;
+                    case (int)MenuItemType.Adhoc:
+                        MenuPages.Add(id, new NavigationPage(new AdhocTournament())
+                        {
+                            BarBackgroundColor = Color.FromRgb(30, 39, 104)
+                        });
+                        break;
                 }
             }
 

@@ -36,11 +36,6 @@ namespace MFApp.Views
             IsBusy = false;
         }
 
-        private void Button_Clicked_1(object sender, EventArgs e)
-        {
-            Navigation.PushAsync(new LogoutPage());
-        }
-
         protected override void OnAppearing()
         {
             base.OnAppearing();

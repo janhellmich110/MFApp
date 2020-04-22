@@ -38,7 +38,7 @@
             </StackLayout>
         </StackLayout>
         <ScrollView Grid.Row="1">
-            <StackLayout Orientation="Vertical" Padding="16,40,16,40" Spacing="10">
+            <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Padding="16,40,16,40" Spacing="10">
                 <Label FontSize="22">
                     <Label.FormattedText>
                         <FormattedString>
@@ -50,9 +50,18 @@
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
-                <Button x:Name="SyncProgressButton" Text="Sync Data" Clicked="Button_Clicked" />
-                <Button x:Name="ResetDB" Text="Reset DB" Clicked="ResetDB_Clicked" />
-                <Button Text="Ausloggen" Clicked="Button_Clicked_1" />
+                <Button x:Name="SyncProgressButton" 
+                        Text="Sync Data"
+                        BackgroundColor="#1E2768"
+                        TextColor="White"
+                        HorizontalOptions="FillAndExpand"
+                        Clicked="Button_Clicked" />
+                <Button x:Name="ResetDB" 
+                        Text="Reset DB"
+                        BackgroundColor="#1E2768"
+                        TextColor="White"
+                        HorizontalOptions="FillAndExpand"
+                        Clicked="ResetDB_Clicked" />
             </StackLayout>
         </ScrollView>
     </Grid>
