@@ -7,8 +7,8 @@
              x:Class="MFApp.Views.TournamentPage">
   <!--Pages can be added as references or inline-->
     <TabbedPage.Children>
-        <ContentPage Title="Turnier" IconImageSource="GolfIconInfo.jpg">
-            <StackLayout Padding="40,20,40,20">
+        <ContentPage Title="Turnier" IconImageSource="GolfIconInfo.jpg" Appearing="ContentPageTurnier_Appearing">
+            <StackLayout Padding="20">
                 <StackLayout Padding="30,20,30,20" BackgroundColor="#90EE90">
                     <Label Text="{Binding TournamentClub.Name}" 
                                 d:Text="{Binding .}"
@@ -22,6 +22,93 @@
                     <Label Text="{Binding TournamentDate}"
                            HorizontalOptions="CenterAndExpand"
                            VerticalOptions="Center"/>
+                </StackLayout>
+                <StackLayout Padding="0, 20, 0, 20">
+                    <CollectionView x:Name="FlightCollectionView" ItemsSource="{Binding SelectedPlayers}">
+                        <CollectionView.Header>
+                            <Grid Padding="0,10,0,10" BackgroundColor="LightGray">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackLayout VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="0">
+                                    <Label Text=""
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="Caption"
+                                    FontAttributes="Bold"/>
+                                </StackLayout>
+                                <StackLayout VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1">
+                                    <Label Text="Spieler"
+                                       LineBreakMode="NoWrap"
+                                        HorizontalTextAlignment="Start"
+                                        Style="{DynamicResource ListItemTextStyle}" 
+                                        FontSize="Caption" 
+                                        FontAttributes="Bold"/>
+                                </StackLayout>
+                                <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="2">
+                                    <Label Text="Hdcp"
+                                       LineBreakMode="NoWrap"
+                                       HorizontalTextAlignment="Center"
+                                       Style="{DynamicResource ListItemTextStyle}" 
+                                       FontSize="Caption" 
+                                       FontAttributes="Bold"/>
+                                </StackLayout>
+                                <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="3">
+                                    <Label Text="Vorg"
+                                       LineBreakMode="NoWrap"
+                                       HorizontalTextAlignment="Center"
+                                        Style="{DynamicResource ListItemTextStyle}" 
+                                        FontSize="Caption" 
+                                       FontAttributes="Bold"/>
+                                </StackLayout>
+                            </Grid>
+                        </CollectionView.Header>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="0, 10, 0, 10">
+                                    <StackLayout VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="0">
+                                        <Label Text="{Binding Initials}"                                   
+                                    d:Text="{Binding .}"
+                                    HorizontalTextAlignment="Start"
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="Caption" />
+                                    </StackLayout>
+                                    <StackLayout VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1">
+                                        <Label Text="{Binding Name}" 
+                                    d:Text="{Binding .}"
+                                    HorizontalTextAlignment="Start"
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="Caption" />
+                                    </StackLayout>
+                                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="2">
+                                        <Label Text="{Binding Handicap}" 
+                                    d:Text="{Binding .}"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="Caption" />
+                                    </StackLayout>
+                                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="3">
+                                        <Label Text="{Binding CourseHandicap}" 
+                                    d:Text="{Binding .}"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="Caption" />
+                                    </StackLayout>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
                 </StackLayout>
             </StackLayout>
         </ContentPage>
@@ -40,13 +127,19 @@
                 </d:CollectionView.ItemsSource>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout Padding="10">
-                            <Label Text="{Binding Name}" 
+                        <StackLayout Padding="10" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand" 
+                                     Orientation="Horizontal" >
+                            <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand" >
+                                <Label Text="{Binding Name}" 
                                 d:Text="{Binding .}"
+                                   VerticalOptions="Center"
                                 LineBreakMode="NoWrap" 
                                 Style="{DynamicResource ListItemTextStyle}" 
                                 FontSize="16" />
-                            <Switch x:Name="{Binding Id}"  IsToggled="{Binding Selected}" Toggled="Switch_Toggled"/>
+                            </StackLayout>
+                            <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="End" >
+                                <Switch x:Name="{Binding Id}" VerticalOptions="Center"  IsToggled="{Binding Selected}" Toggled="Switch_Toggled"/>
+                            </StackLayout>
                         </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
@@ -117,18 +210,18 @@
                                     FontAttributes="Bold"/>
                             </StackLayout>
                         </Grid>
-                </CollectionView.Header>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Padding="10, 20, 10, 20">
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="10, 20, 10, 20">
                                 <StackLayout VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="0">
-                                <Label Text="{Binding PlayerName}"                                   
+                                    <Label Text="{Binding PlayerName}"                                   
                                     d:Text="{Binding .}"
                                     HorizontalTextAlignment="Start"
                                     LineBreakMode="NoWrap" 
                                     Style="{DynamicResource ListItemTextStyle}" 
                                     FontSize="Caption" />
-                            </StackLayout>
+                                </StackLayout>
                                 <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1">
                                     <Label Text="{Binding ScoreBrutto}" 
                                     d:Text="{Binding .}"
@@ -162,9 +255,17 @@
                                         FontSize="Caption" />
                                 </StackLayout>
                             </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <StackLayout Padding="20,20,20,20">
+                    <Button x:Name="FinishTournament" 
+                        Text="Runde abschliessen"
+                        BackgroundColor="#1E2768"
+                        TextColor="White"
+                        HorizontalOptions="FillAndExpand"
+                            Clicked="FinishTournament_Clicked"/>
+                </StackLayout>
             </StackLayout>
         </ContentPage>
     </TabbedPage.Children>

@@ -21,12 +21,15 @@
                     <Image Source="mf.png" HorizontalOptions="Center" HeightRequest="80" />
                 </ContentView>
             </StackLayout>
-            <StackLayout VerticalOptions="StartAndExpand" >
+            <StackLayout VerticalOptions="StartAndExpand" Padding="20" >
                 <Label Text="Username" />
                 <Entry Text="{Binding LoginPageData.UserName}" BackgroundColor="White" TextColor="Black" />
                 <Label Text="Password" />
                 <Entry x:Name="passwordEntry" Text="{Binding LoginPageData.Password}" IsPassword="True" BackgroundColor="White" TextColor="Black" />
-                <Button Text="Login" Clicked="Button_Clicked"/>
+                <Button Text="Login" 
+                        BackgroundColor="#1E2768"
+                        TextColor="White"
+                        Clicked="Button_Clicked"/>
                 <Label x:Name="errorMessage" Text="" TextColor="Red" />
             </StackLayout>
         </StackLayout>

@@ -30,8 +30,25 @@ namespace MFApp.Services
         public async Task<bool> AddItemAsync(Event Event)
         {
             int result = 0;
+            int maxId = 1000000;
             try
             {
+                if(Event.Id == 0)
+                {
+                    // get max id 
+                    if(EventList.Count() > 0)
+                        maxId = EventList.Select(x => x.Id).Max();
+
+                    if(maxId < 1000000)
+                    {
+                        maxId = 1000000;
+                    }
+                    else
+                    {
+                        maxId = maxId + 1;
+                    }
+                    Event.Id = maxId;
+                }
                 result = conn.Insert(Event);
             }
             catch (Exception ex)

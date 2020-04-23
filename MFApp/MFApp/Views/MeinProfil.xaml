@@ -7,7 +7,7 @@
              x:Class="MFApp.Views.MeinProfil">
     <ContentPage.Content>
         <StackLayout>
-            <StackLayout Spacing="20" Padding="15">
+            <StackLayout Spacing="20" Padding="20">
                 <Label Text="Initialen:" FontSize="Medium" />
                 <Label Text="{Binding Initials}" d:Text="Initialen" FontSize="Small "/>
                 <Label Text="Name:" FontSize="Medium" />
@@ -21,7 +21,7 @@
                 <Label Text="Mail:" FontSize="Medium" />
                 <Label Text="{Binding Mail}" d:Text="Birthday" FontSize="Small" />
             </StackLayout>
-            <StackLayout Spacing="20" Padding="15" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand"  >
+            <StackLayout Spacing="20" Padding="20" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand"  >
                 <Button Text="Abmelden"
                         Clicked="Logout_Clicked"
                         BackgroundColor="#1E2768"

@@ -53,13 +53,23 @@ namespace MFApp.Views
             this.BindingContext = AdhocModel;
         }
 
-        private void Button_Clicked(object sender, EventArgs e)
+        private async void Button_Clicked(object sender, EventArgs e)
         {
             if ((AdhocModel.SelectedClub != null) && (AdhocModel.SelectedCourse != null))
             {
                 string tournamentName = "Runde: " + DateTime.Today.ToShortDateString();
                 int courseId = AdhocModel.SelectedCourse.Id;
                 int clubId = AdhocModel.SelectedClub.Id;
+
+                // check existing tournament
+                IDataStore<Tournament> DataStoreTournament = DependencyService.Get<IDataStore<Tournament>>();
+                var existingTournament = (await DataStoreTournament.GetItemsAsync()).Where(x=>x.Name == tournamentName).FirstOrDefault();
+
+                if((existingTournament != null) && (existingTournament.CourseId == courseId))
+                {
+                    Navigation.PushAsync(new TournamentPage(existingTournament));
+                    return;
+                }
 
                 // get handicaptables
                 IDataStore<CourseHandicapTable> DataStore = DependencyService.Get<IDataStore<CourseHandicapTable>>();
@@ -76,18 +86,36 @@ namespace MFApp.Views
                         tableIdFemale = cht.Id;
                 }
 
+                Event ev = new Event
+                {
+                    Id=0,
+                    Name = "Meine Runde",
+                    EventDate = DateTime.Now,
+                    EventType = EventTypeEnum.AppEvent,
+                    GolfclubId = clubId
+                };
+                IDataStore<Event> DataStoreEvent = DependencyService.Get<IDataStore<Event>>();
+                await DataStoreEvent.AddItemAsync(ev);
+
+                int newEventId = (await DataStoreEvent.GetItemsAsync()).OrderByDescending(x => x.Id).First().Id;
+
                 Tournament t = new Tournament
                 {
                     Id=0,
-                    EventId = clubId,
+                    EventId = newEventId,
                     Name = tournamentName,
-                    Datum = DateTime.Today,
+                    Datum = DateTime.Now,
                     CourseId = courseId,
                     ManagedFlights = false,
                     WithPutts = false,
                     HandicapTableFemaleId = tableIdFemale,
                     HandicapTableMaleId = tableIdMale
                 };
+                
+                await DataStoreTournament.AddItemAsync(t);
+                int newTournamentId = (await DataStoreTournament.GetItemsAsync()).OrderByDescending(x => x.Id).First().Id;
+
+                t.Id = newTournamentId;
 
                 Navigation.PushAsync(new TournamentPage(t));
             }

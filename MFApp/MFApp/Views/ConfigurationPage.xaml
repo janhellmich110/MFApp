@@ -38,8 +38,8 @@
             </StackLayout>
         </StackLayout>
         <ScrollView Grid.Row="1">
-            <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Padding="16,40,16,40" Spacing="10">
-                <Label FontSize="22">
+            <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Padding="20" Spacing="10">
+                <Label FontSize="22" HorizontalOptions="Center">
                     <Label.FormattedText>
                         <FormattedString>
                             <FormattedString.Spans>
@@ -50,6 +50,7 @@
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
+                <StackLayout Padding="0,20,0,20">
                 <Button x:Name="SyncProgressButton" 
                         Text="Sync Data"
                         BackgroundColor="#1E2768"
@@ -62,6 +63,7 @@
                         TextColor="White"
                         HorizontalOptions="FillAndExpand"
                         Clicked="ResetDB_Clicked" />
+                </StackLayout>
             </StackLayout>
         </ScrollView>
     </Grid>

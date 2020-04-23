@@ -21,6 +21,7 @@ namespace MFApp.Models
     public enum EventTypeEnum
     {
         Tournament = 0,
-        Event = 1
+        Event = 1,
+        AppEvent = 99
     }
 }

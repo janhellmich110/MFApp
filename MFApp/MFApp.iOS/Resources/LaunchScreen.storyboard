@@ -16,13 +16,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="23" image="mf.png">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="23" image="mf.png">
                                 <rect key="frame" x="87" y="218" width="240" height="300"/>
-                                <rect key="contentStretch" x="1" y="0.0" width="0.0" height="0.0"/>
+                                <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                 <color key="backgroundColor" colorSpace="calibratedRGB" red="0.56470588235294117" green="0.93333333333333335" blue="0.56470588235294117" alpha="1"/>
                                 <constraints>
                                     <constraint id="269" firstAttribute="width" constant="60"/>
                                 </constraints>
+                                <edgeInsets key="layoutMargins" top="20" left="20" bottom="20" right="20"/>
                             </imageView>
                         </subviews>
                         <constraints>

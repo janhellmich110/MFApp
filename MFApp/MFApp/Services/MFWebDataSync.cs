@@ -261,7 +261,9 @@ namespace MFApp.Services
                     #region Event
                     try
                     {
-                        conn.Execute("DELETE FROM Event");
+                        conn.Execute("DELETE FROM Event Where Id<1000000");
+                        //string sqlString = "DELETE FROM Event where EventDate < '" + DateTime.Today.AddDays(-7).ToString("yyyy-MM-dd") + "'";
+                        //conn.Execute(sqlString);
                     }
                     catch (Exception) { }
 
@@ -275,7 +277,9 @@ namespace MFApp.Services
                     #region Tournaments
                     try
                     {
-                        conn.Execute("DELETE FROM Tournament");
+                        conn.Execute("DELETE FROM Tournament Where Id<1000000");
+                        //string sqlString = "DELETE FROM Tournament where Datum < '" + DateTime.Today.AddDays(-7).ToString("yyyy-MM-dd") + "'";
+                        //conn.Execute(sqlString);
                     }
                     catch (Exception) { }
 
@@ -409,8 +413,8 @@ namespace MFApp.Services
                     try
                     {
                         // clean old result data
-                        string sqlString = "DELETE FROM Result where LastModified < '" + DateTime.Today.AddDays(-3).ToShortDateString() + "'";
-                        conn.Execute("DELETE FROM Result");
+                        //string sqlString = "DELETE FROM Result where LastModified < '" + DateTime.Today.AddDays(-7).ToString("yyyy-MM-dd") + "'";
+                        //conn.Execute(sqlString);
                     }
                     catch (Exception) { }
 

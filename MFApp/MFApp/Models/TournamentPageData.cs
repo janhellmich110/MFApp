@@ -42,10 +42,7 @@ namespace MFApp.Models
             var GolfclubTask = DataStoreGolfclub.GetItemsAsync();
             List<Golfclub> Golfclubs = GolfclubTask.Result.ToList();
 
-            if(tournament.Id > 0)
-                TournamentClub = Golfclubs.Where(x => x.Id == TournamentEvent.GolfclubId).FirstOrDefault();
-            else
-                TournamentClub = Golfclubs.Where(x => x.Id == tournament.EventId).FirstOrDefault();
+            TournamentClub = Golfclubs.Where(x => x.Id == TournamentEvent.GolfclubId).FirstOrDefault();
 
             // get course
             IDataStore<Course> DataStoreCourse = DependencyService.Get<IDataStore<Course>>();
@@ -149,6 +146,8 @@ namespace MFApp.Models
                     Selected=false
                 };
 
+                tp.CourseHandicap = GetCourseHandicap(tp, Tournament);
+
                 if(CurrentProfile.UserName.ToLower() == tp.UserName.ToLower())
                 {
                     CurrentPlayer = p;
@@ -192,6 +191,42 @@ namespace MFApp.Models
         public ObservableCollection<TournamentPlayer> SelectedPlayers { get; set;}
 
         public ObservableCollection<TournamentResultSummary> PlayerResults { get; set; }
-        
+
+        private int GetCourseHandicap(TournamentPlayer p, Tournament t)
+        {
+            int TournamentHandicapId = 0;
+
+
+            if (p.Gender == Gender.Mann)
+            {
+                TournamentHandicapId = t.HandicapTableMaleId;
+            }
+            else
+            {
+                TournamentHandicapId = t.HandicapTableFemaleId;
+            }
+
+
+            IDataStore<CourseHandicap> DataStore = DependencyService.Get<IDataStore<CourseHandicap>>();
+            var CourseHandicapTask = DataStore.GetItemsAsync();
+            List<CourseHandicap> CourseHandicaps = CourseHandicapTask.Result.ToList();
+
+            foreach (CourseHandicap CH in CourseHandicaps)
+            {
+                if (CH.CourseHandicapTableId == TournamentHandicapId)
+                {
+                    if ((p.Handicap >= CH.HandicapFrom) && (p.Handicap <= CH.HandicapTo))
+                    {
+                        return CH.PlayerHandicap;
+                    }
+
+                }
+            }
+
+            return Convert.ToInt32(p.Handicap);
+
+        }
     }
+
+    
 }

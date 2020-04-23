@@ -68,6 +68,10 @@ namespace MFApp.Views
                 {
                     TournamentPageData.SelectedPlayers.Add(p);
                 }
+                else if(!found)
+                {
+                    CurrentSwitch.IsToggled = false;
+                }
             }
             else
             {
@@ -115,7 +119,7 @@ namespace MFApp.Views
                     if ((rowIndex == 0) && (columnIndex > 0))
                     {
                         // first row header row with player intials
-                        string HeaderText = TournamentPageData.SelectedPlayers[columnIndex - 1].Initials + " (" + GetCourseHandicap(TournamentPageData.SelectedPlayers[columnIndex - 1]) + ')';
+                        string HeaderText = TournamentPageData.SelectedPlayers[columnIndex - 1].Initials + " (" + TournamentPageData.SelectedPlayers[columnIndex - 1].CourseHandicap + ')';
                         AddHeaderPuttsLabelCell(HeaderText, columnIndex, rowIndex);
                     }
                     else if ((rowIndex > 0) && (rowIndex < 10))
@@ -901,7 +905,16 @@ namespace MFApp.Views
 
         private void ContentPageResults_Appearing(object sender, EventArgs e)
         {
+            this.BindingContext = null;
+
+            if(TournamentPageData.TournamentEvent.EventType== EventTypeEnum.AppEvent)
+            {
+                Button b = (Button)this.FindByName("FinishTournament");
+                b.IsVisible = false;
+            }
+
             TournamentPageData.PlayerResults.Clear();
+            TournamentPageData.PlayerResults = new System.Collections.ObjectModel.ObservableCollection<TournamentResultSummary>();
             IDataStore<Result> DataStore = DependencyService.Get<IDataStore<Result>>();
             var ResultTask = DataStore.GetItemsAsync();
             List<Result> Results = ResultTask.Result.ToList();
@@ -944,7 +957,7 @@ namespace MFApp.Views
                             int nPar = t.Par;
 
                             int Teeanzahl = TournamentPageData.TeeList.Count;
-                            int Handicap = GetCourseHandicap(tp);
+                            int Handicap = tp.CourseHandicap;
 
                             int Lochvorgabe = 0;
                             //spielvorgabe zugreifen
@@ -984,8 +997,10 @@ namespace MFApp.Views
 
                 TournamentPageData.PlayerResults.Add(trs);
             }
+            this.BindingContext = TournamentPageData;
         }
 
+        // todo delete
         private int GetCourseHandicap(TournamentPlayer p)
         {
             int TournamentHandicapId = 0;
@@ -1019,6 +1034,63 @@ namespace MFApp.Views
 
             return Convert.ToInt32(p.Handicap);
 
+        }
+
+        //send all results to web
+        private void FinishTournament_Clicked(object sender, EventArgs e)
+        {
+            IDataStore<Result> DataStore = DependencyService.Get<IDataStore<Result>>();
+            var ResultTask = DataStore.GetItemsAsync();
+            List<Result> Results = ResultTask.Result.ToList();
+
+            List<Result> SavedResults = Results.Where(x => x.TournamentId == TournamentPageData.Tournament.Id).ToList();
+            List<TournamentResult> TournamentResultList = new List<TournamentResult>();
+
+            foreach (TournamentPlayer tp in TournamentPageData.SelectedPlayers)
+            {
+                foreach (Tee t in TournamentPageData.TeeList)
+                {
+                    // get result by player and tee
+                    Result PlayerResult = SavedResults.Where(x => x.PlayerId == tp.Id).Where(y => y.TeeId == t.Id).FirstOrDefault();
+                    {
+                        if (PlayerResult != null)
+                        {
+                            TournamentResult tr = new TournamentResult
+                            {
+                                PlayerId = tp.Id,
+                                TournamentId = TournamentPageData.Tournament.Id,
+                                TeeId = t.Id,
+                                Score = PlayerResult.Score,
+                                Putts = PlayerResult.Putts
+                            };
+                            TournamentResultList.Add(tr);
+                        }
+                    }
+
+                }
+
+            }
+
+            // send results to web
+            MFWebDataSync DataSync = new MFWebDataSync();
+            var ResultTaskDataSync = DataSync.SendResults(TournamentResultList);
+            bool DataSyncResult = ResultTaskDataSync.Result;
+
+            Button button = sender as Button;
+            if (DataSyncResult)
+            {
+                button.Text = "Turnier wurde abgeschlossen!";
+            }
+            else
+            {
+                button.Text = "Fehler. Bitte später noch einmal versuchen!";
+            }
+        }
+
+        private void ContentPageTurnier_Appearing(object sender, EventArgs e)
+        {
+            this.BindingContext = null;
+            this.BindingContext = TournamentPageData;
         }
     }
 }
