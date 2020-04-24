@@ -848,7 +848,7 @@ namespace MFApp.Views
         {
             // send results to web
             MFWebDataSync DataSync = new MFWebDataSync();
-            await DataSync.SendResults(TournamentResultList);
+            DataSync.SendResults(TournamentResultList);
         }
 
         private void SaveFlight()
