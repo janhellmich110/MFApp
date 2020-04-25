@@ -61,6 +61,16 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="5, 5, 5, 5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
                             <StackLayout VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="0">
                                 <Label Text="{Binding PlayerName}"                                   
                                     d:Text="{Binding .}"
