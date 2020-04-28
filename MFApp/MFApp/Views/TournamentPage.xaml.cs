@@ -8,6 +8,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using MFApp.Models;
 using MFApp.Services;
+using System.Diagnostics;
 
 namespace MFApp.Views
 {
@@ -49,7 +50,7 @@ namespace MFApp.Views
 
         private void Switch_Toggled(object sender, ToggledEventArgs e)
         {
-            Switch CurrentSwitch = (Switch)sender;
+            Xamarin.Forms.Switch CurrentSwitch = (Xamarin.Forms.Switch)sender;
             TournamentPlayer p = (TournamentPlayer)CurrentSwitch.BindingContext;
 
             if (e.Value)
@@ -610,6 +611,7 @@ namespace MFApp.Views
 
         private async void Entry_TextChanged(object sender, TextChangedEventArgs e)
         {
+            Debug.Print("Start enry changed: " + DateTime.Now.ToString("hh:mm:ss.fff"));
             // save result
             var oldText = e.OldTextValue;
             var newText = e.NewTextValue;
@@ -633,7 +635,9 @@ namespace MFApp.Views
             int currentColumnIndex = Convert.ToInt32(currentCommandParameter[1].ToString());
             int currentPlayerId = TournamentPageData.SelectedPlayers[currentColumnIndex - 1].Id;
 
+            Debug.Print("Start save local: " + DateTime.Now.ToString("hh:mm:ss.fff"));
             SaveResultLocal(newText, currentColumnIndex, currentrowIndex, isScore);
+            Debug.Print("End save local: " + DateTime.Now.ToString("hh:mm:ss.fff"));
 
             // calculate sum fields
             int[] InSum = new int[4] { 0, 0, 0, 0 };
@@ -788,8 +792,10 @@ namespace MFApp.Views
 
             if (TournamentPageData.Tournament.Id > 0)
             {
+                Debug.Print("Start save web: " + DateTime.Now.ToString("hh:mm:ss.fff"));
                 // send results to webapp
                 SaveResultsWeb(TournamentResultList);
+                Debug.Print("End save web: " + DateTime.Now.ToString("hh:mm:ss.fff"));
             }
         }
 
@@ -848,7 +854,8 @@ namespace MFApp.Views
         {
             // send results to web
             MFWebDataSync DataSync = new MFWebDataSync();
-            DataSync.SendResults(TournamentResultList);
+
+            var t = Task.Run(() => DataSync.SendResults(TournamentResultList));      
         }
 
         private void SaveFlight()

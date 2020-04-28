@@ -34,6 +34,8 @@ namespace MFApp.Views
             var TournamentTask = DataStoreTournament.GetItemsAsync();
             List<Tournament> Tournaments = TournamentTask.Result.ToList();
 
+            Tournaments = Tournaments.OrderBy(x => x.Datum).ToList();
+
             foreach (Tournament t in Tournaments)
             {
                 HomePageEvent hpe = new HomePageEvent();

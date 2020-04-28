@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
-using Telerik.XamarinForms;
 
 using MFApp.Models;
 using MFApp.Services;
-using Telerik.XamarinForms.Input;
 using System.Linq;
 
 namespace MFApp.Views

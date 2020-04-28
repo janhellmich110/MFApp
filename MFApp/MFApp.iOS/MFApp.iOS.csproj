@@ -262,9 +262,6 @@
     </ImageAsset>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\GolfIconInfo.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="Resources\GolfIconScorecard.png" />
   </ItemGroup>
   <ItemGroup>
@@ -275,5 +272,32 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Assets.xcassets\mf.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\GolfIconInfo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\GolfIconInfo%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\GolfIconInfo%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\GolfIconScorecard%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\GolfIconScorecard%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\GolfIconSpieler%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\GolfIconSpieler%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\GolfIconTrophy%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\GolfIconTrophy%403x.png" />
   </ItemGroup>
 </Project>

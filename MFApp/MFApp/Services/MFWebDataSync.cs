@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using SQLite;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using System.Diagnostics;
 
 namespace MFApp.Services
 {
@@ -211,6 +212,7 @@ namespace MFApp.Services
 
         public async Task<bool> SyncMFWebSynchron()
         {
+            Debug.Print("Start Sync: " + DateTime.Now.ToString("hh:mm:ss.fff"));
             try
             {
                 // get current profile
@@ -228,6 +230,7 @@ namespace MFApp.Services
                 }
                 catch(Exception) { }
 
+                Debug.Print("Start Sync mit Profil: " + DateTime.Now.ToString("hh:mm:ss.fff"));
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new Uri($"https://demo.portivity.de/mfweb/api/");
 
@@ -241,9 +244,11 @@ namespace MFApp.Services
                     }
                     var ResultTask = client.GetStringAsync(webCall);
                     string json = ResultTask.Result.ToString();
+                    Debug.Print("Daten vom web: " + DateTime.Now.ToString("hh:mm:ss.fff"));
 
                     MFWebAPIData item = (MFWebAPIData)JsonConvert.DeserializeObject<MFWebAPIData>(json);
 
+                    Debug.Print("Daten aufbereitet: " + DateTime.Now.ToString("hh:mm:ss.fff"));
                     #region golfclubs
                     try
                     {
@@ -257,6 +262,8 @@ namespace MFApp.Services
                         DataStore.AddItemAsync(golfclub);
                     }
                     #endregion
+
+                    Debug.Print("End Sync Golfclubs: " + DateTime.Now.ToString("hh:mm:ss.fff"));
 
                     #region Event
                     try
@@ -273,6 +280,7 @@ namespace MFApp.Services
                         DataStoreEvent.AddItemAsync(e);
                     }
                     #endregion
+                    Debug.Print("End Sync Events: " + DateTime.Now.ToString("hh:mm:ss.fff"));
 
                     #region Tournaments
                     try
@@ -290,6 +298,8 @@ namespace MFApp.Services
                     }
                     #endregion
 
+                    Debug.Print("End Sync Turniere: " + DateTime.Now.ToString("hh:mm:ss.fff"));
+                    
                     #region Course
                     try
                     {
@@ -304,19 +314,29 @@ namespace MFApp.Services
                     }
                     #endregion
 
+                    Debug.Print("End Sync Kurse: " + DateTime.Now.ToString("hh:mm:ss.fff"));
+
                     #region Tee
-                    try
-                    {
-                        conn.Execute("DELETE FROM Tee");
-                    }
-                    catch (Exception) { }
+                    //try
+                    //{
+                    //    conn.Execute("DELETE FROM Tee");
+                    //}
+                    //catch (Exception) { }
 
                     IDataStore<Tee> DataStoreTee = DependencyService.Get<IDataStore<Tee>>();
+                    var TeeTask = DataStoreTee.GetItemsAsync();
+                    List<Tee> Tees = TeeTask.Result.ToList();
+
                     foreach (Tee t in item.Tees)
                     {
-                        DataStoreTee.AddItemAsync(t);
+                        if (Tees.Where(x => x.Id == t.Id).FirstOrDefault() == null)
+                        {
+                            DataStoreTee.AddItemAsync(t);
+                        }
                     }
                     #endregion
+
+                    Debug.Print("End Sync Tees: " + DateTime.Now.ToString("hh:mm:ss.fff"));
 
                     #region Flight
                     try
@@ -359,44 +379,53 @@ namespace MFApp.Services
                     }
                     #endregion
 
+                    Debug.Print("End Sync Flights: " + DateTime.Now.ToString("hh:mm:ss.fff"));
+
                     #region CourseHandicapTable
-                    try
-                    {
-                        conn.Execute("DELETE FROM CourseHandicap");
-                    }
-                    catch (Exception) { }
-                    try
-                    {
-                        conn.Execute("DELETE FROM CourseHandicapTable");
-                    }
-                    catch (Exception) { }
+                    //try
+                    //{
+                    //    conn.Execute("DELETE FROM CourseHandicap");
+                    //}
+                    //catch (Exception) { }
+                    //try
+                    //{
+                    //    conn.Execute("DELETE FROM CourseHandicapTable");
+                    //}
+                    //catch (Exception) { }
 
                     IDataStore<CourseHandicapTable> DataStoreCourseHandicapTable = DependencyService.Get<IDataStore<CourseHandicapTable>>();
                     IDataStore<CourseHandicap> DataStoreCourseHandicap = DependencyService.Get<IDataStore<CourseHandicap>>();
 
+                    var CourseHandicapTableTask = DataStoreCourseHandicapTable.GetItemsAsync();
+                    List<CourseHandicapTable> CourseHandicapTables = CourseHandicapTableTask.Result.ToList();
+
                     foreach (MFAppCourseHandicapTable ct in item.CourseHandicapTables)
                     {
-                        CourseHandicapTable cht = new CourseHandicapTable
+                        if (CourseHandicapTables.Where(x => x.Id == ct.Id).FirstOrDefault() == null)
                         {
-                            Id = ct.Id,
-                            TeeColour = ct.TeeColour,
-                            TeeGender = ct.TeeGender,
-                            CourseId = ct.CourseId,
-                            Par = ct.Par,
-                            CR = ct.CR,
-                            Slope = ct.Slope
-                        };
+                            CourseHandicapTable cht = new CourseHandicapTable
+                            {
+                                Id = ct.Id,
+                                TeeColour = ct.TeeColour,
+                                TeeGender = ct.TeeGender,
+                                CourseId = ct.CourseId,
+                                Par = ct.Par,
+                                CR = ct.CR,
+                                Slope = ct.Slope
+                            };
 
-                        DataStoreCourseHandicapTable.AddItemAsync(cht);
+                            DataStoreCourseHandicapTable.AddItemAsync(cht);
 
-                        foreach (CourseHandicap ch in ct.CourseHandicaps)
-                        {
-                            DataStoreCourseHandicap.AddItemAsync(ch);
+                            foreach (CourseHandicap ch in ct.CourseHandicaps)
+                            {
+                                DataStoreCourseHandicap.AddItemAsync(ch);
 
+                            }
                         }
                     }
                     #endregion
-
+                    
+                    Debug.Print("End Sync Vorgaben: " + DateTime.Now.ToString("hh:mm:ss.fff"));
 
                     try
                     {
@@ -409,6 +438,8 @@ namespace MFApp.Services
                     {
                         DataStorePlayer.AddItemAsync(player);
                     }
+
+                    Debug.Print("End Sync Spieler: " + DateTime.Now.ToString("hh:mm:ss.fff"));
 
                     try
                     {
@@ -430,6 +461,8 @@ namespace MFApp.Services
             {
                 return await Task.FromResult(false);
             }
+
+            Debug.Print("End Sync: " + DateTime.Now.ToString("hh:mm:ss.fff"));
 
             return await Task.FromResult(true);
         }

@@ -7,7 +7,7 @@
              x:Class="MFApp.Views.TournamentPage">
   <!--Pages can be added as references or inline-->
     <TabbedPage.Children>
-        <ContentPage Title="Turnier" IconImageSource="GolfIconInfo.jpg" Appearing="ContentPageTurnier_Appearing">
+        <ContentPage Title="Turnier" IconImageSource="GolfIconInfo.png" Appearing="ContentPageTurnier_Appearing">
             <StackLayout Padding="20">
                 <StackLayout Padding="30,20,30,20" BackgroundColor="#90EE90">
                     <Label Text="{Binding TournamentClub.Name}" 
