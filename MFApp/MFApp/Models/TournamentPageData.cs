@@ -131,6 +131,8 @@ namespace MFApp.Models
             var PlayerTask = DataStore.GetItemsAsync();
             List<Player> players = PlayerTask.Result.ToList();
 
+            players = players.OrderBy(x => x.Name).ToList();
+
             foreach (Player p in players)
             {
                 TournamentPlayer tp = new TournamentPlayer
