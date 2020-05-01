@@ -103,7 +103,7 @@ namespace MFApp.Models
                     // no player in flight, add current player
                     FlightPlayerIds.Add(CurrentProfile.Id);
                 }
-                TournamentFlight = "MeinFlight";
+                TournamentFlight = "Mein Flight";
             }
             else
             {
@@ -116,7 +116,9 @@ namespace MFApp.Models
                     if(flightPlayer != null)
                     {
                         // flight found
-                        TournamentFlight = f.FlightNumber.ToString() + ": " + f.FlightName;
+                        TournamentFlight = "Flight " + f.FlightNumber.ToString() + ": " + f.FlightName;
+                        FlightPlayerIds = Flight2Players.Where(x => x.FlightId == f.Id).Select(x => x.PlayerId).ToList();
+                        break;
                     }
                     else
                     {
