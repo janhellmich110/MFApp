@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-using MFApp.Models;
+using MFApp.ViewModels;
 using MFApp.Services;
 
 namespace MFApp.Views
@@ -19,23 +19,20 @@ namespace MFApp.Views
         ResultPageData ResultData;
         public ResultPage()
         {
-            InitializeComponent();
-            
-            ResultData = new ResultPageData();
+            InitializeComponent();            
         }
 
-        private async void ContentPage_Appearing(object sender, EventArgs e)
+        protected override void OnAppearing()
         {
-            IsBusy = true;
+            base.OnAppearing();
 
-            MFWebDataSync DataSync = new MFWebDataSync();
-            IEnumerable<MFAppFullTournamentResult> pResults = await DataSync.GetLastResults();
+            BindingContext = ResultData = new ResultPageData();
+        }
 
-            ResultData.PlayerResults = pResults.ToList();
-
-            this.BindingContext = ResultData;
-
-            IsBusy = false;
+        private void RefreshView_Refreshing(object sender, EventArgs e)
+        {
+            BindingContext = ResultData = new ResultPageData();
+            ResultData.IsRefreshing = false;
         }
     }
 }
