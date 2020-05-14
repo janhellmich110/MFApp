@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Xamarin.Essentials;
+
 using MFApp.Services;
 using MFApp.Views;
 
@@ -9,8 +11,11 @@ namespace MFApp
 {
     public partial class App : Application
     {
+        public static ILocationUpdateService LocationUpdateService;
+
         public App()
         {
+            
             InitializeComponent();
             DependencyService.Register<PlayerDataStore>();
             DependencyService.Register<ProfileDataStore>();
@@ -25,10 +30,33 @@ namespace MFApp
             DependencyService.Register<TeeDataStore>();
             DependencyService.Register<ResultDataStore>();
 
+            DependencyService.Register<ILocationUpdateService>();
+
             // sync events
             SyncWebData();
 
             MainPage = new MainPage();
+
+            ILocationUpdateService LocationUpdateService = DependencyService.Get<ILocationUpdateService>();
+            LocationUpdateService.LocationChanged += LocationUpdateService_LocationChanged;
+
+            //try
+            //{
+            //    //var location = await Geolocation.GetLastKnownLocationAsync();
+            //    var request = new GeolocationRequest(GeolocationAccuracy.Medium, new TimeSpan(0, 0, 10));
+            //    var tasklocation = Geolocation.GetLocationAsync(request);
+            //    var location = tasklocation.Result;
+
+            //    if (location != null)
+            //    {
+            //        // save location in profile
+            //    }
+            //}
+            //catch (Exception exp)
+            //{
+            //    // manage exception
+            //}
+
         }
 
         private async Task<bool> SyncWebData()
@@ -36,6 +64,12 @@ namespace MFApp
             MFWebDataSync DataSync = new MFWebDataSync();
             bool bResult = await DataSync.SyncMFWebSynchron();
             return bResult;
+        }
+
+        private void LocationUpdateService_LocationChanged(object sender, ILocationEventArgs e)
+        {
+            //Here you can get the user's location from "e" -> new Location(e.Latitude, e.Longitude);
+            //new Location is from Xamarin.Essentials Location object.
         }
 
         protected override void OnStart()

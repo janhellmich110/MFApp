@@ -469,9 +469,32 @@ namespace MFApp.Services
 
         public async Task<bool> SendResults(List<TournamentResult> ResultList)
         {
+            // add location info
+
             try
             {
-                HttpClient client = new HttpClient();
+                //var location = await Geolocation.GetLastKnownLocationAsync();
+                var request = new GeolocationRequest(GeolocationAccuracy.Medium, new TimeSpan(0, 0, 10));
+                var location = await Geolocation.GetLocationAsync(request);
+
+                if (location != null)
+                {
+                    foreach (TournamentResult tr in ResultList)
+                    {
+                        tr.Latitude = location.Latitude;
+                        tr.Longitude = location.Longitude;
+                    }
+                }
+            }
+            catch (Exception exp) 
+            { 
+                // manage exception
+            }
+
+
+            try
+            {
+               HttpClient client = new HttpClient();
                 client.BaseAddress = new Uri($"https://demo.portivity.de/mfweb/api/");
 
                 bool IsConnected = Connectivity.NetworkAccess == NetworkAccess.Internet;
