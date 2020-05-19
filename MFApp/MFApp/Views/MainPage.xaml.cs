@@ -93,6 +93,12 @@ namespace MFApp.Views
                             BarBackgroundColor = Color.FromRgb(30, 39, 104)
                         });
                         break;
+                    case (int)MenuItemType.Maps:
+                        MenuPages.Add(id, new NavigationPage(new MapsPage())
+                        {
+                            BarBackgroundColor = Color.FromRgb(30, 39, 104)
+                        });
+                        break;
                 }
             }
 

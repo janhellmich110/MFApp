@@ -23,10 +23,14 @@
     <PackageReference Include="Telerik.UI.for.Xamarin.Input.Lite" Version="2020.1.318.1" />
     <PackageReference Include="Telerik.UI.for.Xamarin.SkiaSharp.Lite" Version="2020.1.318.1" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.1" />  
-    <PackageReference Include="Xamarin.Forms" Version="4.6.0.726" />
+    <PackageReference Include="Xamarin.Forms" Version="4.6.0.726" />  
+    <PackageReference Include="Xamarin.Forms.Maps" Version="4.6.0.726" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\MapsPage.xaml.cs">
+      <DependentUpon>MapsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\ConfigurationPage.xaml.cs">
       <DependentUpon>ConfigurationPage.xaml</DependentUpon>
     </Compile>
