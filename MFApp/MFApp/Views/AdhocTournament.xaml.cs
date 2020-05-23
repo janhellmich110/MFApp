@@ -57,16 +57,34 @@ namespace MFApp.Views
         {
             if ((AdhocModel.SelectedClub != null) && (AdhocModel.SelectedCourse != null))
             {
+                bool WithPutts = false;
+                try
+                {
+                    Picker PuttPicker = (Picker)this.FindByName("WithPutts");
+                    if (PuttPicker.SelectedItem.ToString() == "Mit Putts")
+                    {
+                        WithPutts = true;
+                    }
+                }
+                catch (Exception)
+                { }
+
                 string tournamentName = "Runde: " + DateTime.Today.ToShortDateString();
                 int courseId = AdhocModel.SelectedCourse.Id;
                 int clubId = AdhocModel.SelectedClub.Id;
 
                 // check existing tournament
                 IDataStore<Tournament> DataStoreTournament = DependencyService.Get<IDataStore<Tournament>>();
-                var existingTournament = (await DataStoreTournament.GetItemsAsync()).Where(x=>x.Name == tournamentName).FirstOrDefault();
+                var existingTournament = (await DataStoreTournament.GetItemsAsync()).Where(x=>x.Name == tournamentName).Where(d=>d.Datum.Date==DateTime.Today).FirstOrDefault();
 
                 if((existingTournament != null) && (existingTournament.CourseId == courseId))
                 {
+                    if(existingTournament.WithPutts != WithPutts)
+                    {
+                        existingTournament.WithPutts = WithPutts;
+                        await DataStoreTournament.UpdateItemAsync(existingTournament);
+                    }
+
                     Navigation.PushAsync(new TournamentPage(existingTournament));
                     return;
                 }
@@ -89,7 +107,7 @@ namespace MFApp.Views
                 Event ev = new Event
                 {
                     Id=0,
-                    Name = "Meine Runde",
+                    Name = "Eigene Runde",
                     EventDate = DateTime.Now,
                     EventType = EventTypeEnum.AppEvent,
                     GolfclubId = clubId
@@ -107,7 +125,7 @@ namespace MFApp.Views
                     Datum = DateTime.Now,
                     CourseId = courseId,
                     ManagedFlights = false,
-                    WithPutts = false,
+                    WithPutts = WithPutts,
                     HandicapTableFemaleId = tableIdFemale,
                     HandicapTableMaleId = tableIdMale
                 };
@@ -119,6 +137,11 @@ namespace MFApp.Views
 
                 Navigation.PushAsync(new TournamentPage(t));
             }
+        }
+
+        async void Close_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PopModalAsync();
         }
     }
 

@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="MFApp.Views.TeeInfoPage"
+             xmlns:vm="clr-namespace:MFApp.ViewModels"
+             Title="{Binding Name}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Primary">#1E2768</Color>
+            <Color x:Key="Accent">#90EE90</Color>
+            <Color x:Key="LightTextColor">#999999</Color>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Schliessen" Clicked="Close_Clicked" />
+        <ToolbarItem Text="Aktualisieren" Clicked="Refresh_Clicked" />
+    </ContentPage.ToolbarItems>
+    
+    <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <StackLayout Padding="20" HeightRequest="30" HorizontalOptions="FillAndExpand" BackgroundColor="AliceBlue" >
+            <Label Text="{Binding Description}" 
+                                d:Text="{Binding .}"
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource ListItemTextStyle}" 
+                                FontSize="16" />
+        </StackLayout>
+        <StackLayout VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+            <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" >
+                <Image x:Name="TeeImage" Source="" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Aspect="AspectFit" />
+            </StackLayout>
+            <StackLayout WidthRequest="150" VerticalOptions="StartAndExpand" HorizontalOptions="Start" >
+                <ScrollView  Padding="0, 20, 0, 20" VerticalOptions="CenterAndExpand">
+                    <RefreshView IsRefreshing="{Binding IsRefreshingAllPlaces, Mode=TwoWay}" Command="{Binding LoadAllPlacesCommand}">
+                        <CollectionView x:Name="AllPlacesCollectionView" ItemsSource="{Binding TeePlaces}">
+                                       <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Padding="5, 5, 5, 5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="50"/>
+                                            <ColumnDefinition Width="80"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackLayout VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="0">
+                                            <Label Text="{Binding Text}"                                   
+                                    d:Text="{Binding .}"
+                                    HorizontalTextAlignment="Start"
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="Caption" />
+                                        </StackLayout>
+                                        <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1">
+                                            <Label Text="{Binding Distance}" 
+                                    d:Text="{Binding .}"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="Caption" />
+                                        </StackLayout>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </RefreshView>
+                </ScrollView>
+            </StackLayout>
+        </StackLayout>
+    </StackLayout>
+    
+</ContentPage>

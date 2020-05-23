@@ -29,6 +29,7 @@ namespace MFApp
             DependencyService.Register<Flight2PlayerDataStore>();
             DependencyService.Register<TeeDataStore>();
             DependencyService.Register<ResultDataStore>();
+            DependencyService.Register<TeeInfoDataStore>();
 
             DependencyService.Register<ILocationUpdateService>();
 

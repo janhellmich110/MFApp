@@ -24,8 +24,20 @@ namespace MFApp.Services
             if(!SQLiteHelper.TableExists("Result", conn))
                 conn.CreateTable<Result>();
 
-            // get all entries from table
-            ResultList = conn.Table<Result>().ToList();
+            try
+            {
+                // get all entries from table
+                ResultList = conn.Table<Result>().ToList();
+            }
+            catch(Exception)
+            {
+                // recreate table
+                conn.DropTable<Result>();
+
+                conn.CreateTable<Result>();
+                // get all entries from table
+                ResultList = conn.Table<Result>().ToList();
+            }
         }
         public async Task<bool> AddItemAsync(Result Result)
         {
@@ -41,6 +53,21 @@ namespace MFApp.Services
             }
             catch (Exception ex)
             {
+                if(ex.Message.ToLower().Contains("final"))
+                {
+                    // column finl not exists, recreate table and try again
+                    conn.DropTable<Result>();
+
+                    conn.CreateTable<Result>();
+                    ResultList = conn.Table<Result>().ToList();
+
+                    if (Result.Id == 0)
+                    {
+                        int ResultCount = ResultList.Count(); // conn.Table<Result>().Count();
+                        Result.Id = 100000 + ResultCount;
+                    }
+                    result = conn.Insert(Result);
+                }
                 StatusMessage = string.Format("Failed to add {0}. Error: {1}", Result.PlayerId, ex.Message);
             }
             ResultList = conn.Table<Result>().ToList();

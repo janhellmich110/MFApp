@@ -7,8 +7,16 @@
              x:Class="MFApp.Views.MapsPage"
              xmlns:vm="clr-namespace:MFApp.ViewModels" xmlns:map="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              Title="{Binding Title}">
-
-    <Grid x:Name="MapContainer">
-    </Grid>
+    <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Start">
+            <Label x:Name="Latitude" Text="" FontSize="Medium" />
+            <Label x:Name="Longitude" Text="" FontSize="Medium" />
+        </StackLayout>
+        <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand">
+            <Grid x:Name="MapContainer" VerticalOptions="FillAndExpand">
+            </Grid>
+        </StackLayout>
+    </StackLayout>
+    
 
 </ContentPage>

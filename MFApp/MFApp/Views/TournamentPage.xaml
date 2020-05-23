@@ -5,7 +5,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="MFApp.Views.TournamentPage">
-  <!--Pages can be added as references or inline-->
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Teilen" Clicked="ToolbarItem_Clicked" />
+    </ContentPage.ToolbarItems>
+    
+    <!--Pages can be added as references or inline-->
     <TabbedPage.Children>
         <ContentPage Title="Turnier" IconImageSource="GolfIconInfo.png" Appearing="ContentPageTurnier_Appearing">
             <StackLayout Padding="20">
@@ -153,23 +158,32 @@
         </ContentPage>
         <ContentPage Title="Scorecard" Appearing="ContentPage_Scorecard_Appearing" IconImageSource="GolfIconScorecard.png">
             <ScrollView Orientation="Vertical"  VerticalScrollBarVisibility="Default" BackgroundColor="#1E2768">
-                <Grid x:Name="ScoreKarte" Padding="1,1,0,0">
+                <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                    <Grid x:Name="ScoreKarte" Padding="1,1,0,0">
 
-
-                </Grid>
-
+                    </Grid>
+                    <StackLayout Padding="20,20,20,20" BackgroundColor="White">
+                        <Button x:Name="FinishTournament" 
+                        Text="Runde abschliessen"
+                        BackgroundColor="#1E2768"
+                        TextColor="White"
+                        HorizontalOptions="FillAndExpand"
+                            Clicked="FinishTournament_Clicked"/>
+                    </StackLayout>
+                </StackLayout>
             </ScrollView>
         </ContentPage>
         <ContentPage Title="Ergebnisse" Appearing="ContentPageResults_Appearing" IconImageSource="GolfIconTrophy.png">
-            <StackLayout Padding="20, 20, 20, 20">
-                <CollectionView x:Name="PlayerResultCollectionView" ItemsSource="{Binding PlayerResults}">
+            <StackLayout Padding="20, 20, 20, 20" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="Start" HeightRequest="400">
+                    <CollectionView x:Name="PlayerResultCollectionView" ItemsSource="{Binding PlayerResults}">
                     <CollectionView.Header>
                         <Grid Padding="10,10,10,10" BackgroundColor="LightGray">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
+                                </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="150"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
@@ -184,7 +198,7 @@
                                     FontAttributes="Bold"/>
                             </StackLayout>
                             <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1">
-                                <Label Text="Brutto"
+                                <Label Text="Br"
                                        LineBreakMode="NoWrap"
                                         HorizontalTextAlignment="Center"
                                         Style="{DynamicResource ListItemTextStyle}" 
@@ -192,7 +206,7 @@
                                         FontAttributes="Bold"/>
                             </StackLayout>
                             <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="2">
-                                <Label Text="Netto"
+                                <Label Text="Ne"
                                        LineBreakMode="NoWrap"
                                        HorizontalTextAlignment="Center"
                                        Style="{DynamicResource ListItemTextStyle}" 
@@ -224,7 +238,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="150"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
@@ -274,15 +288,127 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                <StackLayout Padding="20,20,20,20">
-                    <Button x:Name="FinishTournament" 
-                        Text="Runde abschliessen"
+                </StackLayout>
+                <Button x:Name="LoadAllResults" 
+                        Text="Alle Ergebnisse"
                         BackgroundColor="#1E2768"
                         TextColor="White"
                         HorizontalOptions="FillAndExpand"
-                            Clicked="FinishTournament_Clicked"/>
-                </StackLayout>
+                            Clicked="LoadAllResults_Clicked"/>
+                <ScrollView  Padding="0, 20, 0, 20" VerticalOptions="FillAndExpand">
+                    <RefreshView IsRefreshing="{Binding IsRefreshingAllResults, Mode=TwoWay}" Command="{Binding LoadAllResultsCommand}">
+                        <CollectionView x:Name="PlayerAllResultCollectionView" ItemsSource="{Binding AllPlayerResults}">
+                            <CollectionView.Header>
+                                <Grid Padding="5,5,5,5" BackgroundColor="LightGray">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackLayout VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="0">
+                                        <Label Text="Spieler"
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="Caption"
+                                    FontAttributes="Bold"/>
+                                    </StackLayout>
+                                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1">
+                                        <Label Text="Br" 
+                                        HorizontalTextAlignment="Center"
+                                        Style="{DynamicResource ListItemTextStyle}" 
+                                        FontSize="Caption" 
+                                        FontAttributes="Bold"/>
+                                    </StackLayout>
+                                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="2">
+                                        <Label Text="Ne" 
+                                       HorizontalTextAlignment="Center"
+                                       Style="{DynamicResource ListItemTextStyle}" 
+                                       FontSize="Caption" 
+                                       FontAttributes="Bold"/>
+                                    </StackLayout>
+                                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="3">
+                                        <Label Text="Loch" 
+                                    HorizontalTextAlignment="Center"
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="Caption" 
+                                    FontAttributes="Bold"/>
+                                    </StackLayout>
+                                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="4">
+                                        <Label Text="Rel"
+                                        Grid.Column="6"
+                                       HorizontalTextAlignment="Center"
+                                        Style="{DynamicResource ListItemTextStyle}" 
+                                        FontSize="Caption" 
+                                       FontAttributes="Bold"/>
+                                    </StackLayout>
+                                </Grid>
+                            </CollectionView.Header>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Padding="5, 5, 5, 5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackLayout VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="0">
+                                            <Label Text="{Binding PlayerName}"                                   
+                                    d:Text="{Binding .}"
+                                    HorizontalTextAlignment="Start"
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="Caption" />
+                                        </StackLayout>
+                                        <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1">
+                                            <Label Text="{Binding ScoreBrutto}" 
+                                    d:Text="{Binding .}"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="Caption" />
+                                        </StackLayout>
+                                        <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="2">
+                                            <Label Text="{Binding ScoreNetto}" 
+                                    d:Text="{Binding .}"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="Caption" />
+                                        </StackLayout>
+                                        <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="3">
+                                            <Label Text="{Binding HolesPlayed}" 
+                                        d:Text="{Binding .}"
+                                           HorizontalTextAlignment="Center"
+                                        LineBreakMode="NoWrap" 
+                                        Style="{DynamicResource ListItemTextStyle}" 
+                                        FontSize="Caption" />
+                                        </StackLayout>
+                                        <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="4">
+                                            <Label Text="{Binding ScoreNettoRelativ}"
+                                        d:Text="{Binding .}"
+                                        HorizontalTextAlignment="Center"
+                                        LineBreakMode="NoWrap" 
+                                        Style="{DynamicResource ListItemTextStyle}" 
+                                        FontSize="Caption" />
+                                        </StackLayout>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </RefreshView>
+                </ScrollView>
             </StackLayout>
+            
         </ContentPage>
     </TabbedPage.Children>
 

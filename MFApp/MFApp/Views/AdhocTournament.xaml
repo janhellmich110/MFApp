@@ -5,6 +5,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="MFApp.Views.AdhocTournament">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Zur Startseite wechseln" Clicked="Close_Clicked" />
+    </ContentPage.ToolbarItems>
+    
     <ContentPage.Content>
         <StackLayout Padding="20,20,20,20">
             <Label Text="Golfclub:" />
@@ -14,6 +18,13 @@
             <Label Text="Kurs:" />
             <Picker x:Name="ListCourses" Title="Kurs" ItemsSource="{Binding AllCourses}"
                 ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedCourse}"/>
+            <Label Text="Putts in der Scorekarte:" />
+            <Picker x:Name="WithPutts" Title="Mit/Ohne Putts" SelectedItem="Ohne Putts">
+                <Picker.Items>
+                    <x:String>Ohne Putts</x:String>
+                    <x:String>Mit Putts</x:String>
+                </Picker.Items>
+            </Picker>
             <StackLayout Padding="0,20,0,20">
                 <Button 
                 Text="Runde starten" 

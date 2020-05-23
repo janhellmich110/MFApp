@@ -24,5 +24,7 @@ namespace MFApp.Models
         public int TournamentId { get; set; }
 
         public DateTime LastModified { get; set; }
+
+        public bool Final { get; set; }
     }
 }

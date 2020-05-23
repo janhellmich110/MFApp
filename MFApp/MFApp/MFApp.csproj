@@ -28,6 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\TeeInfoPage.xaml.cs">
+      <DependentUpon>TeeInfoPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MapsPage.xaml.cs">
       <DependentUpon>MapsPage.xaml</DependentUpon>
     </Compile>

@@ -109,6 +109,20 @@ namespace MFApp.Services
                     }
                     #endregion
 
+                    #region TeeInfo
+                    try
+                    {
+                        conn.Execute("DELETE FROM TeeInfo");
+                    }
+                    catch (Exception) { }
+
+                    IDataStore<TeeInfo> DataStoreTeeinfo = DependencyService.Get<IDataStore<TeeInfo>>();
+                    foreach (TeeInfo t in item.TeeInfos)
+                    {
+                        DataStoreTeeinfo.AddItemAsync(t);
+                    }
+                    #endregion
+
                     #region Flight
                     try
                     {
@@ -337,6 +351,20 @@ namespace MFApp.Services
                     #endregion
 
                     Debug.Print("End Sync Tees: " + DateTime.Now.ToString("hh:mm:ss.fff"));
+
+                    #region TeeInfo
+                    try
+                    {
+                        conn.Execute("DELETE FROM TeeInfo");
+                    }
+                    catch (Exception) { }
+
+                    IDataStore<TeeInfo> DataStoreTeeinfo = DependencyService.Get<IDataStore<TeeInfo>>();
+                    foreach (TeeInfo t in item.TeeInfos)
+                    {
+                        DataStoreTeeinfo.AddItemAsync(t);
+                    }
+                    #endregion
 
                     #region Flight
                     try

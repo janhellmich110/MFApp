@@ -71,5 +71,31 @@ namespace MFApp.Views
             Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
 
         }
+
+        private async void Save_Clicked(object sender, EventArgs e)
+        {
+            var Player = new Player
+            {
+                Id = MyProfile.Id,
+                Name = MyProfile.Name,
+                Initials = MyProfile.Initials,
+                UserName = MyProfile.UserName,
+                UserPassword = MyProfile.UserPassword,
+                Handicap = MyProfile.Handicap,
+                Birthday = MyProfile.Birthday,
+                Mail = MyProfile.Mail,
+                Gender=MyProfile.Gender,
+                GroupId=MyProfile.GroupId
+            };
+
+            // update player local
+            IDataStore<Player> DataStorePlayer= DependencyService.Get<IDataStore<Player>>();
+            await DataStorePlayer.UpdateItemAsync(Player);
+
+            // send new player to web
+            MFWebDataSync DataSync = new MFWebDataSync();
+            await DataSync.SendNewPlayer(Player);
+
+        }
     }
 }

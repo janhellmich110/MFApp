@@ -6,11 +6,27 @@ using System.Collections.ObjectModel;
 using Xamarin.Forms;
 
 using MFApp.Services;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace MFApp.Models
 {
-    public class TournamentPageData
+    public class TournamentPageData : INotifyPropertyChanged
     {
+        bool isRefreshingAllResults;
+
+        public bool IsRefreshingAllResults
+        {
+            get { return isRefreshingAllResults; }
+            set
+            {
+                isRefreshingAllResults = value;
+                OnPropertyChanged();
+            }
+        }
+
         public TournamentPageData()
         {
             AllPlayers = new ObservableCollection<TournamentPlayer>();
@@ -19,6 +35,8 @@ namespace MFApp.Models
         public TournamentPageData(Tournament tournament)
         {
             PlayerResults = new ObservableCollection<TournamentResultSummary>();
+            AllPlayerResults = new ObservableCollection<MFAppFullTournamentResult>();
+
             Tournament = tournament;
             TournamentDate = tournament.Datum.ToString("dd.MM.yyyy hh:mm");
             // get event
@@ -195,6 +213,7 @@ namespace MFApp.Models
         public ObservableCollection<TournamentPlayer> SelectedPlayers { get; set;}
 
         public ObservableCollection<TournamentResultSummary> PlayerResults { get; set; }
+        public ObservableCollection<MFAppFullTournamentResult> AllPlayerResults { get; set; }
 
         private int GetCourseHandicap(TournamentPlayer p, Tournament t)
         {
@@ -230,7 +249,46 @@ namespace MFApp.Models
             return Convert.ToInt32(p.Handicap);
 
         }
+
+        public Command LoadAllResultsCommand => new Command(async () => await ExecuteLoadAllResultsCommand());
+
+        async Task ExecuteLoadAllResultsCommand()
+        {
+            IsRefreshingAllResults = true;
+            try
+            {
+                AllPlayerResults.Clear();
+                await LoadAllResults();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+            finally
+            {
+                IsRefreshingAllResults = false;
+            }
+        }
+
+        async Task<bool> LoadAllResults()
+        {
+            MFWebDataSync DataSync = new MFWebDataSync();
+            IEnumerable<MFAppFullTournamentResult> pResults = await DataSync.GetLastResults();
+            AllPlayerResults = new ObservableCollection<MFAppFullTournamentResult>(pResults);
+
+            return await Task.FromResult(true);
+        }
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
     }
 
-    
+
 }

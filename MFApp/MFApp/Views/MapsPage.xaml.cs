@@ -26,8 +26,14 @@ namespace MFApp.Views
         {
             base.OnAppearing();
 
-            var request = new GeolocationRequest(GeolocationAccuracy.Medium, new TimeSpan(0, 0, 10));
+            var request = new GeolocationRequest(GeolocationAccuracy.Best, new TimeSpan(0, 0, 10));
             var location = await Geolocation.GetLocationAsync(request);
+
+            // set labels
+            Label lat = (Label)this.FindByName("Latitude");
+            Label lon = (Label)this.FindByName("Longitude");
+            lat.Text = location.Latitude.ToString();
+            lon.Text = location.Longitude.ToString();
 
             var map = new Xamarin.Forms.Maps.Map(MapSpan.FromCenterAndRadius(
                 new Position(location.Latitude, location.Longitude),

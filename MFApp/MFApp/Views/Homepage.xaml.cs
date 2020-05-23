@@ -20,6 +20,36 @@ namespace MFApp.Views
         {
             InitializeComponent();
 
+            
+
+        }
+
+
+        private void Button_Clicked(object sender, EventArgs e)
+        {
+            var layout = (BindableObject)sender;
+            var homepageEvent = (HomePageEvent)layout.BindingContext;
+
+            if ((homepageEvent != null) && (homepageEvent.EventTournament != null))
+                Navigation.PushAsync(new TournamentPage(homepageEvent.EventTournament));
+        }
+
+        private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        {
+            var layout = (BindableObject)sender;
+            var homepageEvent = (HomePageEvent)layout.BindingContext;
+
+            if ((homepageEvent != null) && (homepageEvent.EventTournament != null))
+                Navigation.PushAsync(new TournamentPage(homepageEvent.EventTournament));
+        }
+
+        private void AdHoc_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PushModalAsync(new NavigationPage(new AdhocTournament()));
+        }
+
+        private void ContentPage_Appearing(object sender, EventArgs e)
+        {
             HomePageEvents = new HomePageData();
 
             IDataStore<Golfclub> DataStore = DependencyService.Get<IDataStore<Golfclub>>();
@@ -34,50 +64,48 @@ namespace MFApp.Views
             var TournamentTask = DataStoreTournament.GetItemsAsync();
             List<Tournament> Tournaments = TournamentTask.Result.ToList();
 
-            Tournaments = Tournaments.Where(d=>d.Datum >= DateTime.Today).OrderBy(x => x.Datum).ToList();
+            Tournaments = Tournaments.Where(d => d.Datum >= DateTime.Today).OrderBy(x => x.Datum).ToList();
 
             foreach (Tournament t in Tournaments)
             {
                 HomePageEvent hpe = new HomePageEvent();
 
-                Event e = (Event)Events.Where(x => x.Id == t.EventId).FirstOrDefault();
+                Event ev = (Event)Events.Where(x => x.Id == t.EventId).FirstOrDefault();
 
-                Golfclub gc = Golfclubs.Where(x => x.Id == e.GolfclubId).FirstOrDefault();
+                Golfclub gc = Golfclubs.Where(x => x.Id == ev.GolfclubId).FirstOrDefault();
 
                 if (gc != null)
-                    hpe.EventClub = Golfclubs.Where(x => x.Id == e.GolfclubId).Select(y => y.Name).First();
+                    hpe.EventClub = Golfclubs.Where(x => x.Id == ev.GolfclubId).Select(y => y.Name).First();
                 else
                     hpe.EventClub = "";
 
                 hpe.EventDate = t.Datum.ToString("dd.MM.yyy hh:mm");
-                hpe.EventName = e.Name;
+                hpe.EventName = ev.Name;
                 hpe.TournamentName = t.Name;
                 hpe.EventTournament = t;
+                hpe.BackColor = "#90EE90";
+
+                //check if already tournament results
+                hpe.ButtonText = "Runde starten";
+                IDataStore<Result> DataStoreResults = DependencyService.Get<IDataStore<Result>>();
+                var ResultTask = DataStoreResults.GetItemsAsync();
+                List<Result> Results = ResultTask.Result.ToList();
+                List<Result> tResults = Results.Where(x => x.TournamentId == t.Id).ToList();
+                if (tResults.Count > 0)
+                    hpe.ButtonText = "Runde fortsetzen";
+
+                if (ev.EventType == EventTypeEnum.Event)
+                {
+                    hpe.BackColor = "#FF9966";
+                }
+                if (t.Id >= 1000000)
+                {
+                    hpe.BackColor = "#CCFFFF";
+                }
 
                 HomePageEvents.Events.Add(hpe);
             }
             BindingContext = HomePageEvents;
-
         }
-
-        private void Button_Clicked(object sender, EventArgs e)
-        {
-            var layout = (BindableObject)sender;
-            var homepageEvent = (HomePageEvent)layout.BindingContext;
-            
-            if((homepageEvent!= null) && (homepageEvent.EventTournament != null))
-                Navigation.PushAsync(new TournamentPage(homepageEvent.EventTournament));
-        }
-
-        private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
-        {
-            var layout = (BindableObject)sender;
-            var homepageEvent = (HomePageEvent)layout.BindingContext;
-
-            if ((homepageEvent != null) && (homepageEvent.EventTournament != null))
-                Navigation.PushAsync(new TournamentPage(homepageEvent.EventTournament));
-        }
-
-
     }
 }

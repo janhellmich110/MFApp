@@ -22,6 +22,10 @@ namespace MFApp.Models
         public string EventName { get; set; }
         public string TournamentName { get; set; }
 
+        public string BackColor { get; set; }
+
+        public string ButtonText { get; set; }
+
         public Tournament EventTournament { get; set; }
 
     }

@@ -16,6 +16,8 @@ namespace MFApp.Models
 
         public List<Tee> Tees;
 
+        public List<TeeInfo> TeeInfos { get; set; }
+
         public List<MFAppFlight> Flights;
 
         public List<MFAppCourseHandicapTable> CourseHandicapTables;

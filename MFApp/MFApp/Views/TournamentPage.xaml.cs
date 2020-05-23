@@ -9,6 +9,8 @@ using Xamarin.Forms.Xaml;
 using MFApp.Models;
 using MFApp.Services;
 using System.Diagnostics;
+using System.Collections.ObjectModel;
+using Xamarin.Essentials;
 
 namespace MFApp.Views
 {
@@ -138,13 +140,15 @@ namespace MFApp.Views
                             Result SavedResult = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[columnIndex - 1].Id).Where(y => y.TeeId == TournamentPageData.TeeList[rowIndex - 1].Id).FirstOrDefault();
                             string savedScore = "";
                             string savedPutts = "";
+                            bool cellReadOnly = false;
                             if (SavedResult!=null)
                             {
                                 savedScore = SavedResult.Score.ToString();
                                 savedPutts = SavedResult.Putts.ToString();
+                                cellReadOnly = SavedResult.Final;
                             }
                             string entryParameter = rowIndex.ToString() + "_" + columnIndex.ToString();
-                            AddEntryCell(entryParameter, columnIndex, rowIndex, savedScore, savedPutts);
+                            AddEntryCell(entryParameter, columnIndex, rowIndex, savedScore, savedPutts, cellReadOnly);
                         }
                     }
                     else if (rowIndex == 10)
@@ -210,14 +214,16 @@ namespace MFApp.Views
                             Result SavedResult = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[columnIndex - 1].Id).Where(y => y.TeeId == TournamentPageData.TeeList[rowIndex - 2].Id).FirstOrDefault();
                             string savedScore = "";
                             string savedPutts = "";
+                            bool cellReadOnly = false;
                             if (SavedResult != null)
                             {
                                 savedScore = SavedResult.Score.ToString();
                                 savedPutts = SavedResult.Putts.ToString();
+                                cellReadOnly = SavedResult.Final;
                             }
 
                             string entryParameter = (rowIndex - 1).ToString() + "_" + columnIndex.ToString();
-                            AddEntryCell(entryParameter, columnIndex, rowIndex, savedScore, savedPutts);
+                            AddEntryCell(entryParameter, columnIndex, rowIndex, savedScore, savedPutts, cellReadOnly);
                         }
                     }
                     else if ((teeCount > 9) && (rowIndex == 20))
@@ -314,6 +320,9 @@ namespace MFApp.Views
 
                 }
             }
+
+            WriteSumsFromDB(SavedResults);
+            SetCloseTournamentButtonEnabled();
         }
 
         private Label AddLabelCell(string LabelText, int ColumnIndex, int RowIndex)
@@ -415,6 +424,14 @@ namespace MFApp.Views
             #endregion
 
             ScoreKarte.Children.Add(stackLayout, ColumnIndex, RowIndex);
+
+            // add tapped event
+            var teeInfo_tap = new TapGestureRecognizer();
+            teeInfo_tap.Tapped += (s, e) =>
+            {
+                Navigation.PushModalAsync(new NavigationPage(new TeeInfoPage(TournamentPageData.TournamentEvent.GolfclubId, tee.Name)));
+            };
+            label.GestureRecognizers.Add(teeInfo_tap);
 
             return label;
         }
@@ -525,7 +542,7 @@ namespace MFApp.Views
             return label;
         }
 
-        private void AddEntryCell(string CommandParameter, int ColumnIndex, int RowIndex, string EntryText, string EntryText1)
+        private void AddEntryCell(string CommandParameter, int ColumnIndex, int RowIndex, string EntryText, string EntryText1, bool readOnly = false)
         {
             var stackLayout = new StackLayout
             {
@@ -566,7 +583,8 @@ namespace MFApp.Views
                 WidthRequest = 40,
                 Keyboard = Keyboard.Numeric,
                 BackgroundColor = Color.White,
-                TextColor = Color.Black
+                TextColor = Color.Black,
+                IsReadOnly= readOnly
             };
 
             entry.TextChanged += Entry_TextChanged;
@@ -587,7 +605,8 @@ namespace MFApp.Views
                     WidthRequest = 30,
                     Keyboard = Keyboard.Numeric,
                     BackgroundColor = Color.White,
-                    TextColor = Color.Black
+                    TextColor = Color.Black,
+                    IsReadOnly = readOnly
                 };
 
                 entryPutts.TextChanged += Entry_TextChanged;
@@ -749,11 +768,13 @@ namespace MFApp.Views
                         int teeId = TournamentPageData.TeeList[rowIndex - 1].Id;
                         TournamentResult tr = new TournamentResult
                         {
+                            UserId = TournamentPageData.CurrentPlayer.Id,
                             PlayerId = playerId,
                             TournamentId = tournamentId,
                             TeeId = teeId,
                             Score = score,
-                            Putts = putts
+                            Putts = putts,
+                            Final = false
                         };
                         TournamentResultList.Add(tr);
                     }
@@ -797,6 +818,8 @@ namespace MFApp.Views
                 SaveResultsWeb(TournamentResultList);
                 Debug.Print("End save web: " + DateTime.Now.ToString("hh:mm:ss.fff"));
             }
+
+            SetCloseTournamentButtonEnabled();
         }
 
         private void SaveResultLocal(string NewText, int ColumnIndex, int RowIndex, bool score)
@@ -843,7 +866,8 @@ namespace MFApp.Views
                     Putts = newPutts,
                     TournamentId = tournamentId,
                     PlayerId = playerId,
-                    TeeId = teeId
+                    TeeId = teeId,
+                    Final=false
                 };
                 newRes.LastModified = DateTime.Now;
                 DataStore.AddItemAsync(newRes);
@@ -913,7 +937,19 @@ namespace MFApp.Views
         private void ContentPageResults_Appearing(object sender, EventArgs e)
         {
             this.BindingContext = null;
+            CollectionView AllResults = (CollectionView)this.FindByName("PlayerAllResultCollectionView");
+            AllResults.IsVisible = false;
 
+            if(TournamentPageData.TournamentEvent.EventType== EventTypeEnum.Tournament)
+            {
+                Button allResultsButton = (Button)this.FindByName("LoadAllResults");
+                allResultsButton.IsVisible = true;
+            }
+            else
+            {
+                Button allResultsButton = (Button)this.FindByName("LoadAllResults");
+                allResultsButton.IsVisible = false;
+            }
             if(TournamentPageData.TournamentEvent.EventType== EventTypeEnum.AppEvent)
             {
                 Button b = (Button)this.FindByName("FinishTournament");
@@ -1007,42 +1043,6 @@ namespace MFApp.Views
             this.BindingContext = TournamentPageData;
         }
 
-        // todo delete
-        private int GetCourseHandicap(TournamentPlayer p)
-        {
-            int TournamentHandicapId = 0;
-
-
-            if (p.Gender == Gender.Mann)
-            {
-                 TournamentHandicapId = TournamentPageData.Tournament.HandicapTableMaleId;
-            }
-            else
-            {
-                TournamentHandicapId = TournamentPageData.Tournament.HandicapTableFemaleId;
-            }
-
-
-            IDataStore<CourseHandicap> DataStore = DependencyService.Get<IDataStore<CourseHandicap>>();
-            var CourseHandicapTask = DataStore.GetItemsAsync();
-            List<CourseHandicap> CourseHandicaps = CourseHandicapTask.Result.ToList();
-
-            foreach(CourseHandicap CH in CourseHandicaps) 
-            {   
-                if(CH.CourseHandicapTableId == TournamentHandicapId)
-                {
-                    if((p.Handicap >= CH.HandicapFrom) && (p.Handicap <= CH.HandicapTo))
-                    {
-                        return CH.PlayerHandicap;
-                    }
-
-                }
-            }
-
-            return Convert.ToInt32(p.Handicap);
-
-        }
-
         //send all results to web
         private void FinishTournament_Clicked(object sender, EventArgs e)
         {
@@ -1064,11 +1064,13 @@ namespace MFApp.Views
                         {
                             TournamentResult tr = new TournamentResult
                             {
+                                UserId = TournamentPageData.CurrentPlayer.Id,
                                 PlayerId = tp.Id,
                                 TournamentId = TournamentPageData.Tournament.Id,
                                 TeeId = t.Id,
                                 Score = PlayerResult.Score,
-                                Putts = PlayerResult.Putts
+                                Putts = PlayerResult.Putts,
+                                Final = true
                             };
                             TournamentResultList.Add(tr);
                         }
@@ -1087,6 +1089,24 @@ namespace MFApp.Views
             if (DataSyncResult)
             {
                 button.Text = "Turnier wurde abgeschlossen!";
+
+                // set final flag for all results
+                foreach (TournamentPlayer tp in TournamentPageData.SelectedPlayers)
+                {
+                    foreach (Tee t in TournamentPageData.TeeList)
+                    {
+                        // get result by player and tee
+                        Result PlayerResult = SavedResults.Where(x => x.PlayerId == tp.Id).Where(y => y.TeeId == t.Id).FirstOrDefault();
+                        {
+                            if (PlayerResult != null)
+                            {
+                                PlayerResult.Final = true;
+                                DataStore.UpdateItemAsync(PlayerResult);
+                            }
+                        }
+                    }
+
+                }
             }
             else
             {
@@ -1094,10 +1114,169 @@ namespace MFApp.Views
             }
         }
 
+        private void LoadAllResults_Clicked(object sender, EventArgs e)
+        {
+            CollectionView AllResults = (CollectionView)this.FindByName("PlayerAllResultCollectionView");
+            AllResults.IsVisible = true;
+            AllResults.BindingContext = null;
+
+            TournamentPageData.IsRefreshingAllResults = true;
+            AllResults.BindingContext = TournamentPageData;
+        }
+
         private void ContentPageTurnier_Appearing(object sender, EventArgs e)
         {
             this.BindingContext = null;
             this.BindingContext = TournamentPageData;
+        }
+
+        private void WriteSumsFromDB(List<Result> SavedResults)
+        {
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (InSumLabels[i] != null)
+                {
+                    // calculate sum for first 9
+                    int inSumScore = 0;
+                    int inSumPutts = 0;
+                    for (int teeIndex =0; teeIndex < 9; teeIndex++)
+                    {
+                        var teeResult = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[i].Id).Where(y => y.TeeId == TournamentPageData.TeeList[teeIndex].Id).FirstOrDefault(); 
+                        if(teeResult != null)
+                        {
+                            inSumScore = inSumScore + teeResult.Score;
+                            inSumPutts = inSumPutts + teeResult.Putts;
+                        }
+                    }
+
+                    InSumLabels[i].Text = inSumScore.ToString();
+                    if (InSumPuttsLabels[i] != null)
+                        InSumPuttsLabels[i].Text = inSumPutts.ToString();
+                }
+                if (OutSumLabels[i] != null)
+                {
+                    // calculate sum for last 9
+                    int outSumScore = 0;
+                    int outSumPutts = 0;
+                    for (int teeIndex = 9; teeIndex < 18; teeIndex++)
+                    {
+                        var teeResult = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[i].Id).Where(y => y.TeeId == TournamentPageData.TeeList[teeIndex].Id).FirstOrDefault();
+                        if (teeResult != null)
+                        {
+                            outSumScore = outSumScore + teeResult.Score;
+                            outSumPutts = outSumPutts + teeResult.Putts;
+                        }
+                    }
+
+                    OutSumLabels[i].Text = outSumScore.ToString();
+                    if (OutSumPuttsLabels[i] != null)
+                        OutSumPuttsLabels[i].Text = outSumPutts.ToString();
+                }
+                if (TotalSumLabels[i] != null)
+                {
+                    TotalSumLabels[i].Text = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[i].Id).Select(y => y.Score).Sum().ToString();                 
+                }
+
+                if (TotalSumPuttsLabels[i] != null)
+                {
+                    TotalSumPuttsLabels[i].Text = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[i].Id).Select(y => y.Putts).Sum().ToString();
+                }
+            }
+        }
+
+        private void SetCloseTournamentButtonEnabled()
+        {
+            IDataStore<Result> DataStore = DependencyService.Get<IDataStore<Result>>();
+            var ResultTask = DataStore.GetItemsAsync();
+            List<Result> Results = ResultTask.Result.ToList();
+            List<Result> SavedResults = Results.Where(x => x.TournamentId == TournamentPageData.Tournament.Id).ToList();
+
+            bool buttonEnabled = true;
+
+            foreach(TournamentPlayer p in TournamentPageData.SelectedPlayers)
+            {
+                int resultCount = SavedResults.Where(x => x.PlayerId == p.Id).Count();
+                if(resultCount < TournamentPageData.TeeList.Count())
+                {
+                    buttonEnabled = false;
+                    break;
+                }
+            }
+            Button finishButton = (Button)this.FindByName("FinishTournament");
+            if(buttonEnabled)
+            {
+                finishButton.IsEnabled = true;
+            }
+            else
+            {
+                finishButton.IsEnabled = false;
+            }
+        }
+        // todo delete
+        private int GetCourseHandicap(TournamentPlayer p)
+        {
+            int TournamentHandicapId = 0;
+
+
+            if (p.Gender == Gender.Mann)
+            {
+                TournamentHandicapId = TournamentPageData.Tournament.HandicapTableMaleId;
+            }
+            else
+            {
+                TournamentHandicapId = TournamentPageData.Tournament.HandicapTableFemaleId;
+            }
+
+
+            IDataStore<CourseHandicap> DataStore = DependencyService.Get<IDataStore<CourseHandicap>>();
+            var CourseHandicapTask = DataStore.GetItemsAsync();
+            List<CourseHandicap> CourseHandicaps = CourseHandicapTask.Result.ToList();
+
+            foreach (CourseHandicap CH in CourseHandicaps)
+            {
+                if (CH.CourseHandicapTableId == TournamentHandicapId)
+                {
+                    if ((p.Handicap >= CH.HandicapFrom) && (p.Handicap <= CH.HandicapTo))
+                    {
+                        return CH.PlayerHandicap;
+                    }
+
+                }
+            }
+
+            return Convert.ToInt32(p.Handicap);
+
+        }
+
+        private async void ToolbarItem_Clicked(object sender, EventArgs e)
+        {
+            IDataStore<Result> DataStore = DependencyService.Get<IDataStore<Result>>();
+            var ResultTask = DataStore.GetItemsAsync();
+            List<Result> Results = ResultTask.Result.ToList();
+            List<Result> SavedResults = Results.Where(x => x.TournamentId == TournamentPageData.Tournament.Id).ToList();
+
+            String ShareTitle = TournamentPageData.TournamentEvent.Name + " - " + TournamentPageData.Tournament.Name + ": " + DateTime.Today.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
+            String ShareText = ShareTitle + Environment.NewLine + Environment.NewLine;
+            foreach(TournamentPlayer p in TournamentPageData.SelectedPlayers)
+            {
+                ShareText = ShareText + p.Name + Environment.NewLine;
+                foreach(Tee t in TournamentPageData.TeeList.OrderBy(x=>x.Name))
+                {
+                    var res = SavedResults.Where(x => x.PlayerId == p.Id).Where(y => y.TeeId == t.Id).FirstOrDefault();
+                    if(res != null)
+                    {
+                        ShareText = ShareText + t.Name + ": " + res.Score + Environment.NewLine;
+                    }
+                }
+                ShareText = ShareText + Environment.NewLine;
+            }
+
+            await Share.RequestAsync(new ShareTextRequest
+            {
+                Text = ShareTitle,
+                Title = ShareText
+            });
         }
     }
 }
