@@ -17,58 +17,35 @@ namespace MFApp.Views
     {
         public Profile MyProfile { get; set; }
 
+        IDataStore<Profile> DataStoreProfile = DependencyService.Get<IDataStore<Profile>>();
+
         public MeinProfil()
         {
-            InitializeComponent();
-
-            IDataStore<Profile> DataStore = DependencyService.Get<IDataStore<Profile>>();
-            var profilesTask = DataStore.GetItemsAsync();
-            var profiles = profilesTask.Result;
-
-            foreach (Profile p in profiles)
-            {
-                MyProfile = p;
-                break;
-            }
-            this.BindingContext = MyProfile;
+            InitializeComponent();            
         }
 
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
-            this.BindingContext = null;
             base.OnAppearing();
 
-            IDataStore<Profile> DataStore = DependencyService.Get<IDataStore<Profile>>();
-            var profilesTask = DataStore.GetItemsAsync();
-            var profiles = profilesTask.Result;
+            List<Profile> profiles = (await DataStoreProfile.GetItemsAsync()).ToList();
 
-            foreach (Profile p in profiles)
-            {
-                MyProfile = p;
-                break;
-            }
+            if (profiles.Count() > 0)
+                MyProfile = profiles[0];
+
             this.BindingContext = MyProfile;
         }
 
-        private void Logout_Clicked(object sender, EventArgs e)
+        private async void Logout_Clicked(object sender, EventArgs e)
         {
+            List<Profile> profiles = (await DataStoreProfile.GetItemsAsync()).ToList();
 
-            IDataStore<Profile> DataStore = DependencyService.Get<IDataStore<Profile>>();
-            var profilesTask = DataStore.GetItemsAsync();
-            var profiles = profilesTask.Result;
-            int profileId = 0;
-            bool profileExists = false;
-            foreach (Profile p in profiles)
+            if (profiles.Count() > 0)
             {
-                profileExists = true;
-                profileId = p.Id;
-                break;
+                await DataStoreProfile.DeleteItemAsync(profiles[0].Id);
             }
 
-            if (profileExists)
-                DataStore.DeleteItemAsync(profileId);
-
-            Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
+            await Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
 
         }
 

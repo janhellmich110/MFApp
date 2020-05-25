@@ -17,31 +17,44 @@ namespace MFApp.Views
     {
         public AdhocView AdhocModel { get; set; }
 
+        IDataStore<Golfclub> DataStoreGolfclub = DependencyService.Get<IDataStore<Golfclub>>();
+        IDataStore<Course> DataStoreCourse = DependencyService.Get<IDataStore<Course>>();
+        IDataStore<Tournament> DataStoreTournament = DependencyService.Get<IDataStore<Tournament>>();
+        IDataStore<Event> DataStoreEvent = DependencyService.Get<IDataStore<Event>>();
+        IDataStore<CourseHandicapTable> DataStoreHdcpTable = DependencyService.Get<IDataStore<CourseHandicapTable>>();
+
         public AdhocTournament()
         {
             InitializeComponent();
-            AdhocModel = new AdhocView();
-            IDataStore<Golfclub> DataStore = DependencyService.Get<IDataStore<Golfclub>>();
-            var GolfclubTask = DataStore.GetItemsAsync();
-            AdhocModel.AllClubs = GolfclubTask.Result.ToList();
-
-            foreach(Golfclub gc in AdhocModel.AllClubs)
-            {
-                AdhocModel.SelectedClub = gc;
-                break;
-            }            
             
+        }
+
+        private async void ContentPage_Appearing(object sender, EventArgs e)
+        {
+            AdhocModel = new AdhocView();
+
+            AdhocModel.AllClubs = (await DataStoreGolfclub.GetItemsAsync()).ToList();
+            
+            if(AdhocModel.AllClubs.Count > 0)
+                AdhocModel.SelectedClub = AdhocModel.AllClubs[0];
+
             this.BindingContext = AdhocModel;
         }
 
-        private void ListClubs_SelectedIndexChanged(object sender, EventArgs e)
+        private async void ListClubs_SelectedIndexChanged(object sender, EventArgs e)
         {
+            var picker = sender as Picker;
+            //var selectedClub = picker.Items[picker.SelectedIndex];
+
+            // get course picker
+            Picker coursePicker = (Picker)this.FindByName("ListCourses");
+            //coursePicker.Items.Clear();
+            coursePicker.ItemsSource = null;
+
             // update courses
             AdhocModel.AllCourses.Clear();
 
-            IDataStore<Course> DataStoreCourse = DependencyService.Get<IDataStore<Course>>();
-            var CourseTask = DataStoreCourse.GetItemsAsync();
-            List<Course> AllCourses = CourseTask.Result.ToList();
+            List<Course> AllCourses = (await DataStoreCourse.GetItemsAsync()).ToList();
 
             foreach (Course c in AllCourses)
             {
@@ -50,7 +63,7 @@ namespace MFApp.Views
                     AdhocModel.AllCourses.Add(c);
                 }
             }
-            this.BindingContext = AdhocModel;
+            coursePicker.ItemsSource = AdhocModel.AllCourses;
         }
 
         private async void Button_Clicked(object sender, EventArgs e)
@@ -74,7 +87,6 @@ namespace MFApp.Views
                 int clubId = AdhocModel.SelectedClub.Id;
 
                 // check existing tournament
-                IDataStore<Tournament> DataStoreTournament = DependencyService.Get<IDataStore<Tournament>>();
                 var existingTournament = (await DataStoreTournament.GetItemsAsync()).Where(x=>x.Name == tournamentName).Where(d=>d.Datum.Date==DateTime.Today).FirstOrDefault();
 
                 if((existingTournament != null) && (existingTournament.CourseId == courseId))
@@ -85,14 +97,12 @@ namespace MFApp.Views
                         await DataStoreTournament.UpdateItemAsync(existingTournament);
                     }
 
-                    Navigation.PushAsync(new TournamentPage(existingTournament));
+                    await Navigation.PushAsync(new TournamentPage(existingTournament));
                     return;
                 }
 
                 // get handicaptables
-                IDataStore<CourseHandicapTable> DataStore = DependencyService.Get<IDataStore<CourseHandicapTable>>();
-                var CourseHandicapTableTask = DataStore.GetItemsAsync();
-                List<CourseHandicapTable> tables = CourseHandicapTableTask.Result.ToList();
+                List<CourseHandicapTable> tables = (await DataStoreHdcpTable.GetItemsAsync()).ToList();
 
                 int tableIdMale = 0;
                 int tableIdFemale = 0;
@@ -112,7 +122,7 @@ namespace MFApp.Views
                     EventType = EventTypeEnum.AppEvent,
                     GolfclubId = clubId
                 };
-                IDataStore<Event> DataStoreEvent = DependencyService.Get<IDataStore<Event>>();
+
                 await DataStoreEvent.AddItemAsync(ev);
 
                 int newEventId = (await DataStoreEvent.GetItemsAsync()).OrderByDescending(x => x.Id).First().Id;
@@ -135,14 +145,14 @@ namespace MFApp.Views
 
                 t.Id = newTournamentId;
 
-                Navigation.PushAsync(new TournamentPage(t));
+                await Navigation.PushAsync(new TournamentPage(t));
             }
         }
 
         async void Close_Clicked(object sender, EventArgs e)
         {
             await Navigation.PopModalAsync();
-        }
+        }        
     }
 
     public class AdhocView

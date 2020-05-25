@@ -75,8 +75,7 @@ namespace MFApp.ViewModels
         {
             // get infos from db
             IDataStore<TeeInfo> DataStore = DependencyService.Get<IDataStore<TeeInfo>>();
-            var TeeInfoTask = DataStore.GetItemsAsync();
-            List<TeeInfo> TeeInfos = TeeInfoTask.Result.ToList();
+            List<TeeInfo> TeeInfos = (await DataStore.GetItemsAsync()).ToList();
 
             TeeInfos = TeeInfos.Where(x => x.GolfClubId == GolfclubId).Where(y => y.TeeNummer == TeeNummer).ToList();
 
