@@ -345,7 +345,19 @@ namespace MFApp.Services
                     {
                         if (Tees.Where(x => x.Id == t.Id).FirstOrDefault() == null)
                         {
-                            DataStoreTee.AddItemAsync(t);
+                            await DataStoreTee.AddItemAsync(t);
+                        }
+                        else
+                        {
+                            Tee currentTee = Tees.Where(x => x.Id == t.Id).FirstOrDefault();
+                            currentTee.Length = t.Length;
+                            currentTee.LengthRed = t.LengthRed;
+                            currentTee.Hcp = t.Hcp;
+                            currentTee.Name = t.Name;
+                            currentTee.Par = t.Par;
+                            currentTee.Textname = t.Textname;
+
+                            await DataStoreTee.UpdateItemAsync(currentTee);
                         }
                     }
                     #endregion
@@ -461,10 +473,13 @@ namespace MFApp.Services
                     }
                     catch (Exception) { }
 
+                    Player currentPlayer = null;
                     IDataStore<Player> DataStorePlayer = DependencyService.Get<IDataStore<Player>>();
                     foreach (Player player in item.AllPlayers)
                     {
-                        DataStorePlayer.AddItemAsync(player);
+                        await DataStorePlayer.AddItemAsync(player);
+                        if ((currentProfile != null)&&(currentProfile.Id == player.Id))
+                            currentPlayer = player;
                     }
 
                     Debug.Print("End Sync Spieler: " + DateTime.Now.ToString("hh:mm:ss.fff"));
@@ -480,6 +495,13 @@ namespace MFApp.Services
                     // save last sync date
                     if (currentProfile != null)
                     {
+                        if(currentPlayer!=null)
+                        {
+                            currentProfile.Handicap = currentPlayer.Handicap;
+                            currentProfile.DGVHandicap = currentPlayer.DGVHandicap;
+                            currentProfile.Mail = currentPlayer.Mail;
+                            currentProfile.Name = currentPlayer.Name;
+                        }
                         currentProfile.LastSync = DateTime.Now;
                         DataStoreProfile.UpdateItemAsync(currentProfile);
                     }

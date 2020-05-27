@@ -15,7 +15,7 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="150"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
@@ -29,21 +29,21 @@
                                     FontAttributes="Bold"/>
                             </StackLayout>
                             <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1">
-                                <Label Text="Brutto" 
+                                <Label Text="Br" 
                                         HorizontalTextAlignment="Center"
                                         Style="{DynamicResource ListItemTextStyle}" 
                                         FontSize="Caption" 
                                         FontAttributes="Bold"/>
                             </StackLayout>
                             <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="2">
-                                <Label Text="Netto" 
+                                <Label Text="Ne" 
                                        HorizontalTextAlignment="Center"
                                        Style="{DynamicResource ListItemTextStyle}" 
                                        FontSize="Caption" 
                                        FontAttributes="Bold"/>
                             </StackLayout>
                             <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="3">
-                                <Label Text="Loch" 
+                                <Label Text="Lo" 
                                     HorizontalTextAlignment="Center"
                                     Style="{DynamicResource ListItemTextStyle}" 
                                     FontSize="Caption" 
@@ -66,7 +66,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="150"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>

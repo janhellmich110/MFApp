@@ -64,23 +64,20 @@
                                 <StackLayout Padding="40,20,40,20">
                                     <StackLayout Padding="30,20,30,20" BackgroundColor="{Binding BackColor}">
                                         <Label Text="{Binding EventClub}" 
-                                d:Text="{Binding .}"
-                                LineBreakMode="NoWrap"
-                                   HorizontalOptions="Center"
-                                Style="{DynamicResource ListItemTextStyle}" 
-                                FontSize="16" />
+                                            d:Text="{Binding .}"
+                                            LineBreakMode="NoWrap"
+                                            HorizontalOptions="Center"
+                                            FontSize="16" />
                                         <Label Text="{Binding EventName}" 
-                                d:Text="Name"
-                                LineBreakMode="NoWrap"
-                                   HorizontalOptions="Center"
-                                Style="{DynamicResource ListItemDetailTextStyle}"
-                                FontSize="13" />
+                                            d:Text="Name"
+                                            LineBreakMode="NoWrap"
+                                            HorizontalOptions="Center"
+                                            FontSize="13" />
                                         <Label Text="{Binding TournamentName}" 
-                                d:Text="Name"
-                                LineBreakMode="NoWrap"
-                                   HorizontalOptions="Center"
-                                Style="{DynamicResource ListItemDetailTextStyle}"
-                                FontSize="13" />
+                                            d:Text="Name"
+                                            LineBreakMode="NoWrap"
+                                            HorizontalOptions="Center"
+                                            FontSize="13" />
                                         <Button 
                                 Text="{Binding ButtonText}" 
                                 Clicked="Button_Clicked"

@@ -66,6 +66,7 @@ namespace MFApp.Views
                 p.Initials = currentPlayer.Initials;
                 p.Name = currentPlayer.Name;
                 p.Handicap = currentPlayer.Handicap;
+                p.DGVHandicap = currentPlayer.DGVHandicap;
                 p.Birthday = currentPlayer.Birthday;
                 p.Gender = currentPlayer.Gender;
                 p.Mail = currentPlayer.Mail;

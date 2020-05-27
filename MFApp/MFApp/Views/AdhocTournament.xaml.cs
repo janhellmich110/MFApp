@@ -31,11 +31,24 @@ namespace MFApp.Views
 
         private async void ContentPage_Appearing(object sender, EventArgs e)
         {
+            // check for adhoc round today
+            List<Tournament> Tournaments = (await DataStoreTournament.GetItemsAsync()).ToList();
+            Tournament AdhocToday = Tournaments.Where(d => d.Datum.Date == DateTime.Today).Where(x => x.Name.ToLower().StartsWith("runde:")).FirstOrDefault();
+
             AdhocModel = new AdhocView();
 
             AdhocModel.AllClubs = (await DataStoreGolfclub.GetItemsAsync()).ToList();
-            
-            if(AdhocModel.AllClubs.Count > 0)
+
+            if (AdhocToday != null)
+            {
+                Event ev = await DataStoreEvent.GetItemAsync(AdhocToday.EventId);
+                if((ev != null)&&(AdhocModel.AllClubs.Where(x=>x.Id == ev.GolfclubId).FirstOrDefault() != null))
+                {
+                    AdhocModel.SelectedClub = AdhocModel.AllClubs.Where(x => x.Id == ev.GolfclubId).FirstOrDefault();
+                }
+            }
+
+            if ((AdhocModel.SelectedClub == null) && (AdhocModel.AllClubs.Count > 0))
                 AdhocModel.SelectedClub = AdhocModel.AllClubs[0];
 
             this.BindingContext = AdhocModel;
@@ -44,7 +57,6 @@ namespace MFApp.Views
         private async void ListClubs_SelectedIndexChanged(object sender, EventArgs e)
         {
             var picker = sender as Picker;
-            //var selectedClub = picker.Items[picker.SelectedIndex];
 
             // get course picker
             Picker coursePicker = (Picker)this.FindByName("ListCourses");
@@ -63,6 +75,28 @@ namespace MFApp.Views
                     AdhocModel.AllCourses.Add(c);
                 }
             }
+
+            // check for adhoc round today
+            List<Tournament> Tournaments = (await DataStoreTournament.GetItemsAsync()).ToList();
+            Tournament AdhocToday = Tournaments.Where(d => d.Datum.Date == DateTime.Today).Where(x => x.Name.ToLower().StartsWith("runde:")).FirstOrDefault();
+            if (AdhocToday != null)
+            {
+                Course c = AllCourses.Where(x => x.Id == AdhocToday.CourseId).FirstOrDefault();
+                if (c != null)
+                {
+                    AdhocModel.SelectedCourse = c;
+
+                    bool withPutts = AdhocToday.WithPutts;
+                    // set also withputts
+                    Picker PuttPicker = (Picker)this.FindByName("WithPutts");
+                    if (withPutts)
+                        PuttPicker.SelectedItem = "Mit Putts";
+                    else
+                        PuttPicker.SelectedItem = "Ohne Putts";
+
+                }
+            }
+
             coursePicker.ItemsSource = AdhocModel.AllCourses;
         }
 

@@ -19,8 +19,10 @@
                 <Entry Text="{Binding Player.Initials}" d:Text="Item name" FontSize="Small" TextColor="Black" />
                 <Label Text="Name" FontSize="Medium" />
                 <Entry Text="{Binding Player.Name}" d:Text="Name" FontSize="Small" Margin="0" TextColor="Black" />
-                <Label Text="Handicap (Wichtig: mit '.' eingeben)" FontSize="Medium" />
+                <Label Text="MF-Handicap (Wichtig: mit '.' eingeben)" FontSize="Medium" />
                 <Entry Text="{Binding Player.Handicap}" Keyboard="Numeric" d:Text="Handicap" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
+                <Label Text="DGV-Handicap (Wichtig: mit '.' eingeben)" FontSize="Medium" />
+                <Entry Text="{Binding Player.DGVHandicap}" Keyboard="Numeric" d:Text="Handicap" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
                 <Label Text="Username" FontSize="Medium" />
                 <Entry Text="{Binding Player.UserName}" d:Text="Username" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
                 <Label Text="Kennwort" FontSize="Medium" />

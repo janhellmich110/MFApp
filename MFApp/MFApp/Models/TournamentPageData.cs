@@ -162,6 +162,7 @@ namespace MFApp.Models
                     Name=p.Name,
                     Initials=p.Initials,
                     Handicap=p.Handicap,
+                    DGVHandicap=p.DGVHandicap,
                     Mail=p.Mail,
                     Gender=p.Gender,
                     CourseHandicap = (int)p.Handicap,

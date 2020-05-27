@@ -332,7 +332,7 @@
                                        FontAttributes="Bold"/>
                                     </StackLayout>
                                     <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="3">
-                                        <Label Text="Loch" 
+                                        <Label Text="Lo" 
                                     HorizontalTextAlignment="Center"
                                     Style="{DynamicResource ListItemTextStyle}" 
                                     FontSize="Caption" 

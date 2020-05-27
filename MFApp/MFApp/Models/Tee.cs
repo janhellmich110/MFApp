@@ -11,6 +11,7 @@ namespace MFApp.Models
         public int Id { get; set; }
 
         public int Length { get; set; }
+        public int LengthRed { get; set; }
         public int Hcp { get; set; }
         public int Par { get; set; }
         public int Name { get; set; }

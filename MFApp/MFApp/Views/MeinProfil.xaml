@@ -6,39 +6,44 @@
              mc:Ignorable="d"
              x:Class="MFApp.Views.MeinProfil">
     <ContentPage.Content>
-        <StackLayout>
-            <StackLayout Spacing="20" Padding="20">
-                <Label Text="Anmeldename:" FontSize="Medium" />
-                <Label Text="{Binding UserName}" d:Text="Name" FontSize="Small"/>
-                
-                <Label Text="Initialen:" FontSize="Medium" />
-                <Label Text="{Binding Initials}" d:Text="Initialen" FontSize="Small "/>
-                
-                <Label Text="Name:" FontSize="Medium" />
-                <Entry Text="{Binding Name}" d:Text="Name" FontSize="Small" Margin="0" TextColor="Black" />
-                <Label Text="Handicap (Wichtig: mit '.' eingeben):" FontSize="Medium" />
-                <Entry Text="{Binding Handicap}" Keyboard="Numeric" d:Text="Handicap" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
-                <Label Text="Geburtstag:" FontSize="Medium" />
-                <DatePicker Date="{Binding Birthday}" />
-                <Label Text="Mail:" FontSize="Medium" />
-                <Entry Text="{Binding Mail}" d:Text="Mail" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
-            </StackLayout>
-            <StackLayout Spacing="20" Padding="20,20,20,0" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand"  >
-                <Button Text="Speichern"
+        <ScrollView>
+            <StackLayout>
+                <StackLayout Spacing="20" Padding="20">
+                    <Label Text="Anmeldename:" FontSize="Medium" />
+                    <Label Text="{Binding UserName}" d:Text="Name" FontSize="Small"/>
+
+                    <Label Text="Initialen:" FontSize="Medium" />
+                    <Label Text="{Binding Initials}" d:Text="Initialen" FontSize="Small "/>
+
+                    <Label Text="Name:" FontSize="Medium" />
+                    <Entry Text="{Binding Name}" d:Text="Name" FontSize="Small" Margin="0" TextColor="Black" />
+                    <Label Text="MF-Handicap:" FontSize="Medium" />
+                    <Entry Text="{Binding Handicap}" Keyboard="Numeric" x:Name="InputHandicap" d:Text="Handicap" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
+                    <Label Text="DGV-Handicap:" FontSize="Medium" />
+                    <Entry Text="{Binding DGVHandicap}" Keyboard="Numeric" x:Name="InputDGVHandicap" d:Text="Handicap" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
+                    <Label Text="Geburtstag:" FontSize="Medium" />
+                    <DatePicker Date="{Binding Birthday}" />
+                    <Label Text="Mail:" FontSize="Medium" />
+                    <Entry Text="{Binding Mail}" d:Text="Mail" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
+                </StackLayout>
+                <StackLayout Spacing="20" Padding="20,20,20,0" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand"  >
+                    <Button Text="Speichern"
                         Clicked="Save_Clicked"
+                        x:Name="ButtonSave"
                         BackgroundColor="#1E2768"
                         TextColor="White"
                         VerticalOptions="CenterAndExpand" 
                         HorizontalOptions="FillAndExpand"/>
-            </StackLayout>
-            <StackLayout Spacing="20" Padding="20" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand"  >
-                <Button Text="Abmelden"
+                </StackLayout>
+                <StackLayout Spacing="20" Padding="20" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand"  >
+                    <Button Text="Abmelden"
                         Clicked="Logout_Clicked"
                         BackgroundColor="#1E2768"
                         TextColor="White"
                         VerticalOptions="CenterAndExpand" 
                         HorizontalOptions="FillAndExpand"/>
+                </StackLayout>
             </StackLayout>
-        </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

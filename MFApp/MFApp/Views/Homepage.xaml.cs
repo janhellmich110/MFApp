@@ -67,7 +67,7 @@ namespace MFApp.Views
                 }
                 if (t.Id >= 1000000)
                 {
-                    hpe.BackColor = "#CCFFFF";
+                    hpe.BackColor = "#91C7E9";
                 }
 
                 HomePageEvents.Events.Add(hpe);

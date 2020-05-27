@@ -37,9 +37,8 @@ namespace MFApp.Views
             // convert gender
             Picker genderPicker = (Picker)this.FindByName("SelectGender");
 
-            if (genderPicker.SelectedItem.ToString().ToLower() == "mann")
-                Player.Gender = Gender.Mann;
-            else
+            Player.Gender = Gender.Mann;
+            if ((genderPicker.SelectedItem !=null) && (genderPicker.SelectedItem.ToString().ToLower() == "frau"))
                 Player.Gender = Gender.Frau;
 
             // set group for new player from profile

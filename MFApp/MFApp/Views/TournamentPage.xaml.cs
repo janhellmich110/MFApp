@@ -839,7 +839,7 @@ namespace MFApp.Views
             {
                 Navigation.PushModalAsync(new NavigationPage(new TeeInfoPage(TournamentPageData.TournamentEvent.GolfclubId, tee.Name)));
             };
-            label.GestureRecognizers.Add(teeInfo_tap);
+            stackLayout.GestureRecognizers.Add(teeInfo_tap);
 
             return label;
         }

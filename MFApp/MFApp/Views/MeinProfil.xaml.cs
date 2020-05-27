@@ -26,6 +26,8 @@ namespace MFApp.Views
 
         protected async override void OnAppearing()
         {
+            this.BindingContext = null;
+
             base.OnAppearing();
 
             List<Profile> profiles = (await DataStoreProfile.GetItemsAsync()).ToList();
@@ -51,6 +53,12 @@ namespace MFApp.Views
 
         private async void Save_Clicked(object sender, EventArgs e)
         {
+            string inputHdcp = ((Entry)this.FindByName("InputHandicap")).Text;
+            string inputDGVHdcp = ((Entry)this.FindByName("InputDGVHandicap")).Text;
+
+            double decHdcp = Convert.ToDouble(inputHdcp);
+            double decDGVHdcp = Convert.ToDouble(inputDGVHdcp);
+
             var Player = new Player
             {
                 Id = MyProfile.Id,
@@ -58,7 +66,8 @@ namespace MFApp.Views
                 Initials = MyProfile.Initials,
                 UserName = MyProfile.UserName,
                 UserPassword = MyProfile.UserPassword,
-                Handicap = MyProfile.Handicap,
+                Handicap = decHdcp,
+                DGVHandicap= decDGVHdcp,
                 Birthday = MyProfile.Birthday,
                 Mail = MyProfile.Mail,
                 Gender=MyProfile.Gender,
@@ -69,10 +78,18 @@ namespace MFApp.Views
             IDataStore<Player> DataStorePlayer= DependencyService.Get<IDataStore<Player>>();
             await DataStorePlayer.UpdateItemAsync(Player);
 
+            //update profile
+            MyProfile.Handicap = decHdcp;
+            MyProfile.DGVHandicap = decDGVHdcp;
+            IDataStore<Profile> DataStoreProfile = DependencyService.Get<IDataStore<Profile>>();
+            await DataStoreProfile.UpdateItemAsync(MyProfile);
+
             // send new player to web
             MFWebDataSync DataSync = new MFWebDataSync();
             await DataSync.SendNewPlayer(Player);
 
+            Button ButtonSave = (Button)this.FindByName("ButtonSave");
+            ButtonSave.Text = "Daten wurden gespeichert";
         }
     }
 }

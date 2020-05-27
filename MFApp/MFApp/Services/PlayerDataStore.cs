@@ -34,13 +34,28 @@ namespace MFApp.Services
             {
                 if (Player.Id == 0)
                 {
-                    int PlayerCount = conn.Table<Player>().Count();
-                    Player.Id = 100000 + PlayerCount;
+                    int PlayerId = conn.Table<Player>().Select(x=>x.Id).Max() +1;
+                    if (PlayerId < 100000)
+                        PlayerId = 100000;
+                    Player.Id = PlayerId;
                 }
                 result = conn.Insert(Player);
             }
             catch (Exception ex)
             {
+                if (ex.Message.ToLower().Contains("dgvhandicap"))
+                {
+                    // column finl not exists, recreate table and try again
+                    conn.DropTable<Player>();
+
+                    conn.CreateTable<Player>();
+                    if (Player.Id == 0)
+                    {                        
+                        Player.Id = 100000;
+                    }
+                    result = conn.Insert(Player);
+                }
+
                 StatusMessage = string.Format("Failed to add {0}. Error: {1}", Player.Name, ex.Message);
             }
             PlayerList = conn.Table<Player>().ToList();

@@ -13,6 +13,8 @@ namespace MFApp.Models
         public string Initials { get; set; }
         public string Mail { get; set; }
         public double Handicap { get; set; }
+
+        public double DGVHandicap { get; set; }
         public DateTime Birthday { get; set; }
 
         public Gender Gender { get; set; }

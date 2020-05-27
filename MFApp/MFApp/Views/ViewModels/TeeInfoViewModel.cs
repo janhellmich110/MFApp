@@ -87,9 +87,12 @@ namespace MFApp.ViewModels
                 Description = FirstTee.Description;
             }
 
-            // get current location
+            // get current location, 2 times as result is better ???
             var request = new GeolocationRequest(GeolocationAccuracy.Best, new TimeSpan(0, 0, 10));
             var location = await Geolocation.GetLocationAsync(request);
+            await Task.Delay(1000);
+            request = new GeolocationRequest(GeolocationAccuracy.Best, new TimeSpan(0, 0, 10));
+            location = await Geolocation.GetLocationAsync(request);
 
             List<TeePlace> TPList = new List<TeePlace>();
             // fill teeplaces list
@@ -103,7 +106,7 @@ namespace MFApp.ViewModels
                 tp.Distance = (int)(DistanceKM * 1000);
                 TPList.Add(tp);
             }
-            TeePlaces = new ObservableCollection<TeePlace>(TPList.OrderBy(x => x.Distance));
+            TeePlaces = new ObservableCollection<TeePlace>(TPList.OrderBy(x => x.Text));
             return await Task.FromResult(true);
         }
         #region INotifyPropertyChanged

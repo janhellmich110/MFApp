@@ -40,6 +40,18 @@ namespace MFApp.Services
             }
             catch (Exception ex)
             {
+                if (ex.Message.ToLower().Contains("dgvhandicap"))
+                {
+                    // column finl not exists, recreate table and try again
+                    conn.DropTable<Profile>();
+
+                    conn.CreateTable<Profile>();
+                    if (Profile.Id == 0)
+                    {
+                        Profile.Id = 100000;
+                    }
+                    result = conn.Insert(Profile);
+                }
                 StatusMessage = string.Format("Failed to add {0}. Error: {1}", Profile.Name, ex.Message);
             }
             ProfileList = conn.Table<Profile>().ToList();
@@ -82,6 +94,7 @@ namespace MFApp.Services
 
         public async Task<IEnumerable<Profile>> GetItemsAsync(bool forceRefresh = false)
         {
+            ProfileList = conn.Table<Profile>().ToList();
             return await Task.FromResult(ProfileList);
         }
 

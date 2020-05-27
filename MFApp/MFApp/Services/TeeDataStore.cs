@@ -36,6 +36,13 @@ namespace MFApp.Services
             }
             catch (Exception ex)
             {
+                if (ex.Message.ToLower().Contains("lengthred"))
+                {
+                    conn.DropTable<Tee>();
+
+                    conn.CreateTable<Tee>();
+                    result = conn.Insert(Tee);
+                }
                 StatusMessage = string.Format("Failed to add {0}. Error: {1}", Tee.Name, ex.Message);
             }
             TeeList = conn.Table<Tee>().ToList();

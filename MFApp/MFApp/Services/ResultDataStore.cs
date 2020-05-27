@@ -46,8 +46,12 @@ namespace MFApp.Services
             {
                 if (Result.Id == 0)
                 {
-                    int ResultCount = ResultList.Count(); // conn.Table<Result>().Count();
-                    Result.Id = 100000 + ResultCount;
+                    int newResultId = 0;
+                    if (ResultList.Count == 0)
+                        newResultId = 100000;
+                    else
+                        newResultId = ResultList.Select(x => x.Id).Max() + 1; // conn.Table<Result>().Count();
+                    Result.Id = newResultId;
                 }
                 result = conn.Insert(Result);
             }
@@ -63,8 +67,12 @@ namespace MFApp.Services
 
                     if (Result.Id == 0)
                     {
-                        int ResultCount = ResultList.Count(); // conn.Table<Result>().Count();
-                        Result.Id = 100000 + ResultCount;
+                        int newResultId = 0;
+                        if (ResultList.Count == 0)
+                            newResultId = 100000;
+                        else
+                            newResultId = ResultList.Select(x=>x.Id).Max() + 1; // conn.Table<Result>().Count();
+                        Result.Id = newResultId;
                     }
                     result = conn.Insert(Result);
                 }
