@@ -12,8 +12,7 @@ namespace MFApp.Models
         LogOff,
         Results,
         About,
-        Adhoc,
-        Maps
+        Adhoc
     }
     public class HomeMenuItem
     {

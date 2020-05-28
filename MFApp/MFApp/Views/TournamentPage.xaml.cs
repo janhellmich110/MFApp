@@ -27,6 +27,8 @@ namespace MFApp.Views
         Label[] OutSumPuttsLabels = null;
         Label[] TotalSumPuttsLabels = null;
 
+        List<Entry> AllEntryFields = new List<Entry>();
+
         int LastPlayerId = 0;
 
         IDataStore<Result> DataStoreResults = DependencyService.Get<IDataStore<Result>>();
@@ -51,6 +53,7 @@ namespace MFApp.Views
 
         private void ContentPage_Scorecard_Appearing(object sender, EventArgs e)
         {
+            AllEntryFields = new List<Entry>();
             // first clean scorecard
             ScoreKarte.RowDefinitions.Clear();
             ScoreKarte.ColumnDefinitions.Clear();
@@ -628,7 +631,7 @@ namespace MFApp.Views
             SetCloseTournamentButtonEnabled();
         }
 
-        private void FinishTournament_Clicked(object sender, EventArgs e)
+        private async void FinishTournament_Clicked(object sender, EventArgs e)
         {
             List<Result> SavedResults = GetTournamentResults(TournamentPageData.Tournament.Id);
             List<TournamentResult> TournamentResultList = new List<TournamentResult>();
@@ -662,8 +665,8 @@ namespace MFApp.Views
 
             // send results to web
             MFWebDataSync DataSync = new MFWebDataSync();
-            var ResultTaskDataSync = DataSync.SendResults(TournamentResultList);
-            bool DataSyncResult = ResultTaskDataSync.Result;
+            //var ResultTaskDataSync = DataSync.SendResults(TournamentResultList);
+            bool DataSyncResult = await DataSync.SendResults(TournamentResultList); // ResultTaskDataSync.Result;
 
             Button button = sender as Button;
             if (DataSyncResult)
@@ -687,6 +690,17 @@ namespace MFApp.Views
                     }
 
                 }
+
+                // disable all entry fields
+                try
+                {
+                    foreach(Entry entry in AllEntryFields)
+                    {
+                        entry.IsEnabled = false;
+                    }
+                }
+                catch(Exception)
+                { }
             }
             else
             {
@@ -1034,6 +1048,8 @@ namespace MFApp.Views
 
             stackLayout.Children.Add(subStackLayout);
             ScoreKarte.Children.Add(stackLayout, ColumnIndex, RowIndex);
+
+            AllEntryFields.Add(entry);
         }
         #endregion
 
