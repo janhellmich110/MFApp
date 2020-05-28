@@ -55,40 +55,47 @@ namespace MFApp.Views
         {
             string inputHdcp = ((Entry)this.FindByName("InputHandicap")).Text;
             string inputDGVHdcp = ((Entry)this.FindByName("InputDGVHandicap")).Text;
-
-            double decHdcp = Convert.ToDouble(inputHdcp);
-            double decDGVHdcp = Convert.ToDouble(inputDGVHdcp);
-
-            var Player = new Player
-            {
-                Id = MyProfile.Id,
-                Name = MyProfile.Name,
-                Initials = MyProfile.Initials,
-                UserName = MyProfile.UserName,
-                UserPassword = MyProfile.UserPassword,
-                Handicap = decHdcp,
-                DGVHandicap= decDGVHdcp,
-                Birthday = MyProfile.Birthday,
-                Mail = MyProfile.Mail,
-                Gender=MyProfile.Gender,
-                GroupId=MyProfile.GroupId
-            };
-
-            // update player local
-            IDataStore<Player> DataStorePlayer= DependencyService.Get<IDataStore<Player>>();
-            await DataStorePlayer.UpdateItemAsync(Player);
-
-            //update profile
-            MyProfile.Handicap = decHdcp;
-            MyProfile.DGVHandicap = decDGVHdcp;
-            IDataStore<Profile> DataStoreProfile = DependencyService.Get<IDataStore<Profile>>();
-            await DataStoreProfile.UpdateItemAsync(MyProfile);
-
-            // send new player to web
-            MFWebDataSync DataSync = new MFWebDataSync();
-            await DataSync.SendNewPlayer(Player);
-
             Button ButtonSave = (Button)this.FindByName("ButtonSave");
+
+            try
+            {
+                double decHdcp = Convert.ToDouble(inputHdcp);
+                double decDGVHdcp = Convert.ToDouble(inputDGVHdcp);
+
+                var Player = new Player
+                {
+                    Id = MyProfile.Id,
+                    Name = MyProfile.Name,
+                    Initials = MyProfile.Initials,
+                    UserName = MyProfile.UserName,
+                    UserPassword = MyProfile.UserPassword,
+                    Handicap = decHdcp,
+                    DGVHandicap = decDGVHdcp,
+                    Birthday = MyProfile.Birthday,
+                    Mail = MyProfile.Mail,
+                    Gender = MyProfile.Gender,
+                    GroupId = MyProfile.GroupId
+                };
+
+                // update player local
+                IDataStore<Player> DataStorePlayer = DependencyService.Get<IDataStore<Player>>();
+                await DataStorePlayer.UpdateItemAsync(Player);
+
+                //update profile
+                MyProfile.Handicap = decHdcp;
+                MyProfile.DGVHandicap = decDGVHdcp;
+                IDataStore<Profile> DataStoreProfile = DependencyService.Get<IDataStore<Profile>>();
+                await DataStoreProfile.UpdateItemAsync(MyProfile);
+
+                // send new player to web
+                MFWebDataSync DataSync = new MFWebDataSync();
+                await DataSync.SendNewPlayer(Player);
+            }
+            catch(Exception exp)
+            {
+                ButtonSave.Text = "Fehler! Nochmal versuchen";
+            }
+            
             ButtonSave.Text = "Daten wurden gespeichert";
         }
     }
