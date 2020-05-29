@@ -76,6 +76,7 @@
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Services\LocationUpdateService.cs" />
+    <Compile Include="Services\ScreenshotService_iOS.cs" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
@@ -518,33 +519,6 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\GolfIconTrophy%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\TeeInfo\1_1.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\TeeInfo\1_2.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\TeeInfo\1_3.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\TeeInfo\1_4.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\TeeInfo\1_5.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\TeeInfo\1_6.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\TeeInfo\1_7.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\TeeInfo\1_8.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\TeeInfo\1_9.jpg" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\LochBild1_1.jpg" />

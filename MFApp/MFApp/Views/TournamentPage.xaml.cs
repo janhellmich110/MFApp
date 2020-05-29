@@ -11,6 +11,8 @@ using MFApp.Services;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
 using Xamarin.Essentials;
+using MFApp.Interfaces;
+using System.IO;
 
 namespace MFApp.Views
 {
@@ -710,29 +712,35 @@ namespace MFApp.Views
 
         private async void ToolbarItem_Clicked(object sender, EventArgs e)
         {
-            List<Result> SavedResults = GetTournamentResults(TournamentPageData.Tournament.Id);
-
-            String ShareTitle = TournamentPageData.TournamentEvent.Name + " - " + TournamentPageData.Tournament.Name + ": " + DateTime.Today.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
-            String ShareText = ShareTitle + Environment.NewLine + Environment.NewLine;
-            foreach (TournamentPlayer p in TournamentPageData.SelectedPlayers)
+            try
             {
-                ShareText = ShareText + p.Name + Environment.NewLine;
-                foreach (Tee t in TournamentPageData.TeeList.OrderBy(x => x.Name))
+                var screenShotService = Xamarin.Forms.DependencyService.Get<IScreenshotService>();
+
+                var viewImage = screenShotService.GetScreenshot(ScoreKarte, new Size(((StackLayout)ScoreKarte.Parent).Width, ((StackLayout)ScoreKarte.Parent).Height));
+
+                if (viewImage == null)
+                    return;
+
+                // write file to temp because share wants it
+                var file = Path.Combine(FileSystem.CacheDirectory, "shareimg.jpeg");
+                File.WriteAllBytes(file, viewImage);
+
+                string shareTitle = TournamentPageData.TournamentEvent.Name + " - " + TournamentPageData.Tournament.Name + ": " + DateTime.Today.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
+
+
+                await Share.RequestAsync(new ShareFileRequest
                 {
-                    var res = SavedResults.Where(x => x.PlayerId == p.Id).Where(y => y.TeeId == t.Id).FirstOrDefault();
-                    if (res != null)
-                    {
-                        ShareText = ShareText + t.Name + ": " + res.Score + Environment.NewLine;
-                    }
-                }
-                ShareText = ShareText + Environment.NewLine;
+                    File = new ShareFile(file),
+                    Title = shareTitle,
+                    PresentationSourceBounds = Xamarin.Essentials.DeviceInfo.Platform == DevicePlatform.iOS && Xamarin.Essentials.DeviceInfo.Idiom == DeviceIdiom.Tablet
+                            ? new System.Drawing.Rectangle(0, 20, 0, 0)
+                            : System.Drawing.Rectangle.Empty
+                });
             }
-
-            await Share.RequestAsync(new ShareTextRequest
+            catch (Exception exc)
             {
-                Text = ShareText,
-                Title = ShareTitle
-            });
+
+            }
         }
 
         private void LoadAllResults_Clicked(object sender, EventArgs e)

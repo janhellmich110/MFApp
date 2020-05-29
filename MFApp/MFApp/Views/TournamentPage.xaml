@@ -6,10 +6,6 @@
              mc:Ignorable="d"
              x:Class="MFApp.Views.TournamentPage">
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Teilen" Clicked="ToolbarItem_Clicked" />
-    </ContentPage.ToolbarItems>
-    
     <!--Pages can be added as references or inline-->
     <TabbedPage.Children>
         <ContentPage Title="Turnier" IconImageSource="GolfIconInfo.png" Appearing="ContentPageTurnier_Appearing">
@@ -157,6 +153,9 @@
             </CollectionView>
         </ContentPage>
         <ContentPage Title="Scorecard" Appearing="ContentPage_Scorecard_Appearing" IconImageSource="GolfIconScorecard.png">
+            <ContentPage.ToolbarItems>
+                <ToolbarItem Text="Teilen" Clicked="ToolbarItem_Clicked" />
+            </ContentPage.ToolbarItems>
             <ScrollView Orientation="Vertical"  VerticalScrollBarVisibility="Default" BackgroundColor="#1E2768">
                 <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                     <Grid x:Name="ScoreKarte" Padding="1,1,0,0">
