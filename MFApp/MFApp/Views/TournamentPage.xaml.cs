@@ -426,6 +426,7 @@ namespace MFApp.Views
                 if ((!found) && (TournamentPageData.SelectedPlayers.Count() < 4))
                 {
                     TournamentPageData.SelectedPlayers.Add(p);
+                    TournamentPageData.SelectedPlayers = TournamentPageData.SortFlightPlayer(TournamentPageData.SelectedPlayers);
                 }
                 else if (!found)
                 {
@@ -706,7 +707,7 @@ namespace MFApp.Views
             }
             else
             {
-                button.Text = "Fehler. Bitte später noch einmal versuchen!";
+                button.Text = "Fehler. Bitte noch einmal versuchen!";
             }
         }
 
@@ -1171,52 +1172,55 @@ namespace MFApp.Views
 
             for (int i = 0; i < 4; i++)
             {
-                if (InSumLabels[i] != null)
+                if (i < TournamentPageData.SelectedPlayers.Count())
                 {
-                    // calculate sum for first 9
-                    int inSumScore = 0;
-                    int inSumPutts = 0;
-                    for (int teeIndex =0; teeIndex < 9; teeIndex++)
+                    if (InSumLabels[i] != null)
                     {
-                        var teeResult = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[i].Id).Where(y => y.TeeId == TournamentPageData.TeeList[teeIndex].Id).FirstOrDefault(); 
-                        if(teeResult != null)
+                        // calculate sum for first 9
+                        int inSumScore = 0;
+                        int inSumPutts = 0;
+                        for (int teeIndex = 0; teeIndex < 9; teeIndex++)
                         {
-                            inSumScore = inSumScore + teeResult.Score;
-                            inSumPutts = inSumPutts + teeResult.Putts;
+                            var teeResult = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[i].Id).Where(y => y.TeeId == TournamentPageData.TeeList[teeIndex].Id).FirstOrDefault();
+                            if (teeResult != null)
+                            {
+                                inSumScore = inSumScore + teeResult.Score;
+                                inSumPutts = inSumPutts + teeResult.Putts;
+                            }
                         }
+
+                        InSumLabels[i].Text = inSumScore.ToString();
+                        if (InSumPuttsLabels[i] != null)
+                            InSumPuttsLabels[i].Text = inSumPutts.ToString();
+                    }
+                    if (OutSumLabels[i] != null)
+                    {
+                        // calculate sum for last 9
+                        int outSumScore = 0;
+                        int outSumPutts = 0;
+                        for (int teeIndex = 9; teeIndex < 18; teeIndex++)
+                        {
+                            var teeResult = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[i].Id).Where(y => y.TeeId == TournamentPageData.TeeList[teeIndex].Id).FirstOrDefault();
+                            if (teeResult != null)
+                            {
+                                outSumScore = outSumScore + teeResult.Score;
+                                outSumPutts = outSumPutts + teeResult.Putts;
+                            }
+                        }
+
+                        OutSumLabels[i].Text = outSumScore.ToString();
+                        if (OutSumPuttsLabels[i] != null)
+                            OutSumPuttsLabels[i].Text = outSumPutts.ToString();
+                    }
+                    if (TotalSumLabels[i] != null)
+                    {
+                        TotalSumLabels[i].Text = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[i].Id).Select(y => y.Score).Sum().ToString();
                     }
 
-                    InSumLabels[i].Text = inSumScore.ToString();
-                    if (InSumPuttsLabels[i] != null)
-                        InSumPuttsLabels[i].Text = inSumPutts.ToString();
-                }
-                if (OutSumLabels[i] != null)
-                {
-                    // calculate sum for last 9
-                    int outSumScore = 0;
-                    int outSumPutts = 0;
-                    for (int teeIndex = 9; teeIndex < 18; teeIndex++)
+                    if (TotalSumPuttsLabels[i] != null)
                     {
-                        var teeResult = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[i].Id).Where(y => y.TeeId == TournamentPageData.TeeList[teeIndex].Id).FirstOrDefault();
-                        if (teeResult != null)
-                        {
-                            outSumScore = outSumScore + teeResult.Score;
-                            outSumPutts = outSumPutts + teeResult.Putts;
-                        }
+                        TotalSumPuttsLabels[i].Text = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[i].Id).Select(y => y.Putts).Sum().ToString();
                     }
-
-                    OutSumLabels[i].Text = outSumScore.ToString();
-                    if (OutSumPuttsLabels[i] != null)
-                        OutSumPuttsLabels[i].Text = outSumPutts.ToString();
-                }
-                if (TotalSumLabels[i] != null)
-                {
-                    TotalSumLabels[i].Text = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[i].Id).Select(y => y.Score).Sum().ToString();                 
-                }
-
-                if (TotalSumPuttsLabels[i] != null)
-                {
-                    TotalSumPuttsLabels[i].Text = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[i].Id).Select(y => y.Putts).Sum().ToString();
                 }
             }
         }
@@ -1239,11 +1243,11 @@ namespace MFApp.Views
             Button finishButton = (Button)this.FindByName("FinishTournament");
             if(buttonEnabled)
             {
-                finishButton.IsEnabled = true;
+                finishButton.IsVisible = true;
             }
             else
             {
-                finishButton.IsEnabled = false;
+                finishButton.IsVisible = false;
             }
         }
 

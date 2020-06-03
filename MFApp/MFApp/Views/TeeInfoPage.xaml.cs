@@ -21,6 +21,8 @@ namespace MFApp.Views
 
         private int golfClubId;
         private int teeNumber;
+        private bool ImageZoomed = false;
+
         public TeeInfoPage()
         {
             InitializeComponent();
@@ -82,34 +84,33 @@ namespace MFApp.Views
                 // cast to an image
                 Image theImage = (Image)sender;
 
-                double origWidth = ((ScrollView)theImage.Parent.Parent).Width;
-                double origHeight = ((ScrollView)theImage.Parent.Parent).Width;
+                if(ImageZoomed)
+                {
+                    ((StackLayout)theImage.Parent).WidthRequest = ((StackLayout)theImage.Parent).Width / 2;
+                    ((StackLayout)theImage.Parent).HeightRequest = ((StackLayout)theImage.Parent).Height / 2;
 
-                ((StackLayout)theImage.Parent).WidthRequest = ((StackLayout)theImage.Parent).Width * 2;
-                ((StackLayout)theImage.Parent).HeightRequest = ((StackLayout)theImage.Parent).Height * 2;
+                    theImage.Aspect = Aspect.AspectFit;
+                    ImageZoomed = false;
+                }
+                else
+                {
+                    double origWidth = ((ScrollView)theImage.Parent.Parent).Width;
+                    double origHeight = ((ScrollView)theImage.Parent.Parent).Width;
 
-                ((ScrollView)theImage.Parent.Parent).ScrollToAsync(0,0,true);
+                    ((StackLayout)theImage.Parent).WidthRequest = ((StackLayout)theImage.Parent).Width * 2;
+                    ((StackLayout)theImage.Parent).HeightRequest = ((StackLayout)theImage.Parent).Height * 2;
 
-                // scrollview should keep width
-                ((ScrollView)theImage.Parent.Parent).WidthRequest = origWidth;
+                    ((ScrollView)theImage.Parent.Parent).ScrollToAsync(0, 0, true);
 
-                theImage.Aspect = Aspect.AspectFit;
-            };
+                    // scrollview should keep width
+                    ((ScrollView)theImage.Parent.Parent).WidthRequest = origWidth;
 
-            var doubletapGestureRecognizer = new TapGestureRecognizer();
-            doubletapGestureRecognizer.NumberOfTapsRequired = 2;
-            doubletapGestureRecognizer.Tapped += (sender, e) =>
-            {
-                // cast to an image
-                Image theImage = (Image)sender;
-
-                ((StackLayout)theImage.Parent).WidthRequest = ((StackLayout)theImage.Parent).Width / 2;
-                ((StackLayout)theImage.Parent).HeightRequest = ((StackLayout)theImage.Parent).Height / 2;
-
-                theImage.Aspect = Aspect.AspectFit;
+                    theImage.Aspect = Aspect.AspectFit;
+                    ImageZoomed = true;
+                }
+                
             };
             
-            teeImage.GestureRecognizers.Add(doubletapGestureRecognizer);
             teeImage.GestureRecognizers.Add(tapGestureRecognizer);
 
             this.BindingContext = teeInfoViewModel;

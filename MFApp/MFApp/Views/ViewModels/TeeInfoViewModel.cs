@@ -87,9 +87,12 @@ namespace MFApp.ViewModels
                 Description = FirstTee.Description;
             }
 
-            // get current location, 2 times as result is better ???
-            var request = new GeolocationRequest(GeolocationAccuracy.Best, new TimeSpan(0, 0, 10));
+            // get current location, 3 times as result is better ???
+            var request = new GeolocationRequest(GeolocationAccuracy.High, new TimeSpan(0, 0, 10));
             var location = await Geolocation.GetLocationAsync(request);
+            await Task.Delay(1000);
+            request = new GeolocationRequest(GeolocationAccuracy.Best, new TimeSpan(0, 0, 10));
+            location = await Geolocation.GetLocationAsync(request);
             await Task.Delay(1000);
             request = new GeolocationRequest(GeolocationAccuracy.Best, new TimeSpan(0, 0, 10));
             location = await Geolocation.GetLocationAsync(request);

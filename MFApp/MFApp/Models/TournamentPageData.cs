@@ -192,6 +192,8 @@ namespace MFApp.Models
 
                 AllPlayers.Add(tp);
             }
+
+            SelectedPlayers = SortFlightPlayer(SelectedPlayers);
         }
 
         public Player CurrentPlayer { get; set; }
@@ -249,6 +251,29 @@ namespace MFApp.Models
 
             return Convert.ToInt32(p.Handicap);
 
+        }
+
+        public ObservableCollection<TournamentPlayer> SortFlightPlayer(ObservableCollection<TournamentPlayer> FlightPlayers)
+        {
+            ObservableCollection<TournamentPlayer> SortedPlayers = new ObservableCollection<TournamentPlayer>();
+
+            FlightPlayers = new ObservableCollection<TournamentPlayer>(FlightPlayers.OrderBy(x => x.Id));
+
+            // first add current player
+            foreach (TournamentPlayer tp in FlightPlayers)
+            {
+                if (tp.Id == CurrentPlayer.Id)
+                    SortedPlayers.Add(tp);
+            }
+
+            // then add other players by id
+            foreach (TournamentPlayer tp in FlightPlayers)
+            {
+                if (tp.Id != CurrentPlayer.Id)
+                    SortedPlayers.Add(tp);
+            }
+
+            return SortedPlayers;
         }
 
         public Command LoadAllResultsCommand => new Command(async () => await ExecuteLoadAllResultsCommand());
