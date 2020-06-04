@@ -25,7 +25,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>MondayFighter</string>
 	<key>CFBundleVersion</key>
-	<string>4</string>
+	<string>5</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>CFBundleName</key>
@@ -35,7 +35,7 @@
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.7</string>
+	<string>1.8</string>
 	<key>UIMainStoryboardFile</key>
 	<string>LaunchScreen</string>
 	<key>CFBundleIconName</key>
@@ -43,10 +43,10 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>App has no access to calender.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Darf diese App immer auf den Standort zugreifen?</string>
+	<string>Die App verwendet den aktuellen Standort für die Entfernung zu Hindernissen im Bierdiebook.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Darf diese App auf den Stndort zurgeifen während die App genutzt wird?</string>
+	<string>Die App verwendet den aktuellen Standort für die Entfernung zu Hindernissen auf dem Platz im Bierdiebook während die App genutzt wird.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Darf diese App immer auf den Standort zugreifen?</string>
+	<string>Die App verwendet den aktuellen Standort für die Entfernung zu Hindernissen im Bierdiebook.</string>
 </dict>
 </plist>
