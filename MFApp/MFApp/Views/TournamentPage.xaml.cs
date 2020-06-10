@@ -446,11 +446,18 @@ namespace MFApp.Views
             // save result
             var oldText = e.OldTextValue;
             var newText = e.NewTextValue;
+            int entryScore = 0;
 
             if (string.IsNullOrEmpty(newText))
             {
                 return;
             }
+
+            if (!int.TryParse(newText, out entryScore))
+            {
+                newText = "0";
+            }
+
 
             string currentCommand = ((Entry)sender).ReturnCommandParameter.ToString();
             bool isScore = true;

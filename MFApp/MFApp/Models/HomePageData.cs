@@ -25,7 +25,7 @@ namespace MFApp.Models
         public string BackColor { get; set; }
 
         public string ButtonText { get; set; }
-
+        public bool ButtonVisible { get; set; }
         public Tournament EventTournament { get; set; }
 
     }
