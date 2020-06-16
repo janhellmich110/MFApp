@@ -41,10 +41,10 @@ namespace MFApp.iOS.Services
             }
             catch (Exception e)
             {
+                //CrashTracker.Track(e);
                 return null;
             }
         }
-
 
         public static UIView ConvertFormsToNative(Xamarin.Forms.View view, CGRect size)
         {
@@ -65,8 +65,9 @@ namespace MFApp.iOS.Services
 
                 return nativeView;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                //CrashTracker.Track(e);
                 return null;
             }
 
@@ -82,8 +83,9 @@ namespace MFApp.iOS.Services
                 UIImage image = UIGraphics.GetImageFromCurrentImageContext();
                 return image;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                //CrashTracker.Track(e);
                 return null;
             }
         }

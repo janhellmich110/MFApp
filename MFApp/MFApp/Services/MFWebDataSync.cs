@@ -521,25 +521,25 @@ namespace MFApp.Services
         {
             // add location info
 
-            try
-            {
-                //var location = await Geolocation.GetLastKnownLocationAsync();
-                var request = new GeolocationRequest(GeolocationAccuracy.Medium, new TimeSpan(0, 0, 10));
-                var location = await Geolocation.GetLocationAsync(request);
+            //try
+            //{
+            //    //var location = await Geolocation.GetLastKnownLocationAsync();
+            //    var request = new GeolocationRequest(GeolocationAccuracy.Medium, new TimeSpan(0, 0, 10));
+            //    var location = await Geolocation.GetLocationAsync(request);
 
-                if (location != null)
-                {
-                    foreach (TournamentResult tr in ResultList)
-                    {
-                        tr.Latitude = location.Latitude;
-                        tr.Longitude = location.Longitude;
-                    }
-                }
-            }
-            catch (Exception exp) 
-            { 
-                // manage exception
-            }
+            //    if (location != null)
+            //    {
+            //        foreach (TournamentResult tr in ResultList)
+            //        {
+            //            tr.Latitude = location.Latitude;
+            //            tr.Longitude = location.Longitude;
+            //        }
+            //    }
+            //}
+            //catch (Exception exp) 
+            //{ 
+            //    // manage exception
+            //}
 
 
             try

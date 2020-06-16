@@ -45,8 +45,9 @@ namespace MFApp.Droid.Services
 
                 return bitmapData;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                //CrashTracker.Track(ex);
                 return null;
             }
         }
@@ -54,14 +55,13 @@ namespace MFApp.Droid.Services
         public Android.Views.View ConvertFormsToNative(Xamarin.Forms.View view, Rectangle size)
         {
             var currentRenderer = Platform.GetRenderer(view);
-
             // Platform.CreateRendererWithContext(view, Android.App.Application.Context) ; //, CrossCurrentActivity.Current.AppContext);
 
             var newView = currentRenderer.View;
             currentRenderer.Tracker.UpdateLayout();
-            var layoutParams = new ViewGroup.LayoutParams((int)size.Width, (int)size.Height);
+            var layoutParams = new ViewGroup.LayoutParams((int)currentRenderer.View.Width, (int)currentRenderer.View.Height);
             newView.LayoutParameters = layoutParams;
-            newView.Layout(0, 0, (int)size.Width, (int)size.Height);
+            newView.Layout(0, 0, (int)currentRenderer.View.Width, (int)currentRenderer.View.Height);
 
             //Platform.SetRenderer(view, currentRenderer);
 
@@ -70,7 +70,7 @@ namespace MFApp.Droid.Services
 
         private Bitmap ConvertViewToBitMap(Android.Views.View view, Rectangle size)
         {
-            Bitmap bitmap = Bitmap.CreateBitmap((int)size.Width, (int)size.Height, Bitmap.Config.Argb8888);
+            Bitmap bitmap = Bitmap.CreateBitmap((int)view.Width, (int)view.Height, Bitmap.Config.Argb8888);
             Canvas canvas = new Canvas(bitmap);
             canvas.DrawColor(Android.Graphics.Color.White);
             view.Draw(canvas);
