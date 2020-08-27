@@ -156,21 +156,147 @@
             <ContentPage.ToolbarItems>
                 <ToolbarItem Text="Teilen" Clicked="ToolbarItem_Clicked" />
             </ContentPage.ToolbarItems>
-            <ScrollView Orientation="Vertical"  VerticalScrollBarVisibility="Default" BackgroundColor="#1E2768">
-                <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                    <Grid x:Name="ScoreKarte" Padding="1,1,0,0">
+            <StackLayout>
+                <ScrollView Orientation="Vertical"  VerticalScrollBarVisibility="Default" BackgroundColor="#1E2768">
+                    <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                        <Grid x:Name="ScoreKarte" Padding="1,1,0,0">
 
-                    </Grid>
-                    <StackLayout Padding="20,20,20,20" BackgroundColor="White">
-                        <Button x:Name="FinishTournament" 
+                        </Grid>
+                        <StackLayout Padding="20,20,20,20" BackgroundColor="White">
+                            <Button x:Name="FinishTournament" 
                         Text="Runde abschliessen"
                         BackgroundColor="#1E2768"
                         TextColor="White"
                         HorizontalOptions="FillAndExpand"
                             Clicked="FinishTournament_Clicked"/>
+                        </StackLayout>
                     </StackLayout>
+                </ScrollView>
+                <StackLayout HorizontalOptions="Center" VerticalOptions="EndAndExpand">
+                    <Grid x:Name="ScoreCardKeyboard" HorizontalOptions="Center" WidthRequest="370">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="40"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="20"/>
+                        </Grid.ColumnDefinitions>
+                        <StackLayout Grid.Column="0" Grid.Row="0">
+                            <Label ClassId="-" Text="-" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center">
+                            </Label>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ScoreKeyboard_Tapped" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                        <StackLayout Grid.Column="0" Grid.Row="1">
+                            <Label ClassId="1" Text="1" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center">
+                            </Label>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ScoreKeyboard_Tapped" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                        <StackLayout Grid.Column="1" Grid.Row="0">
+                            <Label ClassId="2" Text="2" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center">
+                            </Label>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ScoreKeyboard_Tapped" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                        <StackLayout Grid.Column="1" Grid.Row="1">
+                            <Label ClassId="3" Text="3" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center">
+                            </Label>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ScoreKeyboard_Tapped" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                        <StackLayout Grid.Column="2" Grid.Row="0">
+                            <Label ClassId="4" Text="4" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center">
+                            </Label>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ScoreKeyboard_Tapped" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                        <StackLayout Grid.Column="2" Grid.Row="1">
+                            <Label ClassId="5" Text="5" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center">
+                            </Label>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ScoreKeyboard_Tapped" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                        <StackLayout Grid.Column="3" Grid.Row="0">
+                            <Label ClassId="6" Text="6" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center">
+                            </Label>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ScoreKeyboard_Tapped" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                        <StackLayout Grid.Column="3" Grid.Row="1">
+                            <Label ClassId="7" Text="7" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center">
+                            </Label>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ScoreKeyboard_Tapped" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                        <StackLayout Grid.Column="4" Grid.Row="0">
+                            <Label ClassId="8" Text="8" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center">
+                            </Label>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ScoreKeyboard_Tapped" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                        <StackLayout Grid.Column="4" Grid.Row="1">
+                            <Label ClassId="9" Text="9" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center">
+                            </Label>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ScoreKeyboard_Tapped" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                        <StackLayout Grid.Column="5" Grid.Row="0">
+                            <Label ClassId="10" Text="10" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center">
+                            </Label>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ScoreKeyboard_Tapped" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                        <StackLayout Grid.Column="5" Grid.Row="1">
+                            <Label ClassId="11" Text="11" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center">
+                            </Label>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ScoreKeyboard_Tapped" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                        <StackLayout Grid.Column="6" Grid.Row="0">
+                            <Label ClassId="12" Text="12" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center">
+                            </Label>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ScoreKeyboard_Tapped" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                        <StackLayout Grid.Column="6" Grid.Row="1">
+                            <Label ClassId="X" Text="X" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center">
+                            </Label>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ScoreKeyboard_Tapped" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                        <StackLayout Grid.Column="7" Grid.Row="0">
+                            <Label Text="" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center">
+                            </Label>
+                        </StackLayout>
+                        <StackLayout Grid.Column="7" Grid.Row="1">
+                            <Label Text="" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center">
+                            </Label>
+                        </StackLayout>
+                    </Grid>
                 </StackLayout>
-            </ScrollView>
+            </StackLayout>
         </ContentPage>
         <ContentPage Title="Ergebnisse" Appearing="ContentPageResults_Appearing" IconImageSource="GolfIconTrophy.png">
             <StackLayout Padding="20, 20, 20, 20" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">

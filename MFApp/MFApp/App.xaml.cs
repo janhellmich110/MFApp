@@ -33,6 +33,8 @@ namespace MFApp
 
             DependencyService.Register<ILocationUpdateService>();
 
+            Device.SetFlags(new string[] { "Expander_Experimental" });
+
             // sync events
             SyncWebData();
 

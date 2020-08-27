@@ -232,22 +232,51 @@ namespace MFApp.Models
                 TournamentHandicapId = t.HandicapTableFemaleId;
             }
 
-
-            IDataStore<CourseHandicap> DataStore = DependencyService.Get<IDataStore<CourseHandicap>>();
-            var CourseHandicapTask = DataStore.GetItemsAsync();
-            List<CourseHandicap> CourseHandicaps = CourseHandicapTask.Result.ToList();
-
-            foreach (CourseHandicap CH in CourseHandicaps)
+            try
             {
-                if (CH.CourseHandicapTableId == TournamentHandicapId)
+                if (p.Handicap <= 36)
                 {
-                    if ((p.Handicap >= CH.HandicapFrom) && (p.Handicap <= CH.HandicapTo))
-                    {
-                        return CH.PlayerHandicap;
-                    }
+                    IDataStore<CourseHandicapTable> DataStore = DependencyService.Get<IDataStore<CourseHandicapTable>>();
+                    var CourseHandicapTask = DataStore.GetItemsAsync();
+                    List<CourseHandicapTable> CourseHandicaps = CourseHandicapTask.Result.ToList();
 
+                    CourseHandicapTable currentTable = CourseHandicaps.Where(x => x.Id == TournamentHandicapId).FirstOrDefault();
+
+                    // calculate course handicap
+                    double currentHdcp = p.Handicap;
+                    if (currentHdcp > 0)
+                        currentHdcp *= -1;
+
+                    int currentCourseHdcp = (int)Math.Round((((double)currentHdcp * currentTable.Slope / ((double)113)) - (double)currentTable.CR + (double)currentTable.Par));
+                    if (currentCourseHdcp < 0)
+                        currentCourseHdcp *= -1;
+
+                    return currentCourseHdcp;
+                }
+                else
+                {
+                    IDataStore<CourseHandicap> DataStore = DependencyService.Get<IDataStore<CourseHandicap>>();
+                    var CourseHandicapTask = DataStore.GetItemsAsync();
+                    List<CourseHandicap> CourseHandicaps = CourseHandicapTask.Result.ToList();
+
+                    foreach (CourseHandicap CH in CourseHandicaps)
+                    {
+                        if (CH.CourseHandicapTableId == TournamentHandicapId)
+                        {
+                            if ((p.Handicap >= CH.HandicapFrom) && (p.Handicap <= CH.HandicapTo))
+                            {
+                                return CH.PlayerHandicap;
+                            }
+
+                        }
+                    }
                 }
             }
+            catch (Exception)
+            {
+                return (int)p.Handicap;
+            }
+
 
             return Convert.ToInt32(p.Handicap);
 

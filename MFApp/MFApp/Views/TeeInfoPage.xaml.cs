@@ -23,6 +23,8 @@ namespace MFApp.Views
         private int teeNumber;
         private bool ImageZoomed = false;
 
+        private bool openedModal { get; set; }
+
         public TeeInfoPage()
         {
             InitializeComponent();
@@ -35,15 +37,68 @@ namespace MFApp.Views
             InitializeComponent();
             golfClubId = GolfClubId;
             teeNumber = TeeNumber;
+
+            InitTeeInfoPage();
         }
 
-        protected async override void OnAppearing()
+        private async void InitTeeInfoPage()
         {
-            base.OnAppearing();
-
             teeInfoViewModel = new TeeInfoViewModel(golfClubId, teeNumber);
-            await teeInfoViewModel.LoadAllPlaces();
+            await teeInfoViewModel.InitTeeInfos();
+            teeInfoViewModel.Name = "Birdiebook";
+            Init();
 
+            this.BindingContext = teeInfoViewModel;
+        }
+
+        protected override void OnAppearing()
+        {
+            openedModal = (Navigation.ModalStack.Count() > 0) ? true : false;
+            InitTeePicker();
+            BackButton.IsVisible = openedModal;
+
+            base.OnAppearing();
+        }
+
+        private async void InitTeePicker()
+        {
+            try
+            {
+                if (teeInfoViewModel == null)
+                    return;
+
+                var teeNames = await teeInfoViewModel.GetTeeNameList();
+                if (teeNames == null)
+                {
+                    TeePicker.IsEnabled = false;
+                    return;
+                }
+
+                TeePicker.ItemsSource = teeNames;
+
+                TeePicker.SelectedIndexChanged += TeePicker_SelectedIndexChanged;
+
+                if (!openedModal)
+                {
+                    TeePicker.SelectedItem = teeNames.FirstOrDefault();
+                    TeePicker.IsEnabled = true;
+                }
+                else
+                {
+                    var tee = teeNames.Where(t => t.StartsWith(teeNumber.ToString() + ":")).FirstOrDefault();
+                    TeePicker.SelectedItem = tee;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CrashTracker.Track(ex);
+                throw;
+            }
+        }
+
+        private async void Init()
+        {
             Image teeImage = (Image)this.FindByName("TeeImage");
             teeImage.Source = teeInfoViewModel.ImageName;
 
@@ -53,7 +108,20 @@ namespace MFApp.Views
             Label Hdcp = (Label)this.FindByName("Hdcp");
             Label Distance_Yellow = (Label)this.FindByName("Distance_Yellow");
             Label Distance_Red = (Label)this.FindByName("Distance_Red");
+            Label HoleDesciption = (Label)this.FindByName("HoleDescription");
 
+            //Get description from teeinfo
+            string holeDescriptionText = "";
+
+            IDataStore<TeeInfo> DataStore = DependencyService.Get<IDataStore<TeeInfo>>();
+            List<TeeInfo> TeeInfos = (await DataStore.GetItemsAsync()).ToList();
+
+            TeeInfos = TeeInfos.Where(x => x.GolfClubId == golfClubId).Where(y => y.TeeNummer == teeNumber).OrderBy(z => z.TeeNummer).ToList();
+
+            if (TeeInfos.Count() > 0)
+            {
+                holeDescriptionText = TeeInfos[0].Description;
+            }
 
             // get tee
             IDataStore<Course> DataStoreCourse = DependencyService.Get<IDataStore<Course>>();
@@ -63,9 +131,9 @@ namespace MFApp.Views
             List<Tee> Tees = (await DataStoreTee.GetItemsAsync()).ToList();
 
             Tee currentTee;
-            foreach(Course c in Courses.Where(x=>x.GolfclubId== golfClubId))
+            foreach (Course c in Courses.Where(x => x.GolfclubId == golfClubId))
             {
-                currentTee = Tees.Where(x => x.CourseId == c.Id).Where(y=>y.Name==teeNumber).FirstOrDefault();
+                currentTee = Tees.Where(x => x.CourseId == c.Id).Where(y => y.Name == teeNumber).FirstOrDefault();
                 if (currentTee != null)
                 {
                     Holenumber.Text = currentTee.Name.ToString();
@@ -73,6 +141,7 @@ namespace MFApp.Views
                     Hdcp.Text = currentTee.Hcp.ToString();
                     Distance_Yellow.Text = currentTee.Length.ToString();
                     Distance_Red.Text = currentTee.LengthRed.ToString();
+                    HoleDesciption.Text = holeDescriptionText;
                     break;
                 }
             }
@@ -84,7 +153,7 @@ namespace MFApp.Views
                 // cast to an image
                 Image theImage = (Image)sender;
 
-                if(ImageZoomed)
+                if (ImageZoomed)
                 {
                     ((StackLayout)theImage.Parent).WidthRequest = ((StackLayout)theImage.Parent).Width / 2;
                     ((StackLayout)theImage.Parent).HeightRequest = ((StackLayout)theImage.Parent).Height / 2;
@@ -108,12 +177,37 @@ namespace MFApp.Views
                     theImage.Aspect = Aspect.AspectFit;
                     ImageZoomed = true;
                 }
-                
-            };
-            
-            teeImage.GestureRecognizers.Add(tapGestureRecognizer);
 
-            this.BindingContext = teeInfoViewModel;
+            };
+
+            // reset zoom if hole is selected
+            if (ImageZoomed)
+            {
+                ((StackLayout)TeeImage.Parent).WidthRequest = ((StackLayout)TeeImage.Parent).Width / 2;
+                ((StackLayout)TeeImage.Parent).HeightRequest = ((StackLayout)TeeImage.Parent).Height / 2;
+
+                TeeImage.Aspect = Aspect.AspectFit;
+                ImageZoomed = false;
+            }
+
+            if (teeImage.GestureRecognizers.Count() == 0)
+                teeImage.GestureRecognizers.Add(tapGestureRecognizer);
+
+            GetLocalisationData();
+
+        }
+
+        private async void GetLocalisationData()
+        {
+            var result = await teeInfoViewModel.LoadAllPlaces();
+
+            if (result)
+            {
+                CollectionView AllPlaces = (CollectionView)this.FindByName("AllPlacesCollectionView");
+                AllPlaces.BindingContext = null;
+
+                AllPlaces.BindingContext = teeInfoViewModel;
+            }
         }
 
         async void Refresh_Clicked(object sender, EventArgs e)
@@ -128,6 +222,19 @@ namespace MFApp.Views
         async void Close_Clicked(object sender, EventArgs e)
         {
             await Navigation.PopModalAsync();
+            TeePicker.SelectedIndexChanged -= TeePicker_SelectedIndexChanged;
+        }
+
+        private async void TeePicker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Picker picker = sender as Picker;
+            string value = picker.SelectedItem.ToString();
+            int i = value.IndexOf(':');
+            teeNumber = Convert.ToInt32(value.Substring(0, i));
+
+            teeInfoViewModel.TeeNumber = teeNumber;
+            await teeInfoViewModel.InitTeeInfos();
+            Init();
         }
     }
 }

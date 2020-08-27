@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -54,13 +53,43 @@ namespace MFApp.Views
         private async void Save_Clicked(object sender, EventArgs e)
         {
             string inputHdcp = ((Entry)this.FindByName("InputHandicap")).Text;
+            inputHdcp = inputHdcp.Replace("-", "");
+            if (Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator == ",")
+            {
+                inputHdcp = inputHdcp.Replace(".", ",");
+            }
+            else
+            {
+                inputHdcp = inputHdcp.Replace(",", ".");
+            }
+
+
             string inputDGVHdcp = ((Entry)this.FindByName("InputDGVHandicap")).Text;
+            inputDGVHdcp = inputDGVHdcp.Replace("-", "");
+            if (Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator == ",")
+            {
+                inputDGVHdcp = inputDGVHdcp.Replace(".", ",");
+            }
+            else
+            {
+                inputDGVHdcp = inputDGVHdcp.Replace(",", ".");
+            }
             Button ButtonSave = (Button)this.FindByName("ButtonSave");
 
             try
             {
-                double decHdcp = Convert.ToDouble(inputHdcp);
-                double decDGVHdcp = Convert.ToDouble(inputDGVHdcp);
+                double decHdcp = 0;
+                try
+                {
+                    decHdcp = Convert.ToDouble(inputHdcp);
+                }
+                catch (Exception) { }
+                double decDGVHdcp = 0;
+                try
+                {
+                    decDGVHdcp = Convert.ToDouble(inputDGVHdcp);
+                }
+                catch (Exception) { }
 
                 var Player = new Player
                 {

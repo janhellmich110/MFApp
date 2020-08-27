@@ -21,11 +21,11 @@ namespace MFApp.Views
             menuItems = new List<HomeMenuItem>
             {
                 new HomeMenuItem {Id = MenuItemType.Home, Title="Startseite" },
-                //new HomeMenuItem {Id = MenuItemType.Adhoc, Title="Übungsrunde" },
+                new HomeMenuItem {Id = MenuItemType.Birdiebook, Title="Birdiebook" },
                 new HomeMenuItem {Id = MenuItemType.Player, Title="Spieler" },
-                new HomeMenuItem {Id = MenuItemType.Results, Title="Ergebnisse" },
-                new HomeMenuItem {Id = MenuItemType.Configuration, Title="Einstellungen" },
-                new HomeMenuItem {Id = MenuItemType.LogOff, Title="Mein Profil" }
+                new HomeMenuItem {Id = MenuItemType.Results, Title="Ergebnisse" },                
+                new HomeMenuItem {Id = MenuItemType.LogOff, Title="Mein Profil" },
+                new HomeMenuItem {Id = MenuItemType.About, Title="Infos" },
             };
 
             ListViewMenu.ItemsSource = menuItems;

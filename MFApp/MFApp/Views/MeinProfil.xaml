@@ -18,9 +18,9 @@
                     <Label Text="Name:" FontSize="Medium" />
                     <Entry Text="{Binding Name}" d:Text="Name" FontSize="Small" Margin="0" TextColor="Black" />
                     <Label Text="MF-Handicap:" FontSize="Medium" />
-                    <Entry Text="{Binding Handicap}" Keyboard="Numeric" x:Name="InputHandicap" d:Text="Handicap" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
+                    <Entry Text="{Binding Handicap}" x:Name="InputHandicap" d:Text="Handicap" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
                     <Label Text="DGV-Handicap:" FontSize="Medium" />
-                    <Entry Text="{Binding DGVHandicap}" Keyboard="Numeric" x:Name="InputDGVHandicap" d:Text="Handicap" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
+                    <Entry Text="{Binding DGVHandicap}" x:Name="InputDGVHandicap" d:Text="Handicap" FontSize="Small" Margin="0" BackgroundColor="White" TextColor="Black" />
                     <Label Text="Geburtstag:" FontSize="Medium" />
                     <DatePicker Date="{Binding Birthday}" />
                     <Label Text="Mail:" FontSize="Medium" />

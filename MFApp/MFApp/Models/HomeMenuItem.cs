@@ -8,6 +8,7 @@ namespace MFApp.Models
     {
         Home,
         Player,
+        Birdiebook,
         Configuration,
         LogOff,
         Results,

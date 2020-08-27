@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="MFApp.Views.AboutPage"
+             xmlns:vm="clr-namespace:GCKSApp.ViewModels"
+             Title="{Binding Title}">
+    <AbsoluteLayout VerticalOptions="FillAndExpand"
+                    HorizontalOptions="FillAndExpand">
+        <Image  AbsoluteLayout.LayoutFlags="All" 
+                AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                Aspect="AspectFill" 
+                Source="GCKSBackground.jpg"/>
+        <StackLayout AbsoluteLayout.LayoutFlags="All" 
+                AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
+            <StackLayout Padding="0,10,0,0" >
+                <Image Source="mf.png" 
+                    HeightRequest="96"/>
+            </StackLayout>
+            <ScrollView>
+                <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Padding="20" Spacing="10">
+                    <Frame CornerRadius="5"
+                           HasShadow="True"
+                           Opacity=".9">
+                        <StackLayout>
+                            <Label FontSize="22" HorizontalOptions="Center">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <FormattedString.Spans>
+                                            <Span Text="Monday Fighter App V 1.7" FontAttributes="Bold" FontSize="22" />
+                                        </FormattedString.Spans>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <StackLayout Padding="0,20,0,20" HorizontalOptions="StartAndExpand">
+                                <Label FontSize="22">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <FormattedString.Spans>
+                                                <Span Text="Anschrift" FontAttributes="Bold" FontSize="22" />
+                                            </FormattedString.Spans>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label FontSize="18" 
+                            Text="Golfclub Königshof Sittensen e. V."/>
+                                <Label FontSize="18" 
+                            Text="Alpershausener Weg 60"/>
+                                <Label FontSize="18" 
+                            Text="27419 Sittensen"/>
+                            </StackLayout>
+                            <StackLayout Padding="0,20,0,20" HorizontalOptions="StartAndExpand" x:Name="GCWeb">
+                                <Label FontSize="22">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <FormattedString.Spans>
+                                                <Span Text="Web" FontAttributes="Bold" FontSize="22" />
+                                            </FormattedString.Spans>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label FontSize="18" 
+                                       Text="Webseite öffnen"
+                                       TextColor="{DynamicResource LightBlueColor}">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Web_Tapped"></TapGestureRecognizer>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </StackLayout>
+                            <StackLayout Padding="0,20,0,20" HorizontalOptions="StartAndExpand" x:Name="GCMail">
+                                <Label FontSize="22">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <FormattedString.Spans>
+                                                <Span Text="Mail" FontAttributes="Bold" FontSize="22" />
+                                            </FormattedString.Spans>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label FontSize="18" 
+                                       Text="info@golfclub-sittensen.de"
+                                       TextColor="{DynamicResource LightBlueColor}">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="SendMail_Tapped"></TapGestureRecognizer>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </StackLayout>
+                            <StackLayout Padding="0,20,0,20" HorizontalOptions="StartAndExpand">
+                                <Label FontSize="22">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <FormattedString.Spans>
+                                                <Span Text="Telefon" FontAttributes="Bold" FontSize="22" />
+                                            </FormattedString.Spans>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label FontSize="18" 
+                                       Text="+49 4282 3266"
+                                       TextColor="{DynamicResource LightBlueColor}">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="PhoneNumer_Tapped"></TapGestureRecognizer>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </StackLayout>
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+            </ScrollView>
+
+        </StackLayout>
+
+    </AbsoluteLayout>
+
+</ContentPage>

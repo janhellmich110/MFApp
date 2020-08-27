@@ -9,7 +9,35 @@
     <Application.Resources>
         <ResourceDictionary>
             <!--Global Styles-->
+            <Color x:Key="DarkBlueColor">#006498</Color>
+            <Color x:Key="DarkGreyColor">#BBBBBB</Color>
+            <Color x:Key="LightGreyColor">#EEEEEE</Color>
+            <Color x:Key="WhiteColor">White</Color>
+            <Color x:Key="LightBlueColor">#0085CA</Color>
+            <Color x:Key="BlackColor">Black</Color>
+            <Color x:Key="SubTitleGreyColor">#AAAAAA</Color>
+            <Color x:Key="GreyColor">#707070</Color>
+            <Color x:Key="PlaceholderTextColor">#BCE0FD</Color>
+            <Color x:Key="GreenColor">#449d44</Color>
+            <Color x:Key="RedColor">Red</Color>
+            <Color x:Key="LightRedColor">#f05b5b</Color>
+
+            <Color x:Key="LightTextColor">#999999</Color>
+
+            <Color x:Key="ButtonBackground">#1E2768</Color>
+            <Color x:Key="ButtonTextColor">#FFFFFF</Color>
+
+            <Color x:Key="EntryBackgroundColor">#FFFFFF</Color>
+            <Color x:Key="EntryTextColor">#000000</Color>
+
+            <Color x:Key="AppPrimaryBackground">#90EE90</Color>
+
+            <Color x:Key="HomepageTournament">#90EE90</Color>
+            <Color x:Key="HomepageAdhocTournament">#91C7E9</Color>
+            <Color x:Key="HomepageEvent">#FF9966</Color>
+
             <Color x:Key="NavigationPrimary">#2196F3</Color>
+            
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor" Value="{StaticResource NavigationPrimary}" />
                 <Setter Property="BarTextColor" Value="White" />

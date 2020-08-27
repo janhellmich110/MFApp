@@ -29,13 +29,16 @@ namespace MFApp.Views
         Label[] OutSumPuttsLabels = null;
         Label[] TotalSumPuttsLabels = null;
 
-        List<Entry> AllEntryFields = new List<Entry>();
+        List<Label> AllEntryFields = new List<Label>();
 
         int LastPlayerId = 0;
 
         IDataStore<Result> DataStoreResults = DependencyService.Get<IDataStore<Result>>();
         IDataStore<Flight> DataStoreFlight = DependencyService.Get<IDataStore<Flight>>();
         IDataStore<Flight2Player> DataStoreFlight2Player = DependencyService.Get<IDataStore<Flight2Player>>();
+
+        StackLayout currentActiveHoleBox;
+        Color currentActiveHoleBoxColor = Color.White;
 
         public TournamentPage(Tournament tournament)
         {
@@ -55,7 +58,10 @@ namespace MFApp.Views
 
         private void ContentPage_Scorecard_Appearing(object sender, EventArgs e)
         {
-            AllEntryFields = new List<Entry>();
+            Grid scoreKeyboard = (Grid)this.FindByName("ScoreCardKeyboard");
+            scoreKeyboard.IsVisible = false;
+
+            AllEntryFields = new List<Label>();
             // first clean scorecard
             ScoreKarte.RowDefinitions.Clear();
             ScoreKarte.ColumnDefinitions.Clear();
@@ -95,11 +101,11 @@ namespace MFApp.Views
                     }
                     else if ((rowIndex > 0) && (rowIndex < 10))
                     {
+                        // get tee
+                        Tee tee = TournamentPageData.TeeList[rowIndex - 1];
                         // erste 9 Löcher
                         if (columnIndex == 0)
                         {
-                            // get tee
-                            Tee tee = TournamentPageData.TeeList[rowIndex - 1];
                             AddHoleLabelCell(tee, columnIndex, rowIndex);
                         }
                         else
@@ -116,7 +122,21 @@ namespace MFApp.Views
                                 cellReadOnly = SavedResult.Final;
                             }
                             string entryParameter = rowIndex.ToString() + "_" + columnIndex.ToString();
-                            AddEntryCell(entryParameter, columnIndex, rowIndex, savedScore, savedPutts, cellReadOnly);
+                            // set cell color for score
+                            Color cellColor = Color.White;
+                            try
+                            {
+                                int iScore = Convert.ToInt32(savedScore);
+                                cellColor = GetScoreColor(iScore, tee.Par);
+                            }
+                            catch (Exception) { }
+
+                            string holeHandicap = GetHoleHandicap(TournamentPageData.SelectedPlayers[columnIndex - 1].CourseHandicap, TournamentPageData.TeeList[rowIndex - 1].Hcp);
+                            string holePoints = "";
+                            if (!string.IsNullOrEmpty(savedScore) && savedScore != "0")
+                                holePoints = GetHolePoints(TournamentPageData.SelectedPlayers[columnIndex - 1].CourseHandicap, TournamentPageData.TeeList[rowIndex - 1].Hcp, TournamentPageData.TeeList[rowIndex - 1].Par, Convert.ToInt32(savedScore));
+
+                            AddEntryCell(entryParameter, columnIndex, rowIndex, savedScore, savedPutts, cellColor, holeHandicap, holePoints, cellReadOnly);
                         }
                     }
                     else if (rowIndex == 10)
@@ -171,9 +191,9 @@ namespace MFApp.Views
                     else if ((teeCount > 9) && (rowIndex > 10) && (rowIndex < 20))
                     {
                         // zweite 9 Löcher
+                        Tee tee = TournamentPageData.TeeList[rowIndex - 2];
                         if (columnIndex == 0)
                         {
-                            Tee tee = TournamentPageData.TeeList[rowIndex - 2];
                             AddHoleLabelCell(tee, columnIndex, rowIndex);
                         }
                         else
@@ -191,7 +211,21 @@ namespace MFApp.Views
                             }
 
                             string entryParameter = (rowIndex - 1).ToString() + "_" + columnIndex.ToString();
-                            AddEntryCell(entryParameter, columnIndex, rowIndex, savedScore, savedPutts, cellReadOnly);
+                            // set cell color for score
+                            Color cellColor = Color.White;
+                            try
+                            {
+                                int iScore = Convert.ToInt32(savedScore);
+                                cellColor = GetScoreColor(iScore, tee.Par);
+                            }
+                            catch (Exception) { }
+
+                            string holeHandicap = GetHoleHandicap(TournamentPageData.SelectedPlayers[columnIndex - 1].CourseHandicap, TournamentPageData.TeeList[rowIndex - 2].Hcp);
+                            string holePoints = "";
+                            if (!string.IsNullOrEmpty(savedScore) && savedScore != "0")
+                                holePoints = GetHolePoints(TournamentPageData.SelectedPlayers[columnIndex - 1].CourseHandicap, TournamentPageData.TeeList[rowIndex - 2].Hcp, TournamentPageData.TeeList[rowIndex - 2].Par, Convert.ToInt32(savedScore));
+
+                            AddEntryCell(entryParameter, columnIndex, rowIndex, savedScore, savedPutts, cellColor, holeHandicap, holePoints, cellReadOnly);
                         }
                     }
                     else if ((teeCount > 9) && (rowIndex == 20))
@@ -704,7 +738,7 @@ namespace MFApp.Views
                 // disable all entry fields
                 try
                 {
-                    foreach(Entry entry in AllEntryFields)
+                    foreach(Label entry in AllEntryFields)
                     {
                         entry.IsEnabled = false;
                     }
@@ -980,8 +1014,12 @@ namespace MFApp.Views
             return label;
         }
 
-        private void AddEntryCell(string CommandParameter, int ColumnIndex, int RowIndex, string EntryText, string EntryText1, bool readOnly = false)
+        private void AddEntryCell(string CommandParameter, int ColumnIndex, int RowIndex, string EntryText, string EntryText1, Color cellColor, string holeHandicap, string holePoints, bool readOnly = false)
         {
+            if (EntryText == "99")
+                EntryText = "-";
+            if (EntryText1 == "99")
+                EntryText1 = "-";
             var stackLayout = new StackLayout
             {
                 VerticalOptions = LayoutOptions.FillAndExpand,
@@ -996,7 +1034,7 @@ namespace MFApp.Views
             };
             var subsubScoreStackLayout = new StackLayout
             {
-                BackgroundColor = Color.White,
+                BackgroundColor = cellColor,
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 HorizontalOptions = LayoutOptions.FillAndExpand
             };
@@ -1008,24 +1046,45 @@ namespace MFApp.Views
             };
 
 
-            var stackLayoutScore = new StackLayout
+            var stackLayoutScore = new AbsoluteLayout
             {
-                VerticalOptions = LayoutOptions.CenterAndExpand
-            };
-            var entry = new Entry
-            {
-                Text = EntryText,
-                HorizontalTextAlignment = TextAlignment.Center,
-                ReturnCommandParameter = CommandParameter,
-                FontSize = 20,
-                WidthRequest = 40,
-                Keyboard = Keyboard.Numeric,
-                BackgroundColor = Color.White,
-                TextColor = Color.Black,
-                IsReadOnly = readOnly
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                HorizontalOptions = LayoutOptions.FillAndExpand
             };
 
-            entry.TextChanged += Entry_TextChanged;
+            var entry = new Label
+            {
+                Text = EntryText,
+                ClassId = CommandParameter,
+                VerticalTextAlignment = TextAlignment.Center,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                HorizontalOptions = LayoutOptions.Center,
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontSize = 20,
+                FontAttributes = FontAttributes.Bold,
+                WidthRequest = 30,
+
+            };
+            AbsoluteLayout.SetLayoutBounds(entry, new Rectangle(0.5, 0.5, -1, -1));
+            AbsoluteLayout.SetLayoutFlags(entry, AbsoluteLayoutFlags.PositionProportional);
+
+            var tapGestureRecognizer = new TapGestureRecognizer();
+            tapGestureRecognizer.NumberOfTapsRequired = 1;
+            tapGestureRecognizer.Tapped += (sender, e) =>
+            {
+                // keyboard visible
+                Grid scoreKeyboard = (Grid)this.FindByName("ScoreCardKeyboard");
+                scoreKeyboard.IsVisible = true;
+                if (currentActiveHoleBox != null)
+                    currentActiveHoleBox.BackgroundColor = currentActiveHoleBoxColor;
+                currentActiveHoleBox = (StackLayout)sender;
+                currentActiveHoleBoxColor = currentActiveHoleBox.BackgroundColor;
+
+                currentActiveHoleBox.BackgroundColor = Color.LightCyan;
+            };
+
+            if (subsubScoreStackLayout.GestureRecognizers.Count() == 0)
+                subsubScoreStackLayout.GestureRecognizers.Add(tapGestureRecognizer);
 
             if (TournamentPageData.Tournament.WithPutts)
             {
@@ -1034,20 +1093,51 @@ namespace MFApp.Views
                     VerticalOptions = LayoutOptions.CenterAndExpand
                 };
                 CommandParameter = "putts_" + CommandParameter;
-                var entryPutts = new Entry
+                //var entryPutts = new Entry
+                //{
+                //    Text = EntryText1,
+                //    HorizontalTextAlignment = TextAlignment.Center,
+                //    ReturnCommandParameter = CommandParameter,
+                //    FontSize = 20,
+                //    WidthRequest = 30,
+                //    Keyboard = Keyboard.Numeric,
+                //    BackgroundColor = Color.White,
+                //    TextColor = Color.Black,
+                //    IsReadOnly = readOnly
+                //};
+                //entryPutts.TextChanged += Entry_TextChanged;
+
+                var entryPutts = new Label
                 {
                     Text = EntryText1,
+                    ClassId = CommandParameter,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    VerticalOptions = LayoutOptions.CenterAndExpand,
+                    HorizontalOptions = LayoutOptions.Center,
                     HorizontalTextAlignment = TextAlignment.Center,
-                    ReturnCommandParameter = CommandParameter,
                     FontSize = 20,
-                    WidthRequest = 30,
-                    Keyboard = Keyboard.Numeric,
-                    BackgroundColor = Color.White,
+                    FontAttributes = FontAttributes.Bold,
                     TextColor = Color.Black,
-                    IsReadOnly = readOnly
+                    WidthRequest = 30
+                };
+                var tapGestureRecognizerPutts = new TapGestureRecognizer();
+                tapGestureRecognizerPutts.NumberOfTapsRequired = 1;
+                tapGestureRecognizerPutts.Tapped += (sender, e) =>
+                {
+                    // keyboard visible
+                    Grid scoreKeyboard = (Grid)this.FindByName("ScoreCardKeyboard");
+                    scoreKeyboard.IsVisible = true;
+                    if (currentActiveHoleBox != null)
+                        currentActiveHoleBox.BackgroundColor = currentActiveHoleBoxColor;
+                    currentActiveHoleBox = (StackLayout)sender;
+                    currentActiveHoleBoxColor = currentActiveHoleBox.BackgroundColor;
+
+                    currentActiveHoleBox.BackgroundColor = Color.LightCyan;
                 };
 
-                entryPutts.TextChanged += Entry_TextChanged;
+                if (subsubPuttsStackLayout.GestureRecognizers.Count() == 0)
+                    subsubPuttsStackLayout.GestureRecognizers.Add(tapGestureRecognizerPutts);
+
 
                 stackLayoutPutts.Children.Add(entryPutts);
 
@@ -1055,7 +1145,63 @@ namespace MFApp.Views
             }
 
             stackLayoutScore.Children.Add(entry);
+
+            #region vorgaben und punkte
+            var stackLayoutScoreBottom = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.End,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                Orientation = StackOrientation.Horizontal
+            };
+            var stackLayoutScoreHdcp = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.StartAndExpand
+            };
+            var stackLayoutScorePoints = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.EndAndExpand
+            };
+            var lblHdcp = new Label
+            {
+                Text = holeHandicap,
+                VerticalTextAlignment = TextAlignment.Center,
+                VerticalOptions = LayoutOptions.End,
+                HorizontalOptions = LayoutOptions.Start,
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontSize = 14,
+                FontAttributes = FontAttributes.None,
+                WidthRequest = 30
+            };
+            AbsoluteLayout.SetLayoutBounds(lblHdcp, new Rectangle(0, 1, -1, -1));
+            AbsoluteLayout.SetLayoutFlags(lblHdcp, AbsoluteLayoutFlags.PositionProportional);
+            var lblPoints = new Label
+            {
+                Text = holePoints,
+                VerticalTextAlignment = TextAlignment.Center,
+                VerticalOptions = LayoutOptions.End,
+                HorizontalOptions = LayoutOptions.End,
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontSize = 14,
+                FontAttributes = FontAttributes.None,
+                WidthRequest = 30
+            };
+            AbsoluteLayout.SetLayoutBounds(lblPoints, new Rectangle(1, 1, -1, -1));
+            AbsoluteLayout.SetLayoutFlags(lblPoints, AbsoluteLayoutFlags.PositionProportional);
+
+            //stackLayoutScoreHdcp.Children.Add(lblHdcp);
+            //stackLayoutScorePoints.Children.Add(lblPoints);
+
+            //stackLayoutScoreBottom.Children.Add(stackLayoutScoreHdcp);
+            //stackLayoutScoreBottom.Children.Add(stackLayoutScorePoints);
+
+            stackLayoutScore.Children.Add(lblHdcp);
+            stackLayoutScore.Children.Add(lblPoints);
+            #endregion
+
             subsubScoreStackLayout.Children.Add(stackLayoutScore);
+            //subsubScoreStackLayout.Children.Add(stackLayoutScoreBottom);
 
             subStackLayout.Children.Add(subsubScoreStackLayout);
 
@@ -1074,6 +1220,27 @@ namespace MFApp.Views
         {
             int playerId = TournamentPageData.SelectedPlayers[ColumnIndex - 1].Id;
             int teeId = TournamentPageData.TeeList[RowIndex - 1].Id;
+
+            // set cell color dependent on score
+            if (score)
+            {
+                try
+                {
+                    int holeNumber = RowIndex;
+                    if (holeNumber > 9)
+                        holeNumber++;
+                    // set background color
+                    int currentScore = Convert.ToInt32(NewText);
+                    Color scoreColor = GetScoreColor(currentScore, TournamentPageData.TeeList[RowIndex - 1].Par);
+                    StackLayout sl = (StackLayout)ScoreKarte.Children.Where(x => Grid.GetRow(x) == holeNumber && Grid.GetColumn(x) == ColumnIndex).FirstOrDefault();
+                    ((StackLayout)sl.Children[0]).Children[0].BackgroundColor = scoreColor;
+                    currentActiveHoleBoxColor = scoreColor;
+                }
+                catch (Exception)
+                {
+
+                }
+            }
 
             // local saving
             List<Result> SavedResults = GetTournamentResults(TournamentPageData.Tournament.Id);
@@ -1263,6 +1430,281 @@ namespace MFApp.Views
             var ResultTask = DataStoreResults.GetItemsAsync();
             List<Result> Results = ResultTask.Result.ToList();
             return Results.Where(x => x.TournamentId == TournamentPageData.Tournament.Id).ToList();
+        }
+
+        private Color GetScoreColor(int score, int par)
+        {
+            if (score == (par - 2))
+            {
+                return Color.Yellow;
+            }
+            else if (score == (par - 1))
+            {
+                return Color.LightCoral;
+            }
+            else if (score == par)
+            {
+                return Color.LightGreen;
+            }
+            else if (score == (par + 1))
+            {
+                return Color.LightBlue;
+            }
+            else if (score > (par + 1))
+            {
+                return Color.LightGray;
+            }
+            return Color.White;
+        }
+
+        private void ScoreKeyboard_Tapped(object sender, EventArgs e)
+        {
+            StackLayout scoreSL = (StackLayout)sender;
+            Label scoreIn = (Label)scoreSL.Children[0];
+            string strIn = scoreIn.ClassId;
+
+            if (strIn.ToLower() == "x")
+            {
+                Grid scoreKeyboard = (Grid)this.FindByName("ScoreCardKeyboard");
+                scoreKeyboard.IsVisible = false;
+                if (currentActiveHoleBox != null)
+                    currentActiveHoleBox.BackgroundColor = currentActiveHoleBoxColor;
+                return;
+            }
+
+            Label currentIn = (Label)((AbsoluteLayout)currentActiveHoleBox.Children[0]).Children[0];
+            currentIn.Text = strIn;
+
+            string currentCommand = currentIn.ClassId;
+            string newText = strIn;
+            if (newText == "-")
+                newText = "99";
+
+            bool isScore = true;
+            if (currentCommand.StartsWith("putts"))
+            {
+                isScore = false;
+                currentCommand = currentCommand.Replace("putts_", "");
+            }
+
+
+            string[] currentCommandParameter = currentCommand.Split('_');
+            int currentrowIndex = Convert.ToInt32(currentCommandParameter[0].ToString());
+            int currentColumnIndex = Convert.ToInt32(currentCommandParameter[1].ToString());
+            int currentPlayerId = TournamentPageData.SelectedPlayers[currentColumnIndex - 1].Id;
+
+            // set points
+            if (isScore && strIn != "-")
+            {
+                Label currentPoints = (Label)((AbsoluteLayout)currentActiveHoleBox.Children[0]).Children[2];
+                currentPoints.Text = GetHolePoints(TournamentPageData.SelectedPlayers[currentColumnIndex - 1].CourseHandicap, TournamentPageData.TeeList[currentrowIndex - 1].Hcp, TournamentPageData.TeeList[currentrowIndex - 1].Par, Convert.ToInt32(strIn));
+            }
+
+            Debug.Print("Start save local: " + DateTime.Now.ToString("hh:mm:ss.fff"));
+            SaveResultLocal(newText, currentColumnIndex, currentrowIndex, isScore);
+            Debug.Print("End save local: " + DateTime.Now.ToString("hh:mm:ss.fff"));
+
+            // calculate sum fields
+            int[] InSum = new int[4] { 0, 0, 0, 0 };
+            int[] OutSum = new int[4] { 0, 0, 0, 0 };
+            int[] TotalSum = new int[4] { 0, 0, 0, 0 };
+
+            int[] InSumPutts = new int[4] { 0, 0, 0, 0 };
+            int[] OutSumPutts = new int[4] { 0, 0, 0, 0 };
+            int[] TotalSumPutts = new int[4] { 0, 0, 0, 0 };
+
+            List<TournamentResult> TournamentResultList = new List<TournamentResult>();
+
+            foreach (View v in ScoreKarte.Children)
+            {
+                if ((v is StackLayout) && (((StackLayout)v).Children.Count > 0) && (((StackLayout)v).Children[0] is StackLayout))
+                {
+                    StackLayout subStack = (StackLayout)((StackLayout)v).Children[0];
+                    int score = 0;
+                    int putts = 0;
+
+                    int rowIndex = 0;
+                    int columnIndex = 0;
+
+                    if ((subStack.Children.Count() > 0) && (subStack.Children[0] is StackLayout))
+                    {
+                        StackLayout subsubScoreStack = (StackLayout)subStack.Children[0];
+
+                        if ((subsubScoreStack.Children.Count() > 0) && (subsubScoreStack.Children[0] is StackLayout))
+                        {
+                            StackLayout scoreStack = (StackLayout)subsubScoreStack.Children[0];
+
+                            if ((scoreStack.Children[0] is Label) && (((Label)(scoreStack.Children[0])).ClassId != null))
+                            {
+                                // entry
+                                Label tmpEntry = ((Label)(scoreStack.Children[0]));
+                                string[] commandParameter = tmpEntry.ClassId.Split('_');
+
+                                rowIndex = Convert.ToInt32(commandParameter[0].ToString());
+                                columnIndex = Convert.ToInt32(commandParameter[1].ToString());
+                                string entryText = tmpEntry.Text;
+
+                                if (!string.IsNullOrEmpty(entryText))
+                                {
+                                    try
+                                    {
+                                        if (entryText == "-")
+                                            score = 0;
+                                        else
+                                            score = Convert.ToInt32(entryText);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        CrashTracker.Track(ex);
+                                    }
+
+                                    if (rowIndex < 10)
+                                    {
+                                        InSum[columnIndex - 1] = InSum[columnIndex - 1] + score;
+                                    }
+                                    else
+                                    {
+                                        OutSum[columnIndex - 1] = OutSum[columnIndex - 1] + score;
+                                    }
+                                    TotalSum[columnIndex - 1] = TotalSum[columnIndex - 1] + score;
+                                }
+                            }
+                        }
+                    }
+
+                    if ((subStack.Children.Count() > 1) && (subStack.Children[1] is StackLayout))
+                    {
+                        StackLayout subsubPuttsStack = (StackLayout)subStack.Children[1];
+
+                        if ((subsubPuttsStack.Children.Count() > 0) && (subsubPuttsStack.Children[0] is StackLayout))
+                        {
+                            StackLayout puttStack = (StackLayout)subsubPuttsStack.Children[0];
+
+                            if (puttStack.Children[0] is Label)
+                            {
+                                // entry
+                                Label tmpEntry = ((Label)(puttStack.Children[0]));
+                                string[] commandParameter = tmpEntry.ClassId.Replace("putts_", "").Split('_');
+
+                                rowIndex = Convert.ToInt32(commandParameter[0].ToString());
+                                columnIndex = Convert.ToInt32(commandParameter[1].ToString());
+                                string entryText = tmpEntry.Text;
+
+                                if (!string.IsNullOrEmpty(entryText))
+                                {
+                                    try
+                                    {
+                                        if (entryText == "-")
+                                            putts = 0;
+                                        else
+                                            putts = Convert.ToInt32(entryText);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        CrashTracker.Track(ex);
+                                    }
+
+                                    if (rowIndex < 10)
+                                    {
+                                        InSumPutts[columnIndex - 1] = InSumPutts[columnIndex - 1] + putts;
+                                    }
+                                    else
+                                    {
+                                        OutSumPutts[columnIndex - 1] = OutSumPutts[columnIndex - 1] + putts;
+                                    }
+                                    TotalSumPutts[columnIndex - 1] = TotalSumPutts[columnIndex - 1] + putts;
+                                }
+                            }
+                        }
+                    }
+
+                    if ((columnIndex > 0) && (rowIndex > 0) && ((score > 0) || (putts > 0)))
+                    {
+                        // add result
+                        int playerId = TournamentPageData.SelectedPlayers[columnIndex - 1].Id;
+                        int tournamentId = TournamentPageData.Tournament.Id;
+                        int teeId = TournamentPageData.TeeList[rowIndex - 1].Id;
+                        TournamentResult tr = new TournamentResult
+                        {
+                            UserId = TournamentPageData.CurrentPlayer.Id,
+                            PlayerId = playerId,
+                            TournamentId = tournamentId,
+                            TeeId = teeId,
+                            Score = score,
+                            Putts = putts,
+                            Final = false
+                        };
+                        TournamentResultList.Add(tr);
+                    }
+                }
+            }
+
+            //write sums
+            for (int i = 0; i < 4; i++)
+            {
+                if (InSumLabels[i] != null)
+                {
+                    InSumLabels[i].Text = InSum[i].ToString();
+                }
+                if (OutSumLabels[i] != null)
+                {
+                    OutSumLabels[i].Text = OutSum[i].ToString();
+                }
+                if (TotalSumLabels[i] != null)
+                {
+                    TotalSumLabels[i].Text = TotalSum[i].ToString();
+                }
+
+                if (InSumPuttsLabels[i] != null)
+                {
+                    InSumPuttsLabels[i].Text = InSumPutts[i].ToString();
+                }
+                if (OutSumPuttsLabels[i] != null)
+                {
+                    OutSumPuttsLabels[i].Text = OutSumPutts[i].ToString();
+                }
+                if (TotalSumPuttsLabels[i] != null)
+                {
+                    TotalSumPuttsLabels[i].Text = TotalSumPutts[i].ToString();
+                }
+            }
+        }
+
+        private string GetHoleHandicap(int playerHandicap, int holeHandicap)
+        {
+            string holeHdcpString = "";
+
+            while (playerHandicap > 18)
+            {
+                holeHdcpString = holeHdcpString + "I";
+                playerHandicap = playerHandicap - 18;
+            }
+
+            if (playerHandicap >= holeHandicap)
+                holeHdcpString = holeHdcpString + "I";
+
+            return holeHdcpString;
+        }
+
+        private string GetHolePoints(int playerHandicap, int holeHandicap, int par, int score)
+        {
+            int holeHdcpPlayer = 0;
+
+            while (playerHandicap > 18)
+            {
+                holeHdcpPlayer += 1;
+                playerHandicap = playerHandicap - 18;
+            }
+
+            if (playerHandicap >= holeHandicap)
+                holeHdcpPlayer += 1;
+
+            string holePointString = "";
+
+            if (holeHdcpPlayer + par + 2 - score > 0)
+                holePointString = (holeHdcpPlayer + par + 2 - score).ToString();
+
+            return holePointString;
         }
     }
 }

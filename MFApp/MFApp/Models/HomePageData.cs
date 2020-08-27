@@ -28,6 +28,18 @@ namespace MFApp.Models
         public bool ButtonVisible { get; set; }
         public Tournament EventTournament { get; set; }
 
+        // added for Golfclubapp homepages
+        public string EventTitle { get; set; }
+
+        public EventType EventType { get; set; }
+
+        public string Url { get; set; }
     }
 
+    public enum EventType
+    {
+        Notification,
+        Tournament,
+        Promotion
+    }
 }

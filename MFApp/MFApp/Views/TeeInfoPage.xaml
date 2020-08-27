@@ -5,38 +5,79 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="MFApp.Views.TeeInfoPage"
-             xmlns:vm="clr-namespace:MFApp.ViewModels"
+             xmlns:vm="clr-namespace:GCKSApp.ViewModels"
              Title="{Binding Name}">
 
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Color x:Key="Primary">#1E2768</Color>
-            <Color x:Key="Accent">#90EE90</Color>
-            <Color x:Key="LightTextColor">#999999</Color>
-        </ResourceDictionary>
-    </ContentPage.Resources>
+    <NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal" >
+            <Button x:Name="BackButton" 
+                HorizontalOptions="Start" Text="&#xf060;"
+                            BackgroundColor="Transparent"
+                            TextColor="white"
+                            FontSize="Large"
+                            Clicked="Close_Clicked"
+                            WidthRequest="50">
+                <Button.FontFamily>
+                    <OnPlatform x:TypeArguments="x:String">
+                        <On Platform="iOS" Value="Font Awesome 5 Pro" />
+                        <On Platform="Android" Value="fa-regular-400.ttf#" />
+                    </OnPlatform>
+                </Button.FontFamily>
+            </Button>
+            <Label Text="{Binding Name}"
+                   HorizontalOptions="FillAndExpand"
+                   VerticalOptions="Center"
+                   LineBreakMode="TailTruncation"
+                   FontSize="20"
+                   TextColor="white"/>
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Schliessen" Clicked="Close_Clicked" />
-        <ToolbarItem Text="Aktualisieren" Clicked="Refresh_Clicked" />
-    </ContentPage.ToolbarItems>
-    
+            <Button HorizontalOptions="End" Text="&#xf2f1;"
+                    BackgroundColor="Transparent"
+                    TextColor="white"
+                    FontSize="Large"
+                    Clicked="Refresh_Clicked"
+                    WidthRequest="50">
+                <Button.FontFamily>
+                    <OnPlatform x:TypeArguments="x:String">
+                        <On Platform="iOS" Value="Font Awesome 5 Pro" />
+                        <On Platform="Android" Value="fa-regular-400.ttf#" />
+                    </OnPlatform>
+                </Button.FontFamily>
+            </Button>
+        </StackLayout>
+    </NavigationPage.TitleView>
+
     <StackLayout HorizontalOptions="FillAndExpand">
-        <StackLayout Padding="20" HeightRequest="30" HorizontalOptions="FillAndExpand" BackgroundColor="AliceBlue" >
-                <Label Text="{Binding Description}" 
+        <StackLayout Padding="20"  HorizontalOptions="FillAndExpand" BackgroundColor="AliceBlue" >
+            <Picker x:Name="TeePicker"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="Start"
+                        IsEnabled="false"></Picker>
+            <Expander>
+                <Expander.Header>
+                    <Label Text="Unser Tipp für dieses Loch ->"
+                        FontAttributes="Bold"
+                        TextColor="{StaticResource EntryTextColor}" 
+                        FontSize="16" />
+                </Expander.Header>
+                <Expander.Content>
+                    <Label Text="{Binding Description}" 
+                       x:Name="HoleDescription"
                                 d:Text="{Binding .}"
                                 LineBreakMode="WordWrap" 
-                                Style="{DynamicResource ListItemTextStyle}" 
+                                TextColor="{StaticResource EntryTextColor}" 
                                 FontSize="16" />
+                </Expander.Content>
+            </Expander>
         </StackLayout>
         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="Fill" Orientation="Horizontal">
-            
-                <ScrollView Orientation="Both" HorizontalOptions="FillAndExpand" >
-                    <StackLayout HorizontalOptions="FillAndExpand" >
-                        <Image x:Name="TeeImage" VerticalOptions="FillAndExpand"  Source=""  Aspect="AspectFit"  />
-                    </StackLayout>
-                </ScrollView>
-            
+
+            <ScrollView Orientation="Both" HorizontalOptions="FillAndExpand" >
+                <StackLayout HorizontalOptions="FillAndExpand" BackgroundColor="White" >
+                    <Image x:Name="TeeImage" VerticalOptions="FillAndExpand"  Source=""  Aspect="AspectFit" />
+                </StackLayout>
+            </ScrollView>
+
             <StackLayout WidthRequest="130" VerticalOptions="StartAndExpand" HorizontalOptions="Start" Orientation="Vertical" >
                 <StackLayout HorizontalOptions="CenterAndExpand" Padding="15">
                     <Label Text="Loch" 
@@ -63,8 +104,7 @@
                     </StackLayout>
                     <StackLayout HorizontalOptions="EndAndExpand">
                         <Label Text="Hdcp"                                
-                               HorizontalOptions="CenterAndExpand"
-                                Style="{DynamicResource ListItemTextStyle}" 
+                               HorizontalOptions="CenterAndExpand"                                 
                                 FontSize="16" />
                         <Label Text="" 
                                x:Name="Hdcp"
@@ -79,7 +119,7 @@
                                x:Name="Distance_Yellow"
                                HorizontalOptions="CenterAndExpand"
                                VerticalOptions="CenterAndExpand"
-                                Style="{DynamicResource ListItemTextStyle}" 
+                                TextColor="{StaticResource EntryTextColor}" 
                                 FontSize="20" />
                     </StackLayout>
                     <StackLayout BackgroundColor="Red" WidthRequest="60" HeightRequest="50">
@@ -87,11 +127,11 @@
                                x:Name="Distance_Red"
                                HorizontalOptions="CenterAndExpand"
                                VerticalOptions="CenterAndExpand"
-                                Style="{DynamicResource ListItemTextStyle}" 
+                                TextColor="{StaticResource EntryTextColor}" 
                                 FontSize="20" />
                     </StackLayout>
                 </StackLayout>
-                
+
                 <StackLayout>
                     <ScrollView  Padding="0, 20, 0, 20" VerticalOptions="CenterAndExpand" WidthRequest="150">
                         <RefreshView IsRefreshing="{Binding IsRefreshingAllPlaces, Mode=TwoWay}" Command="{Binding LoadAllPlacesCommand}">
@@ -131,5 +171,5 @@
             </StackLayout>
         </StackLayout>
     </StackLayout>
-    
+
 </ContentPage>

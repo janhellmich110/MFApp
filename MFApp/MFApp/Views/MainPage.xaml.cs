@@ -53,7 +53,8 @@ namespace MFApp.Views
             {
                 MenuPages.Remove(id);
             }
-                //if (!MenuPages.ContainsKey(id))
+            int GolfClubId = 1;
+
             if (true)
             {
                 switch (id)
@@ -92,7 +93,19 @@ namespace MFApp.Views
                         {
                             BarBackgroundColor = Color.FromRgb(30, 39, 104)
                         });
-                        break;                    
+                        break;
+                    case (int)MenuItemType.Birdiebook:
+                        MenuPages.Add(id, new NavigationPage(new TeeInfoPage(GolfClubId, 1))
+                        {
+                            BarBackgroundColor = Color.FromRgb(30, 39, 104)
+                        });
+                        break;
+                    case (int)MenuItemType.About:
+                        MenuPages.Add(id, new NavigationPage(new AboutPage())
+                        {
+                            BarBackgroundColor = Color.FromRgb(30, 39, 104)
+                        });
+                        break;
                 }
             }
 
