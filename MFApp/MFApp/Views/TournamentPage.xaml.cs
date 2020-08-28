@@ -1472,7 +1472,12 @@ namespace MFApp.Views
                 return;
             }
 
-            Label currentIn = (Label)((AbsoluteLayout)currentActiveHoleBox.Children[0]).Children[0];
+            Label currentIn;
+            if (currentActiveHoleBox.Children[0] is AbsoluteLayout)
+                currentIn = (Label)((AbsoluteLayout)currentActiveHoleBox.Children[0]).Children[0];
+            else
+                currentIn = (Label)((StackLayout)currentActiveHoleBox.Children[0]).Children[0];
+
             currentIn.Text = strIn;
 
             string currentCommand = currentIn.ClassId;
@@ -1530,9 +1535,9 @@ namespace MFApp.Views
                     {
                         StackLayout subsubScoreStack = (StackLayout)subStack.Children[0];
 
-                        if ((subsubScoreStack.Children.Count() > 0) && (subsubScoreStack.Children[0] is StackLayout))
+                        if ((subsubScoreStack.Children.Count() > 0) && (subsubScoreStack.Children[0] is AbsoluteLayout))
                         {
-                            StackLayout scoreStack = (StackLayout)subsubScoreStack.Children[0];
+                            AbsoluteLayout scoreStack = (AbsoluteLayout)subsubScoreStack.Children[0];
 
                             if ((scoreStack.Children[0] is Label) && (((Label)(scoreStack.Children[0])).ClassId != null))
                             {
