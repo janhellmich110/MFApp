@@ -29,7 +29,7 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <FormattedString.Spans>
-                                            <Span Text="Monday Fighter App V 1.7" FontAttributes="Bold" FontSize="22" />
+                                            <Span Text="Monday Fighter App V 1.91" FontAttributes="Bold" FontSize="22" />
                                         </FormattedString.Spans>
                                     </FormattedString>
                                 </Label.FormattedText>

@@ -53,6 +53,18 @@ namespace MFApp.Services
             }
             catch (Exception ex)
             {
+                if (ex.Message.ToLower().Contains("scoretype"))
+                {
+                    // column scoretype not exists, recreate table and try again
+                    conn.DropTable<Event>();
+
+                    conn.CreateTable<Event>();
+                    if (Event.Id == 0)
+                    {
+                        Event.Id = 100000;
+                    }
+                    result = conn.Insert(Event);
+                }
                 StatusMessage = string.Format("Failed to add {0}. Error: {1}", Event.Name, ex.Message);
             }
             EventList = conn.Table<Event>().ToList();

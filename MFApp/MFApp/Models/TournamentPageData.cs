@@ -171,6 +171,9 @@ namespace MFApp.Models
 
                 tp.CourseHandicap = GetCourseHandicap(tp, Tournament);
 
+                if (TournamentEvent.HandicapType == HandicapTypeEnum.DGVHandicap)
+                    tp.Handicap = p.DGVHandicap;
+
                 if(CurrentProfile.UserName.ToLower() == tp.UserName.ToLower())
                 {
                     CurrentPlayer = p;
@@ -231,10 +234,14 @@ namespace MFApp.Models
             {
                 TournamentHandicapId = t.HandicapTableFemaleId;
             }
+            double currentHdcp = p.Handicap;
 
             try
-            {
-                if (p.Handicap <= 36)
+            {                
+                if (TournamentEvent.HandicapType == HandicapTypeEnum.DGVHandicap)
+                    currentHdcp = p.DGVHandicap;
+
+                if (currentHdcp <= 36)
                 {
                     IDataStore<CourseHandicapTable> DataStore = DependencyService.Get<IDataStore<CourseHandicapTable>>();
                     var CourseHandicapTask = DataStore.GetItemsAsync();
@@ -243,7 +250,7 @@ namespace MFApp.Models
                     CourseHandicapTable currentTable = CourseHandicaps.Where(x => x.Id == TournamentHandicapId).FirstOrDefault();
 
                     // calculate course handicap
-                    double currentHdcp = p.Handicap;
+                    
                     if (currentHdcp > 0)
                         currentHdcp *= -1;
 
@@ -263,7 +270,7 @@ namespace MFApp.Models
                     {
                         if (CH.CourseHandicapTableId == TournamentHandicapId)
                         {
-                            if ((p.Handicap >= CH.HandicapFrom) && (p.Handicap <= CH.HandicapTo))
+                            if ((currentHdcp >= CH.HandicapFrom) && (currentHdcp <= CH.HandicapTo))
                             {
                                 return CH.PlayerHandicap;
                             }
@@ -274,11 +281,11 @@ namespace MFApp.Models
             }
             catch (Exception)
             {
-                return (int)p.Handicap;
+                return (int)Math.Round(currentHdcp);
             }
 
 
-            return Convert.ToInt32(p.Handicap);
+            return (int)Math.Round(currentHdcp);
 
         }
 

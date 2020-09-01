@@ -1673,6 +1673,14 @@ namespace MFApp.Views
                     TotalSumPuttsLabels[i].Text = TotalSumPutts[i].ToString();
                 }
             }
+
+            if (TournamentPageData.Tournament.Id > 0)
+            {
+                Debug.Print("Start save web: " + DateTime.Now.ToString("hh:mm:ss.fff"));
+                // send results to webapp
+                SaveResultsWeb(TournamentResultList);
+                Debug.Print("End save web: " + DateTime.Now.ToString("hh:mm:ss.fff"));
+            }
         }
 
         private string GetHoleHandicap(int playerHandicap, int holeHandicap)
