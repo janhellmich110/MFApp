@@ -1172,7 +1172,7 @@ namespace MFApp.Views
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = 14,
                 FontAttributes = FontAttributes.None,
-                WidthRequest = 30
+                WidthRequest = 20
             };
             AbsoluteLayout.SetLayoutBounds(lblHdcp, new Rectangle(0, 1, -1, -1));
             AbsoluteLayout.SetLayoutFlags(lblHdcp, AbsoluteLayoutFlags.PositionProportional);
@@ -1185,7 +1185,7 @@ namespace MFApp.Views
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = 14,
                 FontAttributes = FontAttributes.None,
-                WidthRequest = 30
+                WidthRequest = 20
             };
             AbsoluteLayout.SetLayoutBounds(lblPoints, new Rectangle(1, 1, -1, -1));
             AbsoluteLayout.SetLayoutFlags(lblPoints, AbsoluteLayoutFlags.PositionProportional);
@@ -1348,18 +1348,23 @@ namespace MFApp.Views
             {
                 if (i < TournamentPageData.SelectedPlayers.Count())
                 {
+                    int inSumScore = 0;
+                    int inSumPutts = 0;
+                    int outSumScore = 0;
+                    int outSumPutts = 0;
+
                     if (InSumLabels[i] != null)
                     {
                         // calculate sum for first 9
-                        int inSumScore = 0;
-                        int inSumPutts = 0;
                         for (int teeIndex = 0; teeIndex < 9; teeIndex++)
                         {
                             var teeResult = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[i].Id).Where(y => y.TeeId == TournamentPageData.TeeList[teeIndex].Id).FirstOrDefault();
                             if (teeResult != null)
                             {
-                                inSumScore = inSumScore + teeResult.Score;
-                                inSumPutts = inSumPutts + teeResult.Putts;
+                                if(teeResult.Score < 99)
+                                    inSumScore = inSumScore + teeResult.Score;
+                                if (teeResult.Putts < 99)
+                                    inSumPutts = inSumPutts + teeResult.Putts;
                             }
                         }
 
@@ -1369,16 +1374,16 @@ namespace MFApp.Views
                     }
                     if (OutSumLabels[i] != null)
                     {
-                        // calculate sum for last 9
-                        int outSumScore = 0;
-                        int outSumPutts = 0;
+                        // calculate sum for last 9                        
                         for (int teeIndex = 9; teeIndex < 18; teeIndex++)
                         {
                             var teeResult = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[i].Id).Where(y => y.TeeId == TournamentPageData.TeeList[teeIndex].Id).FirstOrDefault();
                             if (teeResult != null)
                             {
-                                outSumScore = outSumScore + teeResult.Score;
-                                outSumPutts = outSumPutts + teeResult.Putts;
+                                if (teeResult.Score < 99)
+                                    outSumScore = outSumScore + teeResult.Score;
+                                if (teeResult.Putts < 99)
+                                    outSumPutts = outSumPutts + teeResult.Putts;
                             }
                         }
 
@@ -1388,12 +1393,12 @@ namespace MFApp.Views
                     }
                     if (TotalSumLabels[i] != null)
                     {
-                        TotalSumLabels[i].Text = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[i].Id).Select(y => y.Score).Sum().ToString();
+                        TotalSumLabels[i].Text = (inSumScore + outSumScore).ToString(); // SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[i].Id).Select(y => y.Score).Sum().ToString();
                     }
 
                     if (TotalSumPuttsLabels[i] != null)
                     {
-                        TotalSumPuttsLabels[i].Text = SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[i].Id).Select(y => y.Putts).Sum().ToString();
+                        TotalSumPuttsLabels[i].Text = (inSumPutts + outSumPutts).ToString(); // SavedResults.Where(x => x.PlayerId == TournamentPageData.SelectedPlayers[i].Id).Select(y => y.Putts).Sum().ToString();
                     }
                 }
             }

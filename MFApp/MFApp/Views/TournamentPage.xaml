@@ -300,7 +300,7 @@
         </ContentPage>
         <ContentPage Title="Ergebnisse" Appearing="ContentPageResults_Appearing" IconImageSource="GolfIconTrophy.png">
             <StackLayout Padding="20, 20, 20, 20" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="Start" HeightRequest="400">
+                <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="Start" HeightRequest="450" >
                     <CollectionView x:Name="PlayerResultCollectionView" ItemsSource="{Binding PlayerResults}">
                     <CollectionView.Header>
                         <Grid Padding="10,10,10,10" BackgroundColor="LightGray">
