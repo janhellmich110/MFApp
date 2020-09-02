@@ -25,7 +25,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>MondayFighter</string>
 	<key>CFBundleVersion</key>
-	<string>191</string>
+	<string>192</string>
 	<key>CFBundleName</key>
 	<string>MFApp</string>
 	<key>CFBundleIdentifier</key>
@@ -33,7 +33,7 @@
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.91</string>
+	<string>1.92</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
