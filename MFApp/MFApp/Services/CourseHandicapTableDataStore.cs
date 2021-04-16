@@ -36,6 +36,14 @@ namespace MFApp.Services
             }
             catch (Exception ex)
             {
+                if (ex.Message.ToLower().Contains("handicapstrokes"))
+                {
+                    // column finl not exists, recreate table and try again
+                    conn.DropTable<CourseHandicapTable>();
+
+                    conn.CreateTable<CourseHandicapTable>();
+                    result = conn.Insert(CourseHandicapTable);
+                }
                 StatusMessage = string.Format("Failed to add {0}. Error: {1}", CourseHandicapTable.CourseId, ex.Message);
             }
             CourseHandicapTableList = conn.Table<CourseHandicapTable>().ToList();

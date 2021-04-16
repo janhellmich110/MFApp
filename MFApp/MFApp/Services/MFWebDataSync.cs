@@ -422,16 +422,16 @@ namespace MFApp.Services
                     Debug.Print("End Sync Flights: " + DateTime.Now.ToString("hh:mm:ss.fff"));
 
                     #region CourseHandicapTable
-                    //try
-                    //{
-                    //    conn.Execute("DELETE FROM CourseHandicap");
-                    //}
-                    //catch (Exception) { }
-                    //try
-                    //{
-                    //    conn.Execute("DELETE FROM CourseHandicapTable");
-                    //}
-                    //catch (Exception) { }
+                    try
+                    {
+                        conn.Execute("DELETE FROM CourseHandicap");
+                    }
+                    catch (Exception) { }
+                    try
+                    {
+                        conn.Execute("DELETE FROM CourseHandicapTable");
+                    }
+                    catch (Exception) { }
 
                     IDataStore<CourseHandicapTable> DataStoreCourseHandicapTable = DependencyService.Get<IDataStore<CourseHandicapTable>>();
                     IDataStore<CourseHandicap> DataStoreCourseHandicap = DependencyService.Get<IDataStore<CourseHandicap>>();
@@ -451,16 +451,17 @@ namespace MFApp.Services
                                 CourseId = ct.CourseId,
                                 Par = ct.Par,
                                 CR = ct.CR,
-                                Slope = ct.Slope
+                                Slope = ct.Slope,
+                                HandicapStrokes = ct.HandicapStrokes
                             };
 
                             DataStoreCourseHandicapTable.AddItemAsync(cht);
 
-                            foreach (CourseHandicap ch in ct.CourseHandicaps)
-                            {
-                                DataStoreCourseHandicap.AddItemAsync(ch);
+                            //foreach (CourseHandicap ch in ct.CourseHandicaps)
+                            //{
+                            //    DataStoreCourseHandicap.AddItemAsync(ch);
 
-                            }
+                            //}
                         }
                     }
                     #endregion

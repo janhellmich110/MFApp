@@ -18,5 +18,7 @@ namespace MFApp.Models
         public int Par { get; set; }
         public double CR { get; set; }
         public int Slope { get; set; }
+
+        public int HandicapStrokes { get; set; }
     }
 }

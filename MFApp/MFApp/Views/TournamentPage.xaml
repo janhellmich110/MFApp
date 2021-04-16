@@ -9,7 +9,7 @@
     <!--Pages can be added as references or inline-->
     <TabbedPage.Children>
         <ContentPage Title="Turnier" IconImageSource="GolfIconInfo.png" Appearing="ContentPageTurnier_Appearing">
-            <StackLayout Padding="20">
+            <StackLayout Padding="20" x:Name="Turnier">
                 <StackLayout Padding="30,20,30,20" BackgroundColor="#90EE90">
                     <Label Text="{Binding TournamentClub.Name}" 
                                 d:Text="{Binding .}"
@@ -313,6 +313,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
                             <StackLayout VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="0">
@@ -354,7 +355,15 @@
                                     FontSize="Caption" 
                                     FontAttributes="Bold"/>
                             </StackLayout>
-                        </Grid>
+                                <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="5">
+                                    <Label Text="SD"
+                                       LineBreakMode="NoWrap"
+                                    HorizontalTextAlignment="Center"
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="Caption" 
+                                    FontAttributes="Bold"/>
+                                </StackLayout>
+                            </Grid>
                     </CollectionView.Header>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
@@ -364,6 +373,7 @@
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
@@ -409,7 +419,15 @@
                                         Style="{DynamicResource ListItemTextStyle}" 
                                         FontSize="Caption" />
                                 </StackLayout>
-                            </Grid>
+                                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="5">
+                                        <Label Text="{Binding SD}" 
+                                        d:Text="{Binding .}"
+                                           HorizontalTextAlignment="Center"
+                                        LineBreakMode="NoWrap" 
+                                        Style="{DynamicResource ListItemTextStyle}" 
+                                        FontSize="Caption" />
+                                    </StackLayout>
+                                </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
@@ -430,6 +448,7 @@
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>

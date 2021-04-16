@@ -14,43 +14,83 @@ namespace MFApp.iOS.Services
 {
     class ScreenshotService_iOS : IScreenshotService
     {
-        public byte[] GetScreenshot(View view, Size size)
+        public byte[] GetScreenshot(View[] views)
         {
             try
             {
-                if (size == null)
+                if (views == null || views?.Count() == 0)
+                    return null;
+
+                // Get each Picture from the given views
+                List<UIImage> images = new List<UIImage>();
+                foreach (var view in views)
                 {
-                    size = new Size(view.Width, view.Height);
+                    var image = ConvertFormsToUIImage(view);
+                    images.Add(image);
                 }
 
-                var rect = new CGRect(0, 0, size.Width, size.Height);
-                //Converting forms page to native view
-                var iOSView = ConvertFormsToNative(view, rect);
+                //calc the overall pictures size
+                List<IVisualElementRenderer> renderers = new List<IVisualElementRenderer>();
+                int width = 0;
+                int height = 0;
+                for (int i = 0; i < views.Length; i++)
+                {
+                    renderers.Add(Platform.GetRenderer(views[i]));
+                    if (i == 0)
+                        width += Convert.ToInt32(renderers.Last().Element.Width);
 
-                // Converting View to UIImage
-                UIImage uiImage = ConvertViewToImage(iOSView, rect);
+                    height += Convert.ToInt32(renderers.Last().Element.Height);
+                }
+
+
+                CGSize s = new CGSize(width, height);
+
 
                 byte[] bitmapData;
+                nfloat oldViewHeight = 0;
+                //create a big picture containing all pictures underneath each other
+                using (var context = UIGraphics.GetCurrentContext())
+                {
+                    UIGraphics.BeginImageContext(s);
+                    foreach (var image in images)
+                    {
+                        image.Draw(new CGRect(0, oldViewHeight, image.Size.Width, image.Size.Height));
+                        oldViewHeight = image.Size.Height;
+                    }
 
-                var png = uiImage.AsPNG();
-                bitmapData = png.ToArray();
+                    UIImage uIImage = UIGraphics.GetImageFromCurrentImageContext();
+                    UIGraphics.EndImageContext();
 
-                UIGraphics.EndImageContext();
+                    var nsData = uIImage.AsPNG();
+                    bitmapData = nsData.ToArray();
+                }
 
                 return bitmapData;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                //CrashTracker.Track(e);
+                //CrashTracker.Track(ex);
                 return null;
             }
         }
 
-        public static UIView ConvertFormsToNative(Xamarin.Forms.View view, CGRect size)
+        private UIImage ConvertFormsToUIImage(View view)
+        {
+            var rect = new CGRect(0, 0, view.Width, view.Height);
+            //Converting forms page to native view
+            var iOSView = ConvertFormsToNative(view, rect);
+
+            // Converting View to UIImage
+            UIImage uiImage = ConvertViewToImage(iOSView, rect);
+
+            return uiImage;
+        }
+
+        private UIView ConvertFormsToNative(Xamarin.Forms.View view, CGRect size)
         {
             try
             {
-                var renderer = Platform.CreateRenderer(view);
+                var renderer = Platform.GetRenderer(view);
 
                 renderer.NativeView.Frame = size;
 
@@ -81,6 +121,7 @@ namespace MFApp.iOS.Services
                 UIGraphics.BeginImageContext(s);
                 iOSView.Layer.RenderInContext(UIGraphics.GetCurrentContext());
                 UIImage image = UIGraphics.GetImageFromCurrentImageContext();
+                UIGraphics.EndImageContext();
                 return image;
             }
             catch (Exception e)

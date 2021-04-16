@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -6,6 +8,7 @@ using Xamarin.Essentials;
 
 using MFApp.Services;
 using MFApp.Views;
+using MFApp.Models;
 
 namespace MFApp
 {
@@ -30,10 +33,28 @@ namespace MFApp
             DependencyService.Register<TeeDataStore>();
             DependencyService.Register<ResultDataStore>();
             DependencyService.Register<TeeInfoDataStore>();
+            DependencyService.Register<AppVersionDataStore>();
 
             DependencyService.Register<ILocationUpdateService>();
 
             Device.SetFlags(new string[] { "Expander_Experimental" });
+
+            // check appversion table - if no entries, create first entry
+            IDataStore<AppVersion> AppVersions = DependencyService.Get<IDataStore<AppVersion>>();
+
+            var appVersionsTask = AppVersions.GetItemsAsync();
+            AppVersion v = appVersionsTask.Result.FirstOrDefault();
+
+            if (v == null)
+            {
+                // create first version
+                AppVersion newVersion = new AppVersion()
+                {
+                    Version = 200,
+                    DBVersion ="2"
+                };
+                AppVersions.AddItemAsync(newVersion);
+            }
 
             // sync events
             SyncWebData();

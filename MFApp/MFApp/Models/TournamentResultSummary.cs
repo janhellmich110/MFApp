@@ -14,5 +14,6 @@ namespace MFApp.Models
         public int BruttoPoints { get; set; }
         public int NettoPoints { get; set; }
         public int Putts { get; set; }
+        public double SD { get; set; }
     }
 }

@@ -354,6 +354,10 @@ namespace MFApp.Views
 
             List<Result> SavedResults = GetTournamentResults(TournamentPageData.Tournament.Id);
 
+            IDataStore<CourseHandicapTable> DataStore = DependencyService.Get<IDataStore<CourseHandicapTable>>();
+            var CourseHandicapTask = DataStore.GetItemsAsync();
+            List<CourseHandicapTable> CourseHandicaps = CourseHandicapTask.Result.ToList();
+
             foreach (TournamentPlayer tp in TournamentPageData.SelectedPlayers)
             {
                 TournamentResultSummary trs = new TournamentResultSummary();
@@ -365,6 +369,9 @@ namespace MFApp.Views
                 int BruttoPoints = 0;
                 int NettoPoints = 0;
                 int Putts = 0;
+                int holesPlayed = 0;
+                int BruttoScoreSD = 0;
+                int BruttoScoreSDPar = 0;
 
                 foreach (Tee t in TournamentPageData.TeeList)
                 {
@@ -373,13 +380,15 @@ namespace MFApp.Views
                     {
                         if (PlayerResult != null)
                         {
+                            holesPlayed++;                            
                             // result found
                             BruttoScore = BruttoScore + PlayerResult.Score;
                             Putts = Putts + PlayerResult.Putts;
 
                             //Bruttopunkte
                             int points = 0;
-                            points = t.Par - PlayerResult.Score + 2;
+                            if (PlayerResult.Score > 0)
+                                points = t.Par - PlayerResult.Score + 2;
 
                             if (points > 0)
                             {
@@ -406,12 +415,25 @@ namespace MFApp.Views
                                 nPar += 1;
                             }
 
+                            // SD Brutto
+                            if(PlayerResult.Score > (nPar+2))
+                            {
+                                BruttoScoreSD = (BruttoScoreSD + (nPar +2));
+                            }
+                            else
+                            {
+                                BruttoScoreSD += (PlayerResult.Score);
+                            }
+                            BruttoScoreSDPar = BruttoScoreSDPar + nPar;
+
                             //NettoZählspiel
-                            NettoScore += PlayerResult.Score - (nPar - t.Par);
+                            if(PlayerResult.Score > 0)
+                                NettoScore += PlayerResult.Score - (nPar - t.Par);
 
                             //Nettopunkte
                             int npoints = 0;
-                            npoints = nPar - PlayerResult.Score + 2;
+                            if (PlayerResult.Score > 0)
+                                npoints = nPar - PlayerResult.Score + 2;
 
                             if (npoints > 0)
                             {
@@ -427,6 +449,31 @@ namespace MFApp.Views
                 trs.BruttoPoints = BruttoPoints;
                 trs.NettoPoints = NettoPoints;
                 trs.Putts = Putts;
+
+                // calculate score differential
+                trs.SD = 0;
+                if(holesPlayed == 9)
+                {
+                    BruttoScoreSD = BruttoScoreSD + BruttoScoreSDPar + 1;
+                    
+                    CourseHandicapTable currentTable = CourseHandicaps.Where(x => x.Id == TournamentPageData.Tournament.HandicapTableMaleId).FirstOrDefault();
+                    if(tp.Gender == Gender.Frau)
+                    {
+                        currentTable = CourseHandicaps.Where(x => x.Id == TournamentPageData.Tournament.HandicapTableFemaleId).FirstOrDefault();
+                    }
+
+                    trs.SD = (Math.Round((BruttoScoreSD - currentTable.CR) * ((double)113 / currentTable.Slope) * 10) / 10); 
+                }
+                else if (holesPlayed == 18)
+                {
+                    CourseHandicapTable currentTable = CourseHandicaps.Where(x => x.Id == TournamentPageData.Tournament.HandicapTableMaleId).FirstOrDefault();
+                    if (tp.Gender == Gender.Frau)
+                    {
+                        currentTable = CourseHandicaps.Where(x => x.Id == TournamentPageData.Tournament.HandicapTableFemaleId).FirstOrDefault();
+                    }
+
+                    trs.SD = (Math.Round((BruttoScoreSD - currentTable.CR) * ((double)113 / currentTable.Slope) * 10) / 10);
+                }
 
                 TournamentPageData.PlayerResults.Add(trs);
             }
@@ -758,7 +805,8 @@ namespace MFApp.Views
             {
                 var screenShotService = Xamarin.Forms.DependencyService.Get<IScreenshotService>();
 
-                var viewImage = screenShotService.GetScreenshot(ScoreKarte, new Size(((StackLayout)ScoreKarte.Parent).Width, ((StackLayout)ScoreKarte.Parent).Height));
+                var views = new View[] { Turnier, ScoreKarte };
+                var viewImage = screenShotService.GetScreenshot(views);
 
                 if (viewImage == null)
                     return;
@@ -818,6 +866,7 @@ namespace MFApp.Views
                 VerticalTextAlignment = TextAlignment.Center,
                 VerticalOptions = LayoutOptions.Center,
                 FontSize = 20,
+                TextColor = Color.Black,
                 FontAttributes = FontAttributes.Bold
             };
             subStackLayout.Children.Add(label);
@@ -848,6 +897,7 @@ namespace MFApp.Views
                 VerticalTextAlignment = TextAlignment.Center,
                 VerticalOptions = LayoutOptions.Center,
                 FontSize = 20,
+                TextColor = Color.Black,
                 FontAttributes = FontAttributes.Bold
             };
             subStackLayout.Children.Add(label);
@@ -875,6 +925,7 @@ namespace MFApp.Views
                 VerticalTextAlignment = TextAlignment.Center,
                 VerticalOptions = LayoutOptions.Center,
                 FontSize = 16,
+                TextColor = Color.Black,
                 FontAttributes = FontAttributes.None
             };
             var hdcpLabel = new Label
@@ -883,6 +934,7 @@ namespace MFApp.Views
                 VerticalTextAlignment = TextAlignment.Center,
                 VerticalOptions = LayoutOptions.Center,
                 FontSize = 16,
+                TextColor = Color.Black,
                 FontAttributes = FontAttributes.None
             };
 
@@ -929,6 +981,7 @@ namespace MFApp.Views
                 VerticalTextAlignment = TextAlignment.Center,
                 VerticalOptions = LayoutOptions.Center,
                 FontSize = 20,
+                TextColor = Color.Black,
                 FontAttributes = FontAttributes.Bold
             };
             subStackLayout.Children.Add(label);
@@ -958,6 +1011,7 @@ namespace MFApp.Views
                     VerticalTextAlignment = TextAlignment.Center,
                     VerticalOptions = LayoutOptions.Center,
                     FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)),
+                    TextColor = Color.Black,
                     FontAttributes = FontAttributes.None
                 };
                 var puttsLabel = new Label
@@ -966,6 +1020,7 @@ namespace MFApp.Views
                     VerticalTextAlignment = TextAlignment.Center,
                     VerticalOptions = LayoutOptions.Center,
                     FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)),
+                    TextColor = Color.Black,
                     FontAttributes = FontAttributes.None
                 };
 
@@ -1005,6 +1060,7 @@ namespace MFApp.Views
                 VerticalTextAlignment = TextAlignment.Center,
                 VerticalOptions = LayoutOptions.Center,
                 FontSize = 20,
+                TextColor = Color.Black,
                 FontAttributes = FontAttributes.Bold
             };
             subStackLayout.Children.Add(label);
@@ -1062,6 +1118,7 @@ namespace MFApp.Views
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = 20,
                 FontAttributes = FontAttributes.Bold,
+                TextColor = Color.Black,
                 WidthRequest = 30,
 
             };
@@ -1172,6 +1229,7 @@ namespace MFApp.Views
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = 14,
                 FontAttributes = FontAttributes.None,
+                TextColor = Color.Black,
                 WidthRequest = 20
             };
             AbsoluteLayout.SetLayoutBounds(lblHdcp, new Rectangle(0, 1, -1, -1));
@@ -1185,6 +1243,7 @@ namespace MFApp.Views
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = 14,
                 FontAttributes = FontAttributes.None,
+                TextColor = Color.Black,
                 WidthRequest = 20
             };
             AbsoluteLayout.SetLayoutBounds(lblPoints, new Rectangle(1, 1, -1, -1));
@@ -1481,22 +1540,29 @@ namespace MFApp.Views
             if (currentActiveHoleBox.Children[0] is AbsoluteLayout)
                 currentIn = (Label)((AbsoluteLayout)currentActiveHoleBox.Children[0]).Children[0];
             else
-                currentIn = (Label)((StackLayout)currentActiveHoleBox.Children[0]).Children[0];
+                currentIn = (Label)((StackLayout)currentActiveHoleBox.Children[0]).Children[0];            
 
-            currentIn.Text = strIn;
+            string currentCommand = currentIn.ClassId;            
 
-            string currentCommand = currentIn.ClassId;
-            string newText = strIn;
-            if (newText == "-")
-                newText = "99";
+            string newText = strIn;            
 
             bool isScore = true;
             if (currentCommand.StartsWith("putts"))
             {
                 isScore = false;
                 currentCommand = currentCommand.Replace("putts_", "");
+                if (newText == "-")
+                {
+                    newText = "0";
+                }
+                currentIn.Text = newText;
             }
-
+            else
+            {
+                currentIn.Text = strIn;
+                if (newText == "-")
+                    newText = "99";
+            }
 
             string[] currentCommandParameter = currentCommand.Split('_');
             int currentrowIndex = Convert.ToInt32(currentCommandParameter[0].ToString());

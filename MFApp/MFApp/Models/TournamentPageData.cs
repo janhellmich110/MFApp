@@ -234,6 +234,13 @@ namespace MFApp.Models
             {
                 TournamentHandicapId = t.HandicapTableFemaleId;
             }
+
+            IDataStore<CourseHandicapTable> DataStore = DependencyService.Get<IDataStore<CourseHandicapTable>>();
+            var CourseHandicapTask = DataStore.GetItemsAsync();
+            List<CourseHandicapTable> CourseHandicaps = CourseHandicapTask.Result.ToList();
+
+            CourseHandicapTable currentTable = CourseHandicaps.Where(x => x.Id == TournamentHandicapId).FirstOrDefault();
+
             double currentHdcp = p.Handicap;
 
             try
@@ -242,15 +249,8 @@ namespace MFApp.Models
                     currentHdcp = p.DGVHandicap;
 
                 if (currentHdcp <= 36)
-                {
-                    IDataStore<CourseHandicapTable> DataStore = DependencyService.Get<IDataStore<CourseHandicapTable>>();
-                    var CourseHandicapTask = DataStore.GetItemsAsync();
-                    List<CourseHandicapTable> CourseHandicaps = CourseHandicapTask.Result.ToList();
-
-                    CourseHandicapTable currentTable = CourseHandicaps.Where(x => x.Id == TournamentHandicapId).FirstOrDefault();
-
-                    // calculate course handicap
-                    
+                {                    
+                    // calculate course handicap, take negativ hdcp to use old formula                    
                     if (currentHdcp > 0)
                         currentHdcp *= -1;
 
@@ -262,21 +262,7 @@ namespace MFApp.Models
                 }
                 else
                 {
-                    IDataStore<CourseHandicap> DataStore = DependencyService.Get<IDataStore<CourseHandicap>>();
-                    var CourseHandicapTask = DataStore.GetItemsAsync();
-                    List<CourseHandicap> CourseHandicaps = CourseHandicapTask.Result.ToList();
-
-                    foreach (CourseHandicap CH in CourseHandicaps)
-                    {
-                        if (CH.CourseHandicapTableId == TournamentHandicapId)
-                        {
-                            if ((currentHdcp >= CH.HandicapFrom) && (currentHdcp <= CH.HandicapTo))
-                            {
-                                return CH.PlayerHandicap;
-                            }
-
-                        }
-                    }
+                    currentHdcp = (int)Math.Round(currentHdcp + currentTable.HandicapStrokes);
                 }
             }
             catch (Exception)
