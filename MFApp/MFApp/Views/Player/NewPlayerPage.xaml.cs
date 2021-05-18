@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.ComponentModel;
 using Xamarin.Forms;
 
@@ -34,6 +35,57 @@ namespace MFApp.Views
 
         async void Save_Clicked(object sender, EventArgs e)
         {
+            string inputHdcp = ((Entry)this.FindByName("InputHandicap")).Text;
+            if (Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator == ",")
+            {
+                inputHdcp = inputHdcp.Replace(".", ",");
+            }
+            else
+            {
+                inputHdcp = inputHdcp.Replace(",", ".");
+            }
+
+            try
+            {
+                double decHdcp = 0;
+                try
+                {
+                    decHdcp = Convert.ToDouble(inputHdcp);
+                }
+                catch (Exception) { }
+                Player.Handicap = decHdcp;
+            }
+            catch (Exception)
+            {
+                Player.Handicap = 0;
+            }
+
+            // dgv handicap
+            inputHdcp = ((Entry)this.FindByName("InputDGVHandicap")).Text;
+            if (Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator == ",")
+            {
+                inputHdcp = inputHdcp.Replace(".", ",");
+            }
+            else
+            {
+                inputHdcp = inputHdcp.Replace(",", ".");
+            }
+
+            try
+            {
+                double decHdcp = 0;
+                try
+                {
+                    decHdcp = Convert.ToDouble(inputHdcp);
+                }
+                catch (Exception) { }
+                Player.DGVHandicap = decHdcp;
+            }
+            catch (Exception)
+            {
+                Player.DGVHandicap = 0;
+            }
+
             // convert gender
             Picker genderPicker = (Picker)this.FindByName("SelectGender");
 

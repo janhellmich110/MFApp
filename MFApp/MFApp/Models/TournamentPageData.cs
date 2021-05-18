@@ -196,7 +196,7 @@ namespace MFApp.Models
                 AllPlayers.Add(tp);
             }
 
-            SelectedPlayers = SortFlightPlayer(SelectedPlayers);
+            SelectedPlayers = SortFlightPlayer(SelectedPlayers);            
         }
 
         public Player CurrentPlayer { get; set; }

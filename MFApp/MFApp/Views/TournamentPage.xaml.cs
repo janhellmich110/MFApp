@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using MFApp.Models;
+using MFApp.ViewModels;
 using MFApp.Services;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
@@ -484,6 +485,17 @@ namespace MFApp.Views
         {
             this.BindingContext = null;
             this.BindingContext = TournamentPageData;
+
+            try
+            {
+                // initalize bierdiebook
+                TeeInfoViewModel tiVM = new TeeInfoViewModel(TournamentPageData.TournamentClub.Id, 1);
+                tiVM.LoadAllPlaces();
+            }
+            catch(Exception)
+            {
+                // just to initialize, no error handling
+            }
         }
 
         #region event handler

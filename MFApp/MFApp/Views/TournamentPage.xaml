@@ -30,7 +30,7 @@
                            VerticalOptions="Center"
                            FontAttributes="Bold"/>
                 </StackLayout>
-                <StackLayout Padding="0, 10, 0, 20">
+                <StackLayout Padding="0, 10, 0, 20" HeightRequest="150">
                     <CollectionView x:Name="FlightCollectionView" ItemsSource="{Binding SelectedPlayers}">
                         <CollectionView.Header>
                             <Grid Padding="0,10,0,10" BackgroundColor="LightGray">
@@ -299,7 +299,7 @@
             </StackLayout>
         </ContentPage>
         <ContentPage Title="Ergebnisse" Appearing="ContentPageResults_Appearing" IconImageSource="GolfIconTrophy.png">
-            <StackLayout Padding="20, 20, 20, 20" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout Padding="10, 20, 10, 20" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                 <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="Start" HeightRequest="450" >
                     <CollectionView x:Name="PlayerResultCollectionView" ItemsSource="{Binding PlayerResults}">
                     <CollectionView.Header>
