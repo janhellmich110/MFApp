@@ -4,6 +4,8 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
+using Plugin.Geolocator;
+
 
 namespace MFApp.iOS
 {
@@ -22,6 +24,8 @@ namespace MFApp.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
+            CrossGeolocator.Current.GetPositionAsync();
+
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
 

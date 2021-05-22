@@ -11,6 +11,7 @@ using Android.Support.V4.App;
 using Android;
 using Android.Support.Design.Widget;
 using Android.Util;
+using Google.Android.Material.Snackbar;
 
 namespace MFApp.Droid
 {

@@ -12,6 +12,8 @@ using System.Linq;
 using Xamarin.Essentials;
 using System.Runtime.CompilerServices;
 
+using Plugin.Geolocator;
+
 namespace MFApp.ViewModels
 {
     public class TeeInfoViewModel : INotifyPropertyChanged
@@ -95,26 +97,40 @@ namespace MFApp.ViewModels
             // get current location, 2 times as result is better ???
             try
             {
-                var request = new GeolocationRequest(GeolocationAccuracy.High, new TimeSpan(0, 0, 4));
-                var location = await Geolocation.GetLocationAsync(request);
-                await Task.Delay(1000);
-                request = new GeolocationRequest(GeolocationAccuracy.Best, new TimeSpan(0, 0, 15));
-                location = await Geolocation.GetLocationAsync(request);
+                //var request = new GeolocationRequest(GeolocationAccuracy.High, new TimeSpan(0, 0, 4));
+                //var location = await Geolocation.GetLocationAsync(request);
+                //await Task.Delay(1000);
 
                 List<TeePlace> TPList = new List<TeePlace>();
-                if (location != null)
+                CrossGeolocator.Current.DesiredAccuracy = 1;
+                if (IsLocationAvailable())
                 {
-                    // fill teeplaces list
-                    foreach (TeeInfo ti in TeeInfos)
+                    //var request = new GeolocationRequest(GeolocationAccuracy.Best, new TimeSpan(0, 0, 30));
+                    //var location = await Geolocation.GetLocationAsync(request);
+                    Plugin.Geolocator.Abstractions.Position location = null;
+                    try
                     {
-                        TeePlace tp = new TeePlace();
-                        tp.Text = ti.TeeInfoName;
-                        tp.Type = ti.TeeInfoType;
-                        // calculate distance from current location
-                        double DistanceKM = Location.CalculateDistance(location, ti.Latitude, ti.Longitude, DistanceUnits.Kilometers);
-                        tp.Distance = (int)(DistanceKM * 1000);
-                        if (tp.Distance < 600)
-                            TPList.Add(tp);
+                        location = await CrossGeolocator.Current.GetPositionAsync(new TimeSpan(0, 0, 3));
+                    }
+                    catch(Exception ex)
+                    {
+                        location = null;
+                    }
+
+                    if (location != null)
+                    {
+                        // fill teeplaces list
+                        foreach (TeeInfo ti in TeeInfos)
+                        {
+                            TeePlace tp = new TeePlace();
+                            tp.Text = ti.TeeInfoName;
+                            tp.Type = ti.TeeInfoType;
+                            // calculate distance from current location
+                            double DistanceKM = Location.CalculateDistance(location.Latitude, location.Longitude, ti.Latitude, ti.Longitude, DistanceUnits.Kilometers);
+                            tp.Distance = (int)(DistanceKM * 1000);
+                            //if (tp.Distance < 600)
+                                TPList.Add(tp);
+                        }
                     }
                 }
                 TeePlaces = new ObservableCollection<TeePlace>(TPList.OrderBy(x => x.Text));
@@ -167,6 +183,19 @@ namespace MFApp.ViewModels
         }
 
         #endregion
+
+        public bool IsLocationAvailable()
+        {
+            if (!CrossGeolocator.IsSupported)
+                return false;
+
+            return CrossGeolocator.Current.IsGeolocationAvailable;
+        }
+
+        public async Task<Plugin.Geolocator.Abstractions.Position> GetGeoLocation()
+        {
+            return await CrossGeolocator.Current.GetPositionAsync();
+        }
     }
 
     public class TeePlace

@@ -100,6 +100,12 @@ namespace MFApp.Views
                             BarBackgroundColor = Color.FromRgb(30, 39, 104)
                         });
                         break;
+                    case (int)MenuItemType.OOM:
+                        MenuPages.Add(id, new NavigationPage(new WebViewPage("OOM", "https://demo.portivity.de/mfweb/oomapp"))
+                        {
+                            BarBackgroundColor = Color.FromRgb(30, 39, 104)
+                        });
+                        break;
                     case (int)MenuItemType.About:
                         MenuPages.Add(id, new NavigationPage(new AboutPage())
                         {

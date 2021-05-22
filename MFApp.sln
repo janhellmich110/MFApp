@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFApp.Android", "MFApp\MFAp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFApp.iOS", "MFApp\MFApp.iOS\MFApp.iOS.csproj", "{E55B38E8-DAB7-47B3-AE8E-6A98B7CE5F44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFApp", "MFApp\MFApp\MFApp.csproj", "{58D0B38D-E765-48C8-AB67-58A64BCDD5E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MFApp", "MFApp\MFApp\MFApp.csproj", "{58D0B38D-E765-48C8-AB67-58A64BCDD5E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
