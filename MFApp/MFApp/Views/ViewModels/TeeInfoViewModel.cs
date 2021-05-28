@@ -110,7 +110,7 @@ namespace MFApp.ViewModels
                     Plugin.Geolocator.Abstractions.Position location = null;
                     try
                     {
-                        location = await CrossGeolocator.Current.GetPositionAsync(new TimeSpan(0, 0, 3));
+                        location = await CrossGeolocator.Current.GetPositionAsync(new TimeSpan(0, 0, 2));
                     }
                     catch(Exception ex)
                     {
