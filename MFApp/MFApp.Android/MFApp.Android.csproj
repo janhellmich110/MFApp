@@ -37,6 +37,11 @@
     <EnableLLVM>false</EnableLLVM>
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <BundleAssemblies>false</BundleAssemblies>
+    <AndroidKeyStore>true</AndroidKeyStore>
+    <AndroidSigningKeyStore>C:\Users\jhell\Documents\PortivITy\Projekte\App-Dev\app.portivity.de.mfapp.keystore</AndroidSigningKeyStore>
+    <AndroidSigningStorePass>Plan25Staycool!</AndroidSigningStorePass>
+    <AndroidSigningKeyAlias>app.portivity.de.mfapp</AndroidSigningKeyAlias>
+    <AndroidSigningKeyPass>Plan25Staycool!</AndroidSigningKeyPass>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
@@ -55,6 +60,11 @@
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <AndroidKeyStore>true</AndroidKeyStore>
+    <AndroidSigningKeyStore>C:\Users\jhell\Documents\PortivITy\Projekte\App-Dev\app.portivity.de.mfapp.keystore</AndroidSigningKeyStore>
+    <AndroidSigningStorePass>Plan25Staycool!</AndroidSigningStorePass>
+    <AndroidSigningKeyPass>Plan25Staycool!</AndroidSigningKeyPass>
+    <AndroidSigningKeyAlias>app.portivity.de.mfapp</AndroidSigningKeyAlias>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />

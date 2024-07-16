@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="195" package="app.portivity.de.mfapp" android:installLocation="auto" android:versionName="1.95">
-	<uses-sdk android:minSdkVersion="23" android:targetSdkVersion="29" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="197" package="app.portivity.de.mfapp" android:installLocation="auto" android:versionName="1.97">
+	<uses-sdk android:minSdkVersion="23" android:targetSdkVersion="34" />
 	<application android:label="MondayFighter" android:icon="@drawable/AppIcon"></application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
